@@ -1,0 +1,47 @@
+service: spotify-history
+
+frameworkVersion: '2'
+configValidationMode: warn
+unresolvedVariablesNotificationMode: error
+
+plugins:
+  - serverless-plugin-typescript
+#  - serverless-plugin-ifelse
+
+#custom:
+#  serverlessIfElse:
+#    - If: '"${self:provider.stage}" == "prod"'
+#      Set:
+#        functions.spotify-history-lambda.events.0.eventBridge.schedule: rate(60 minutes)
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+  stage: ${opt:stage, 'stg'} # Define default stage
+  lambdaHashingVersion: 20201221
+  versionFunctions: false
+  eventBridge:
+    useCloudFormation: true
+  memorySize: 128 # Overwrite the default memory size. Default is 1024
+  timeout: 5 # The default is 6 seconds. Note: API Gateway current maximum is 30 seconds
+  logRetentionInDays: 7 # Set the default RetentionInDays for a CloudWatch LogGr
+  environment:
+    PUBLIC_TEST: Public 123
+
+functions:
+  spotify-history-lambda:
+    name: ${self:provider.stage}-${self:service}
+    handler: src/index.handler
+    events:
+      - eventBridge:
+          schedule: rate(30 minutes)
+    environment:
+      STAGE: ${self:provider.stage}
+      NODE_ENV: ${self:provider.stage}
+
+package:
+  exclude:
+    - .git/**
+    - README.md
+    - .gitignore
