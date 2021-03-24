@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --build",
+    "build:client": "tsc -p tsconfig.client.json",
     "watch": "tsc --watch",
     "prod:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s prod",
     "prod:deploy": "serverless deploy -s prod",
@@ -18,7 +19,7 @@
     "stg:deploy": "serverless deploy -s stg",
     "invoke:local:custom": "serverless invoke local -f spotify-history-lambda -p test/event.json -x test/context.json",
     "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg",
-    "token": "ts-node -r dotenv/config scripts/get-token.ts"
+    "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts"
   },
   "dependencies": {
     "dotenv": "^8.2.0",

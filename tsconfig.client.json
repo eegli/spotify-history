@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "amd",
+    "outFile": "public/script.js",
+    "rootDir": "scripts",
+    "lib": ["dom"]
+  },
+
+  "extends": "./tsconfig.json",
+  "include": ["scripts/client.ts"]
+}

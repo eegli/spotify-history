@@ -16,6 +16,9 @@ if (!clientId || !clientSecret) {
   throw Error('Did you forget to pass in a client id/secret?');
 }
 
+const script = fs.readFileSync(__dirname + '/../public/script.js', 'utf8');
+const template = `<html><body><script>${script}</script></body></html>`;
+
 const spotifyUrl = () => {
   let url = 'https://accounts.spotify.com/authorize';
   url += '?response_type=code';
@@ -43,26 +46,26 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
 
     req.on('end', function () {
       const data = JSON.parse(body);
-      if (data) {
+      if (data.access_token) {
         console.log(`Saved token to file`);
         data.dateObtained = new Date().toLocaleString();
         fs.writeFileSync(
           __dirname + '/../token.json',
           JSON.stringify(data, null, 2)
         );
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.write('Successful! You can now close this window');
+        res.end();
         process.exit(0);
       }
-      console.log(
-        'An error has occured, no token obtained.\nDid you click "cancel" in the Spotify auth window?'
+      throw Error(
+        'No token obtained.\nDid you click "cancel" in the Spotify auth window?'
       );
-      process.exit(1);
     });
   } else if (req.method === 'GET') {
-    fs.readFile(__dirname + '/../public/index.html', (_, data) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      return res.end();
-    });
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(template);
+    res.end();
   }
 });
 server.listen(port, host, () => {
