@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES5",
     "module": "amd",
-    "outFile": "public/script.js",
+    "outFile": "browser/script.js",
     "rootDir": "scripts",
     "lib": ["dom"]
   },

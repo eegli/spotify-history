@@ -6,17 +6,17 @@ import { nanoid } from 'nanoid';
 const host = 'localhost';
 const port = 3000;
 
-const scopes =
-  'user-read-email user-top-read user-library-read user-read-recently-played';
 const clientId = process.env.CLIENT_ID || '';
 const clientSecret = process.env.CLIENT_SECRET || '';
+
+const scopes =
+  'user-read-email user-top-read user-library-read user-read-recently-played';
 const state = nanoid(12);
 
 if (!clientId || !clientSecret) {
   throw Error('Did you forget to pass in a client id/secret?');
 }
-
-const script = fs.readFileSync(__dirname + '/../public/script.js', 'utf8');
+const script = fs.readFileSync(__dirname + '/../browser/script.js', 'utf8');
 const template = `<html><body><script>${script}</script></body></html>`;
 
 const spotifyUrl = () => {

@@ -1,8 +1,9 @@
-(async () => {
-  const REDIRECT_URL = 'http://localhost:3000';
-  const refreshTokenUrl = 'https://accounts.spotify.com/api/token';
-  const localGetCredentialsUrl = 'http://localhost:3000/credentials';
-  const localSubmitTokenUrl = 'http://localhost:3000/submit';
+(async (): Promise<void> => {
+  // This must correspond to the redirect url set in the Spotify developer application
+  const local = 'http://localhost:3000';
+
+  const getCredentials = `${local}/credentials`;
+  const postToken = `${local}/submit`;
 
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
@@ -14,7 +15,7 @@
     let state: string;
 
     try {
-      const credentialsRes = await fetch(localGetCredentialsUrl, {
+      const credentialsRes = await fetch(getCredentials, {
         credentials: 'same-origin',
       });
       const credentials = await credentialsRes.json();
@@ -30,7 +31,7 @@
       const params = {
         grant_type: 'authorization_code',
         code,
-        redirect_uri: REDIRECT_URL,
+        redirect_uri: local,
       };
 
       const tokenParams = new URLSearchParams();
@@ -38,7 +39,7 @@
         tokenParams.set(prop, params[prop]);
       }
 
-      const tokenRes = await fetch(refreshTokenUrl, {
+      const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded',
@@ -55,7 +56,7 @@
             'Authentication successful. You can now close this window';
         }
 
-        const successRes = await fetch(localSubmitTokenUrl, {
+        const successRes = await fetch(postToken, {
           method: 'POST',
           credentials: 'same-origin',
           headers: {
