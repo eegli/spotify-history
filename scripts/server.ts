@@ -47,7 +47,7 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     req.on('end', function () {
       const data = JSON.parse(body);
       if (data.access_token) {
-        console.log(`Saved token to file`);
+        console.log(`Success! Saved token to file`);
         data.dateObtained = new Date().toLocaleString();
         fs.writeFileSync(
           __dirname + '/../token.json',

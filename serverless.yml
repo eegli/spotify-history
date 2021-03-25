@@ -1,7 +1,7 @@
 service: spotify-history
 
 frameworkVersion: '2'
-configValidationMode: warn
+configValidationMode: error
 unresolvedVariablesNotificationMode: error
 
 plugins:

@@ -2,7 +2,7 @@
   // This must correspond to the redirect url set in the Spotify developer application
   const local = 'http://localhost:3000';
 
-  const getCredentials = `${local}/credentials`;
+  const credentialsURL = `${local}/credentials`;
   const postToken = `${local}/submit`;
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -10,36 +10,48 @@
   const receivedState = urlParams.get('state');
 
   if (code) {
-    let clientId: string;
-    let clientSecret: string;
-    let state: string;
+    // Returned from local server
+    type CredentialsRes = {
+      clientId: string;
+      clientSecret: string;
+      state: string;
+    };
+    // Returned from Spotify
+    type TokenRes = {
+      access_token: string;
+      token_type: string;
+      expires_in: number;
+      refresh_token: string;
+      scope: string;
+    };
 
-    try {
-      const credentialsRes = await fetch(getCredentials, {
+    const getCredentials = async (): Promise<CredentialsRes> => {
+      const result = await fetch(credentialsURL, {
         credentials: 'same-origin',
       });
-      const credentials = await credentialsRes.json();
 
-      if (credentials.state !== receivedState) {
-        throw Error("States don't match");
-      }
+      return result.json();
+    };
 
-      clientId = credentials.clientId;
-      clientSecret = credentials.clientSecret;
-      state = credentials.state;
+    const { clientId, clientSecret, state } = await getCredentials();
 
-      const params = {
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: local,
-      };
+    if (state !== receivedState) {
+      throw Error("States don't match");
+    }
 
-      const tokenParams = new URLSearchParams();
-      for (const prop in params) {
-        tokenParams.set(prop, params[prop]);
-      }
+    const params = {
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: local,
+    };
 
-      const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
+    const tokenParams = new URLSearchParams();
+    for (const prop in params) {
+      tokenParams.set(prop, params[prop]);
+    }
+
+    const getToken = async (): Promise<TokenRes> => {
+      const res = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded',
@@ -47,30 +59,32 @@
         },
         body: tokenParams,
       });
-      const token = await tokenRes.json();
-      if (token.access_token) {
-        const info = document.getElementById('info');
+      return res.json();
+    };
+    const token = await getToken();
 
-        if (info) {
-          info.innerHTML =
-            'Authentication successful. You can now close this window';
-        }
+    if (token.access_token) {
+      const info = document.getElementById('info');
 
-        const successRes = await fetch(postToken, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...token,
-          }),
-        });
-        const successMessage = await successRes.text();
-        const node = document.createElement('h1');
-        node.innerHTML = successMessage;
-        document.body.appendChild(node);
+      if (info) {
+        info.innerHTML =
+          'Authentication successful. You can now close this window';
       }
-    } catch {}
+
+      const successRes = await fetch(postToken, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...token,
+        }),
+      });
+      const successMessage = await successRes.text();
+      const node = document.createElement('h1');
+      node.innerHTML = successMessage;
+      document.body.appendChild(node);
+    }
   }
 })();
