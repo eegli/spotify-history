@@ -9,13 +9,14 @@ plugins:
   - serverless-plugin-typescript
 
 custom:
-  env: ${opt:stage,'stg'}
+  env: ${opt:stage,'stg'} # Define default stage
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: eu-central-1
-  stage: ${self:custom.env} # Define default stage
+  stackName: ${self:custom.env}-${self:service}-stack
+  stage: ${self:custom.env}
   lambdaHashingVersion: 20201221
   versionFunctions: false
   eventBridge:
@@ -34,7 +35,7 @@ functions:
     handler: src/index.handler
     events:
       - eventBridge:
-          schedule: rate(30 minutes)
+          schedule: rate(60 minutes)
     environment:
       STAGE: ${self:custom.env}
       NODE_ENV: ${self:custom.env}
