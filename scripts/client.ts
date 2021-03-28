@@ -37,7 +37,7 @@
       tokenParams.set(prop, params[prop]);
     }
 
-    const getToken = async (): Promise<TokenServer.Token> => {
+    const getToken = async (): Promise<TokenServer.TokenResponse> => {
       const res = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {

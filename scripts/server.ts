@@ -48,7 +48,7 @@ app.get('/credentials', (_, res) => {
 });
 
 app.post('/submit', (req, res) => {
-  const jsonData = req.body;
+  const jsonData = req.body as TokenServer.TokenSuccess;
   if (jsonData.access_token) {
     console.log(`Success! Saved token to file`);
     jsonData.dateObtained = new Date().toISOString();
