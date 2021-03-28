@@ -12,7 +12,7 @@
   const receivedState = urlParams.get('state');
 
   if (code) {
-    const getCredentials = async (): Promise<TokenServer.CredentialsRes> => {
+    const getCredentials = async (): Promise<TokenServer.Credentials> => {
       const result = await fetch(credentialsURL, {
         credentials: 'same-origin',
       });
@@ -37,7 +37,7 @@
       tokenParams.set(prop, params[prop]);
     }
 
-    const getToken = async (): Promise<TokenServer.TokenRes> => {
+    const getToken = async (): Promise<TokenServer.Token> => {
       const res = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {

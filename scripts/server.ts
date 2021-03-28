@@ -1,13 +1,11 @@
 /// <reference path="./types.ts"/>
-
-import { createServer, IncomingMessage, ServerResponse } from 'http';
+import express from 'express';
 import open from 'open';
 import fs from 'fs';
 import { nanoid } from 'nanoid';
 
-const host = 'localhost';
+// Port must correspond to the port set in the Spotify app
 const port = 3000;
-
 const clientId = process.env.CLIENT_ID || '';
 const clientSecret = process.env.CLIENT_SECRET || '';
 
@@ -18,8 +16,15 @@ const state = nanoid(12);
 if (!clientId || !clientSecret) {
   throw Error('Did you forget to pass in a client id/secret?');
 }
+
+const app = express();
+app.use(express.json());
+// Get compiled client script
 const script = fs.readFileSync(__dirname + '/../browser/script.js', 'utf8');
+// This will be sent to the client
 const template = `<html><body><script>${script}</script></body></html>`;
+
+const credentials: TokenServer.Credentials = { clientId, clientSecret, state };
 
 const spotifyUrl = () => {
   let url = 'https://accounts.spotify.com/authorize';
@@ -34,42 +39,31 @@ const spotifyUrl = () => {
 
 open(spotifyUrl());
 
-const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-  if (req.method == 'GET' && req.url === '/credentials') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.write(JSON.stringify({ clientId, clientSecret, state }));
-    res.end();
-  } else if (req.method === 'POST' && req.url === '/submit') {
-    let body = '';
-
-    req.on('data', function (data) {
-      body += data;
-    });
-
-    req.on('end', function () {
-      const data = JSON.parse(body);
-      if (data.access_token) {
-        console.log(`Success! Saved token to file`);
-        data.dateObtained = new Date().toLocaleString();
-        fs.writeFileSync(
-          __dirname + '/../token.json',
-          JSON.stringify(data, null, 2)
-        );
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.write('Successful! You can now close this window');
-        res.end();
-        process.exit(0);
-      }
-      throw Error(
-        'No token obtained.\nDid you click "cancel" in the Spotify auth window?'
-      );
-    });
-  } else if (req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write(template);
-    res.end();
-  }
+app.get('/', (_, res) => {
+  res.send(template);
 });
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
+
+app.get('/credentials', (_, res) => {
+  res.json(credentials);
+});
+
+app.post('/submit', (req, res) => {
+  const jsonData = req.body;
+  if (jsonData.access_token) {
+    console.log(`Success! Saved token to file`);
+    jsonData.dateObtained = new Date().toISOString();
+    fs.writeFileSync(
+      __dirname + '/../token.json',
+      JSON.stringify(jsonData, null, 2)
+    );
+    res.send('Successful! You can now close this window');
+    process.exit(0);
+  }
+  throw Error(
+    'No token obtained.\nDid you click "cancel" in the Spotify auth window?'
+  );
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
