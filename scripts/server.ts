@@ -1,3 +1,5 @@
+/// <reference path="./types.ts"/>
+
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import open from 'open';
 import fs from 'fs';

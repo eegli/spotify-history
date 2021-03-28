@@ -1,3 +1,5 @@
+/// <reference path="./types.ts"/>
+
 (async (): Promise<void> => {
   // This must correspond to the redirect url set in the Spotify developer application
   const local = 'http://localhost:3000';
@@ -10,22 +12,7 @@
   const receivedState = urlParams.get('state');
 
   if (code) {
-    // Returned from local server
-    type CredentialsRes = {
-      clientId: string;
-      clientSecret: string;
-      state: string;
-    };
-    // Returned from Spotify
-    type TokenRes = {
-      access_token: string;
-      token_type: string;
-      expires_in: number;
-      refresh_token: string;
-      scope: string;
-    };
-
-    const getCredentials = async (): Promise<CredentialsRes> => {
+    const getCredentials = async (): Promise<TokenServer.CredentialsRes> => {
       const result = await fetch(credentialsURL, {
         credentials: 'same-origin',
       });
@@ -50,7 +37,7 @@
       tokenParams.set(prop, params[prop]);
     }
 
-    const getToken = async (): Promise<TokenRes> => {
+    const getToken = async (): Promise<TokenServer.TokenRes> => {
       const res = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
