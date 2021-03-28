@@ -1,6 +1,7 @@
 service: spotify-history
 
 frameworkVersion: '2'
+useDotenv: true
 configValidationMode: error
 unresolvedVariablesNotificationMode: error
 
@@ -9,7 +10,6 @@ plugins:
 
 custom:
   env: ${opt:stage,'stg'}
-  bucket: ${self:custom.env}-${self:service}-bucket
 
 provider:
   name: aws
@@ -25,6 +25,8 @@ provider:
   logRetentionInDays: 7 # Set the default RetentionInDays for a CloudWatch LogGr
   environment:
     PUBLIC_TEST: Public 123
+    STAGE: ${self:custom.env}
+    BUCKET_NAME: ${self:custom.env}-${self:service}-bucket
 
 functions:
   spotify-history-lambda:
