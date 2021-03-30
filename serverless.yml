@@ -10,12 +10,13 @@ plugins:
 
 custom:
   env: ${opt:stage,'stg'} # Define default stage
+  prefix: ${self:custom.env}-${self:service}
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: eu-central-1
-  stackName: ${self:custom.env}-${self:service}-stack
+  stackName: ${self:custom.prefix}-stack
   stage: ${self:custom.env}
   lambdaHashingVersion: 20201221
   versionFunctions: false
@@ -26,12 +27,10 @@ provider:
   logRetentionInDays: 7 # Set the default RetentionInDays for a CloudWatch LogGr
   environment:
     PUBLIC_TEST: Public 123
-    STAGE: ${self:custom.env}
-    BUCKET_NAME: ${self:custom.env}-${self:service}-bucket
 
 functions:
   spotify-history-lambda:
-    name: ${self:custom.env}-${self:service}
+    name: ${self:custom.prefix}
     handler: src/index.handler
     events:
       - eventBridge:
@@ -39,6 +38,11 @@ functions:
     environment:
       STAGE: ${self:custom.env}
       NODE_ENV: ${self:custom.env}
+      CLIENT_ID: ${env:CLIENT_ID}
+      CLIENT_SECRET: ${env:CLIENT_SECRET}
+      REFRESH_TOKEN: ${env:REFRESH_TOKEN}
+      MONGO_PW: ${env:MONGO_PW}
+      MONGO_USER: ${env:MONGO_USER}
 
 package:
   exclude:
