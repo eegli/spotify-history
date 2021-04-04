@@ -1,31 +1,17 @@
 const { env } = process;
 
-type Envs = 'prod' | 'stg';
-
-type EnvConfig = {
+type Config = {
   dbName: string;
+  sptClientId: string;
+  sptClientSecret: string;
+  sptRefreshToken: string;
 };
 
-type SharedConfig = {
-  uri: string;
+const config: Config = {
+  dbName: env.DB_NAME || '',
+  sptClientId: env.CLIENT_ID || '',
+  sptClientSecret: env.CLIENT_SECRET || '',
+  sptRefreshToken: env.REFRESH_TOKEN || '',
 };
 
-const currEnv: Envs = env.STAGE as Envs;
-
-const sharedConfig: SharedConfig = {
-  uri: 'spotify-history-stg.rfb2f.mongodb.net',
-};
-
-const envConfig: Record<Envs, EnvConfig> = {
-  stg: {
-    dbName: 'sample_mflix',
-  },
-  prod: {
-    dbName: 'sample_mflix2',
-  },
-};
-
-export const config = {
-  ...sharedConfig,
-  ...envConfig[currEnv],
-} as const;
+export default config;

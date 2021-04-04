@@ -1,53 +1,68 @@
-import Hello from './module/hello';
-
 import { ScheduledHandler } from 'aws-lambda';
 
-import { config } from './config';
-const { env } = process;
+import config from './config';
 
-import mongoose, { ConnectOptions } from 'mongoose';
+import AWS from 'aws-sdk';
+import { getHistory, getRefreshToken } from './services/spotify';
 
-const pw = env.MONGO_PW || '';
-const user = env.MONGO_USER || '';
+const dateId = new Date().toISOString();
 
-const m = new mongoose.Mongoose();
-const options: ConnectOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  dbName: config.dbName,
-  serverSelectionTimeoutMS: 5000,
+const client = new AWS.DynamoDB.DocumentClient();
+
+const putParams = {
+  TableName: 'stg-spotify-history-db',
+  Item: {
+    dateId,
+    songs: [
+      {
+        added_at: '2021-04-02T10:58:57Z',
+        title: 'Peaches (feat. Daniel Caesar & Giveon)',
+        artists: ['Justin Bieber', 'Daniel Caesar', 'Giveon'],
+        album: 'Justice',
+        popularity: 96,
+        genres: ['canadian pop', 'pop', 'post-teen pop'],
+      },
+      {
+        added_at: '2021-03-28T22:01:14Z',
+        title: '7 Stunden',
+        artists: ['LEA', 'Capital Bra'],
+        album: 'Treppenhaus',
+        popularity: 68,
+        genres: ['german pop'],
+      },
+      {
+        added_at: '2021-03-28T16:55:39Z',
+        title: 'What You Need (feat. Charlotte Day Wilson)',
+        artists: ['KAYTRANADA', 'Charlotte Day Wilson'],
+        album: 'What You Need (feat. Charlotte Day Wilson)',
+        popularity: 28,
+        genres: ['escape room', 'indie soul', 'lgbtq+ hip hop'],
+      },
+    ],
+  },
 };
 
-async function run(): Promise<void> {
+const getParams = {
+  TableName: config.dbName,
+  Key: {
+    dateId: '1970-01-01T00:00:00.001Z',
+  },
+};
+
+export const handler: ScheduledHandler = async (): Promise<void> => {
+  // getLastScrobbed()
+  // getSpotifyHistory()
+  // putSpotifyHistory()
   try {
-    await m.connect(
-      `mongodb+srv://${user}:${pw}@spotify-history-stg.rfb2f.mongodb.net/?retryWrites=true&w=majority`,
-      options
-    );
-    const db = m.connection.collection('movies');
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { title: 'Back to the Future' };
-    const movie = await db.findOne(query);
-    console.log(movie);
+    const accessToken = await getRefreshToken();
+    const data = await getHistory(accessToken);
+    console.log(data);
+    const get = await client.get(getParams).promise();
+    const put = await client.put(putParams).promise();
+
+    console.log(get);
+    console.log(put);
   } catch (err) {
-    throw new Error(err);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await m.disconnect();
+    console.log(err);
   }
-}
-
-export const handler: ScheduledHandler = async (
-  event,
-  context,
-  callback
-): Promise<void> => {
-  run()
-    .then(() => callback(null))
-    .catch(err => callback(new Error(err)));
-
-  /*   console.info(Hello + `, current env is: ${process.env.STAGE}`);
-  console.warn(`Available in both prod and stg: ${process.env.PUBLIC_TEST}`);
-  console.log('EVENT' + JSON.stringify(event, null, 2));
-  console.log('CONTEXT' + JSON.stringify(context, null, 2)); */
 };

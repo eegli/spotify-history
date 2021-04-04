@@ -11,6 +11,7 @@ plugins:
 custom:
   env: ${opt:stage,'stg'} # Define default stage
   prefix: ${self:custom.env}-${self:service}
+  dbName: ${self:custom.prefix}-db
 
 provider:
   name: aws
@@ -27,6 +28,15 @@ provider:
   logRetentionInDays: 7 # Set the default RetentionInDays for a CloudWatch LogGr
   environment:
     PUBLIC_TEST: Public 123
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+          Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.dbName}'
 
 functions:
   spotify-history-lambda:
@@ -34,15 +44,30 @@ functions:
     handler: src/index.handler
     events:
       - eventBridge:
-          schedule: rate(60 minutes)
+          schedule: cron(0 * * * *)
     environment:
       STAGE: ${self:custom.env}
       NODE_ENV: ${self:custom.env}
       CLIENT_ID: ${env:CLIENT_ID}
       CLIENT_SECRET: ${env:CLIENT_SECRET}
       REFRESH_TOKEN: ${env:REFRESH_TOKEN}
-      MONGO_PW: ${env:MONGO_PW}
-      MONGO_USER: ${env:MONGO_USER}
+      DB_NAME: ${self:custom.dbName}
+
+resources:
+  Resources:
+    SpotifyHistoryDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.dbName}
+        AttributeDefinitions:
+          - AttributeName: dateId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dateId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 package:
   exclude:
