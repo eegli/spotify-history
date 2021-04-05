@@ -19,7 +19,7 @@
     "stg:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s stg",
     "stg:deploy": "serverless deploy -s stg --force",
     "invoke:stg": "serverless invoke -f spotify-history-lambda -s stg",
-    "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg",
+    "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg | pino-pretty",
     "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "dotenv": "^8.2.0",
     "mongoose": "^5.12.2",
     "open": "^8.0.4",
+    "pino": "^6.11.2",
     "typescript": "^4.2.3"
   },
   "devDependencies": {
@@ -35,9 +36,11 @@
     "@types/aws-sdk": "^2.7.0",
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.35",
+    "@types/pino": "^6.3.6",
     "@types/spotify-api": "^0.0.8",
     "express": "^4.17.1",
     "nanoid": "^3.1.22",
+    "pino-pretty": "^4.7.1",
     "serverless-plugin-ifelse": "^1.0.7",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-node": "^9.1.1"

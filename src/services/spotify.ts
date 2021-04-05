@@ -23,7 +23,7 @@ export const getRefreshToken = async (): Promise<string> => {
 
 export const getHistory = async (
   token: string,
-  params?: GetHistoryParams
+  params: GetHistoryParams
 ): Promise<GetHistoryResponse> => {
   const client = instance<GetHistoryParams>(params);
   const res = await client.get<GetHistoryResponse>(Endpoints.GetHistory, {

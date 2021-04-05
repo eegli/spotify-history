@@ -44,7 +44,7 @@ functions:
     handler: src/index.handler
     events:
       - eventBridge:
-          schedule: cron(0 * * * *)
+          schedule: cron(0 * * * ? *)
     environment:
       STAGE: ${self:custom.env}
       NODE_ENV: ${self:custom.env}

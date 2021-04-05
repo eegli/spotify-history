@@ -1,68 +1,48 @@
 import { ScheduledHandler } from 'aws-lambda';
+import { saveToDynamo, getDateRef, updateDateRef } from './services/dynamo';
 
-import config from './config';
-
-import AWS from 'aws-sdk';
 import { getHistory, getRefreshToken } from './services/spotify';
-
-const dateId = new Date().toISOString();
-
-const client = new AWS.DynamoDB.DocumentClient();
-
-const putParams = {
-  TableName: 'stg-spotify-history-db',
-  Item: {
-    dateId,
-    songs: [
-      {
-        added_at: '2021-04-02T10:58:57Z',
-        title: 'Peaches (feat. Daniel Caesar & Giveon)',
-        artists: ['Justin Bieber', 'Daniel Caesar', 'Giveon'],
-        album: 'Justice',
-        popularity: 96,
-        genres: ['canadian pop', 'pop', 'post-teen pop'],
-      },
-      {
-        added_at: '2021-03-28T22:01:14Z',
-        title: '7 Stunden',
-        artists: ['LEA', 'Capital Bra'],
-        album: 'Treppenhaus',
-        popularity: 68,
-        genres: ['german pop'],
-      },
-      {
-        added_at: '2021-03-28T16:55:39Z',
-        title: 'What You Need (feat. Charlotte Day Wilson)',
-        artists: ['KAYTRANADA', 'Charlotte Day Wilson'],
-        album: 'What You Need (feat. Charlotte Day Wilson)',
-        popularity: 28,
-        genres: ['escape room', 'indie soul', 'lgbtq+ hip hop'],
-      },
-    ],
-  },
-};
-
-const getParams = {
-  TableName: config.dbName,
-  Key: {
-    dateId: '1970-01-01T00:00:00.001Z',
-  },
-};
+import { extractSongInfo } from './utils/extractSongInfo';
+import log from './utils/logger';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
-  // getLastScrobbed()
-  // getSpotifyHistory()
-  // putSpotifyHistory()
   try {
+    // Use refresh token to get access token
     const accessToken = await getRefreshToken();
-    const data = await getHistory(accessToken);
-    console.log(data);
-    const get = await client.get(getParams).promise();
-    const put = await client.put(putParams).promise();
 
-    console.log(get);
-    console.log(put);
+    // Get the date of the last song that was scrobbed
+    const lastScrobbed = await getDateRef();
+
+    const songs = lastScrobbed
+      ? await getHistory(accessToken, {
+          // Only request new items after most recent scrob
+          after: lastScrobbed,
+          limit: 50,
+        })
+      : // If there is no date ref (first time deployed), request all songs before "now"
+        await getHistory(accessToken, {
+          before: Date.now(),
+          limit: 50,
+        });
+
+    // Check if we have new items since last scrobbed
+    if (songs.items.length > 0) {
+      // Filter out unwanted attributes - not everything needs to go
+      // to dynamo
+      const cleanSongs = songs.items.map(extractSongInfo);
+      // Unix timestamp in milliseconds that reflects the last date
+      // that has been scrobbed
+      const newDateRef = songs.cursors.after;
+
+      await saveToDynamo(cleanSongs, newDateRef);
+
+      await updateDateRef(newDateRef);
+      log.info(`Success! ${songs.items.length} new songs have been scrubbed!`);
+      // No new items since last scrobbed
+    } else {
+      log.info(`Success! No new songs have been scrubbed!`);
+    }
   } catch (err) {
-    console.log(err);
+    log.error(err, 'Something went wrong');
   }
 };
