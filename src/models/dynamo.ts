@@ -3,7 +3,6 @@ interface DynamoBaseDoc {
 }
 
 // Primary key for this table
-// Optional sort key may be added here
 interface DynamoBaseKeys {
   dateId: string;
 }
@@ -20,8 +19,10 @@ export interface DynamoItem extends DynamoBaseDoc {
 
 // All non-required item attributes
 interface DynamoRecordAttrs {
-  lastScrobbed: string;
-  lastScrobbedString: string;
+  lastPlayed: number;
+  lastPlayedString: string;
   itemCount?: number;
   items?: any;
 }
+
+export type DymamoItemResponse = Partial<DynamoRecordAttrs>;

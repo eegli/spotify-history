@@ -2,20 +2,20 @@ import config from '../config';
 
 import AWS from 'aws-sdk';
 import { localDS } from '../utils/date';
-import { DynamoItem, DynamoRef } from '../models/dynamo';
+import { DymamoItemResponse, DynamoItem, DynamoRef } from '../models/dynamo';
 
 const client = new AWS.DynamoDB.DocumentClient();
 
-export const saveToDynamo = async (data: unknown[], timeStamp: string) => {
+export const saveToDynamo = async (data: unknown[], timeStamp: number) => {
   const params: DynamoItem = {
     TableName: config.dbName,
     Item: {
       // Primary db key as ISO date string
       dateId: new Date().toISOString(),
       // Timestamp in ms of last song that was scrobbed
-      lastScrobbed: timeStamp,
+      lastPlayed: timeStamp,
       // Same timestamp as above but readable
-      lastScrobbedString: localDS(timeStamp),
+      lastPlayedString: localDS(timeStamp),
       // Array of songs
       items: data, // TODO Type this
       itemCount: data.length,
@@ -24,7 +24,7 @@ export const saveToDynamo = async (data: unknown[], timeStamp: string) => {
   return client.put(params).promise();
 };
 
-export const getDateRef = async (): Promise<number | undefined> => {
+export const getDateRef = async (): Promise<DymamoItemResponse> => {
   const params: DynamoRef = {
     TableName: config.dbName,
     Key: {
@@ -32,16 +32,16 @@ export const getDateRef = async (): Promise<number | undefined> => {
     },
   };
   const ref = await client.get(params).promise();
-  return ref.Item?.lastScrobbed;
+  return ref.Item!;
 };
 
-export const updateDateRef = async (timeStamp: string) => {
+export const updateDateRef = async (timeStamp: number) => {
   const params: DynamoItem = {
     TableName: config.dbName,
     Item: {
       dateId: config.masterDateRef,
-      lastScrobbed: timeStamp,
-      lastScrobbedString: localDS(timeStamp),
+      lastPlayed: timeStamp,
+      lastPlayedString: localDS(timeStamp),
     },
   };
   return client.put(params).promise();

@@ -1,4 +1,4 @@
-export const localDS = (unixTimeStamp: string) => {
-  const t = parseInt(unixTimeStamp);
-  return new Date(t).toLocaleString('en-CH');
+// Consistent locale, hopefully less typos
+export const localDS = (unixTimeStamp: number) => {
+  return new Date(unixTimeStamp).toLocaleString('en-CH');
 };

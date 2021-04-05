@@ -10,7 +10,7 @@ type Config = {
 
 const config: Config = {
   dbName: env.DB_NAME || '',
-  masterDateRef: new Date(1).toISOString(),
+  masterDateRef: '1970-01-01T00:00:00.001Z',
   sptClientId: env.CLIENT_ID || '',
   sptClientSecret: env.CLIENT_SECRET || '',
   sptRefreshToken: env.REFRESH_TOKEN || '',
