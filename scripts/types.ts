@@ -1,4 +1,4 @@
-declare namespace TokenServer {
+namespace TokenServer {
   export type Credentials = {
     clientId: string;
     clientSecret: string;

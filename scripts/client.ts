@@ -1,3 +1,5 @@
+/// <reference path="./types.ts"/>
+
 (async (): Promise<void> => {
   // This must correspond to the redirect url set in the Spotify developer application
   const local = 'http://localhost:3000';

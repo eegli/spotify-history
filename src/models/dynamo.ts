@@ -22,5 +22,6 @@ export interface DynamoItem extends DynamoBaseDoc {
 interface DynamoRecordAttrs {
   lastScrobbed: string;
   lastScrobbedString: string;
-  songs?: any;
+  itemCount?: number;
+  items?: any;
 }

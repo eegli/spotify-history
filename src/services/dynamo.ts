@@ -6,7 +6,7 @@ import { DynamoItem, DynamoRef } from '../models/dynamo';
 
 const client = new AWS.DynamoDB.DocumentClient();
 
-export const saveToDynamo = async (data: any, timeStamp: string) => {
+export const saveToDynamo = async (data: unknown[], timeStamp: string) => {
   const params: DynamoItem = {
     TableName: config.dbName,
     Item: {
@@ -17,7 +17,8 @@ export const saveToDynamo = async (data: any, timeStamp: string) => {
       // Same timestamp as above but readable
       lastScrobbedString: localDS(timeStamp),
       // Array of songs
-      songs: data, // TODO Type this
+      items: data, // TODO Type this
+      itemCount: data.length,
     },
   };
   return client.put(params).promise();
