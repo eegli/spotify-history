@@ -15,10 +15,10 @@ export const saveToDynamo = async (data: any, timeStamp: string) => {
         dateId: new Date().toISOString(),
         // Timestamp in ms of last song that was scrobbed
         lastScrobbed: timeStamp,
-        // Date of most recently played item - useful to quickly see the date
+        // Same timestamp as above but readable
         lastScrobbedString: dateString,
         // Array of songs
-        songs: data,
+        songs: data, // TODO Type this
       },
     })
     .promise();
@@ -29,8 +29,7 @@ export const getDateRef = async (): Promise<number | undefined> => {
     .get({
       TableName: config.dbName,
       Key: {
-        // STATIC
-        dateId: new Date(1).toISOString(),
+        dateId: config.masterDateRef,
       },
     })
     .promise();
@@ -43,8 +42,7 @@ export const updateDateRef = async (timeStamp: string) => {
     .put({
       TableName: config.dbName,
       Item: {
-        // STATIC
-        dateId: new Date(1).toISOString(),
+        dateId: config.masterDateRef,
         lastScrobbed: timeStamp,
         lastScrobbedString: dateString,
       },
