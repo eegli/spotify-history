@@ -12,7 +12,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
     // Get the date of the last song that was saved in Dynamo (a.k.a
     // master date ref of the previous lambda invocation)
-    const { lastPlayed } = await getDateRef();
+    const lastPlayed = await getDateRef();
 
     // If this is deployed for the first time, there is no master date
     // ref (lambda runs for the first time). In this case, all songs

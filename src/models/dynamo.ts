@@ -24,5 +24,3 @@ interface DynamoRecordAttrs {
   itemCount?: number;
   items?: any;
 }
-
-export type DymamoItemResponse = Partial<DynamoRecordAttrs>;

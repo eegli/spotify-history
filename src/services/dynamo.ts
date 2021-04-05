@@ -2,7 +2,7 @@ import config from '../config';
 
 import AWS from 'aws-sdk';
 import { localDS } from '../utils/date';
-import { DymamoItemResponse, DynamoItem, DynamoRef } from '../models/dynamo';
+import { DynamoItem, DynamoRef } from '../models/dynamo';
 
 const client = new AWS.DynamoDB.DocumentClient();
 
@@ -24,7 +24,7 @@ export const saveToDynamo = async (data: unknown[], timeStamp: number) => {
   return client.put(params).promise();
 };
 
-export const getDateRef = async (): Promise<DymamoItemResponse> => {
+export const getDateRef = async (): Promise<number | undefined> => {
   const params: DynamoRef = {
     TableName: config.dbName,
     Key: {
@@ -32,7 +32,7 @@ export const getDateRef = async (): Promise<DymamoItemResponse> => {
     },
   };
   const ref = await client.get(params).promise();
-  return ref.Item!;
+  return ref.Item?.lastPlayed;
 };
 
 export const updateDateRef = async (timeStamp: number) => {
