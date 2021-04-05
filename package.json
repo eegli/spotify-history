@@ -19,7 +19,7 @@
     "stg:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s stg",
     "stg:deploy": "serverless deploy -s stg --force",
     "invoke:stg": "serverless invoke -f spotify-history-lambda -s stg",
-    "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg | pino-pretty",
+    "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg",
     "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts"
   },
   "dependencies": {
