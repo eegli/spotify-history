@@ -1,10 +1,11 @@
 import { ScheduledHandler } from 'aws-lambda';
+import axios from 'axios';
 import { GetHistoryParams } from './api';
 import { saveToDynamo, getDateRef, updateDateRef } from './services/dynamo';
 
 import { getHistory, getRefreshToken } from './services/spotify';
 import { extractSongInfo } from './utils/song';
-
+import testData from './utils/testData';
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
     // Use refresh token to get access token
@@ -55,3 +56,23 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     console.error('Something went wrong', err);
   }
 };
+
+const genres = testData.items
+  .reduce((acc, el) => {
+    acc.push(el.track.artists[0].id);
+    return acc;
+  }, <string[]>[])
+  .reduce(async (acc, el) => {
+    const genre = await axios.get<SpotifyApi.SingleArtistResponse>(
+      `https://api.spotify.com/v1/artists/${el}`,
+      {
+        headers: {
+          Authorization:
+            'Bearer BQAZRuyMPChoOSIf79aTh2vGCpBGPAzYguq1TVO7uvonIIXfh-B5rMzqTDkwRTlt7D4p8YGGJhbhk5seFh-znsZQ437w4_zE6JCYiZ9DrifyNagUlqu32KVa-CiKuRIAuR6JgNIFNjK7nDJRHIu4QB9W_Q5tbHgL0K0u4aE',
+        },
+      }
+    );
+    acc.then(a => a.push(genre.data.genres));
+    return acc;
+  }, Promise.resolve(<string[][]>[]));
+genres.then(res => console.log(res));
