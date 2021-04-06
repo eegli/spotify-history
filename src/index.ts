@@ -57,22 +57,28 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
   }
 };
 
-const genres = testData.items
-  .reduce((acc, el) => {
-    acc.push(el.track.artists[0].id);
-    return acc;
-  }, <string[]>[])
-  .reduce(async (acc, el) => {
-    const genre = await axios.get<SpotifyApi.SingleArtistResponse>(
-      `https://api.spotify.com/v1/artists/${el}`,
-      {
-        headers: {
-          Authorization:
-            'Bearer BQAZRuyMPChoOSIf79aTh2vGCpBGPAzYguq1TVO7uvonIIXfh-B5rMzqTDkwRTlt7D4p8YGGJhbhk5seFh-znsZQ437w4_zE6JCYiZ9DrifyNagUlqu32KVa-CiKuRIAuR6JgNIFNjK7nDJRHIu4QB9W_Q5tbHgL0K0u4aE',
-        },
-      }
-    );
-    acc.then(a => a.push(genre.data.genres));
-    return acc;
-  }, Promise.resolve(<string[][]>[]));
+const artists = testData.items.reduce((acc, el) => {
+  acc.push(el.track.artists.map(el => el.id).join(','));
+  return acc;
+}, <string[]>[]);
+
+console.log(artists);
+const genres = artists.reduce(async (acc, el) => {
+  const genre = await axios.get<SpotifyApi.MultipleArtistsResponse>(
+    `https://api.spotify.com/v1/artists`,
+    {
+      params: {
+        ids: el,
+      },
+      headers: {
+        Authorization:
+          'Bearer BQAtl8kdTPboj1NAQK7K9XioSflqmcbRGpnf1muxUbYyHwW6nQSiaUJqYzJUSCC0ix4UWx3ZVUCElAQ2u1o3CNl8YGOuJM2zI9eCLojJ3sjIOea7I_svzTbIV62xlzDorNuTbAtLjlVkpO7vt0ar0GYL8oZH9hFYb3wIPAc',
+      },
+    }
+  );
+  acc.then(artist => artist.push(genre.data.artists.map(el => el.genres)));
+  return acc;
+}, Promise.resolve(<string[][][]>[]));
 genres.then(res => console.log(res));
+
+// https://dev.to/pedrohasantiago/typescript-adjusting-types-in-reduce-function-with-an-async-callback-2kc8
