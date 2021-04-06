@@ -13,7 +13,6 @@
     "dev": "ts-node -r dotenv/config src/index.ts",
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
-    "watch": "tsc --watch",
     "prod:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s prod",
     "prod:deploy": "serverless deploy -s prod",
     "stg:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s stg",
