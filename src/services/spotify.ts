@@ -17,7 +17,7 @@ interface RefreshTokenResponse {
   expires_in: number;
 }
 
-interface HistoryParams {
+export interface HistoryParams {
   after?: number;
   before?: number;
   limit?: number;
@@ -90,8 +90,8 @@ export class Spotify {
 
       // Manually set the cursors so that we know the time of the
       // first and last song of this history
-      this.cursorAfter = new Date(firstElem).getTime().toString();
-      this.cursorBefore = new Date(lastElem).getTime().toString();
+      this.cursorAfter = new Date(lastElem).getTime().toString();
+      this.cursorBefore = new Date(firstElem).getTime().toString();
     }
   }
 

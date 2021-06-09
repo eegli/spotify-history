@@ -29,5 +29,8 @@ export class History {
   date?: string;
 
   @attribute()
+  count?: number;
+
+  @attribute()
   songs?: HistoryElement[];
 }

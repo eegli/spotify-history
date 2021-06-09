@@ -43,11 +43,17 @@ export const getLatestHistory = async () => {
   }
 };
 
-export const setHistory = async (timestamp: string, data: HistoryElement[]) => {
+export const setHistory = async (
+  timestamp: string,
+  count: number,
+  data: HistoryElement[]
+) => {
   const timeStampForDate = parseInt(timestamp);
   const newHistory: History = Object.assign(new History(), {
     timestamp,
+
     date: new Date(timeStampForDate).toISOString(),
+    count,
     songs: data,
   });
 

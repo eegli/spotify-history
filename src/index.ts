@@ -2,7 +2,7 @@ import { ScheduledHandler } from 'aws-lambda';
 
 import { getLatestHistory, setHistory } from './services/dynamo';
 
-import { Spotify } from './services/spotify';
+import { Spotify, HistoryParams } from './services/spotify';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -14,17 +14,23 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     const latestHistory = await getLatestHistory();
     const latestTimestamp = latestHistory?.timestamp;
 
-    // If this is deployed for the first time, the returned timestamp
-    // is undefined since there is no history element in dynamo (= no
-    // latest timestamp). If that is the case, get all songs since the
-    // beginning of time!
+    const params: HistoryParams = {
+      limit: 50,
+    };
 
-    // 1 is simply new Date(1).getTime(). Note that generally,
-    // timestamps are handled as strings, but the Spotify API expects
-    // a timestamp parameter as a number
-    const timestamp = latestTimestamp ? parseInt(latestTimestamp) : 1;
+    // If we already have something in dynamo from the last time we
+    // scrobbed, request all songs before that date.
 
-    await spotify.getHistory({ after: timestamp, limit: 50 });
+    // Else, if this is deployed for the first time, the returned
+    // timestamp is undefined since there is no history element in
+    // dynamo. In this case, get all songs before now
+    if (latestTimestamp) {
+      params.after = parseInt(latestTimestamp);
+    } else {
+      params.before = new Date().getTime();
+    }
+
+    await spotify.getHistory(params);
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
@@ -32,9 +38,11 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       const enrichedTracks = await spotify.enrichHistory();
       const currentTimestamp = spotify.cursors.before;
 
-      await setHistory(currentTimestamp, enrichedTracks);
+      await setHistory(currentTimestamp, spotify.itemCount, enrichedTracks);
+
+      const songs = spotify.itemCount === 1 ? 'song' : 'songs';
       console.log(
-        `Success! ${spotify.itemCount} new songs have been scrubbed!`
+        `Success! ${spotify.itemCount} new ${songs} have been scrubbed!`
       );
       // No new items since last scrobbed
     } else {
