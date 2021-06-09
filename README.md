@@ -1,6 +1,16 @@
 # Spotify History Lambda
 
-A simple Spotify scrobber. Deployed for free on AWS. Built with Serverless.
+A simple Spotify scrobber.
+
+## Features
+
+- Free of charge. Uses the AWS free tier
+- Easily customizable
+- Export to CSV via AWS Console
+
+## Getting started
+
+wip
 
 ## Running DynamoDB locally
 
@@ -8,27 +18,28 @@ Make sure you have already installed the Node.js dependencies as mentioned above
 
 1. Install the plugin:
 
-```bash
+```console
 sls dynamodb install
 ```
 
 2. Launch DynamoDB. Both commands will migrate tables.
 
-```bash
+```console
 # With seeding. This will populate the table with 3 mocks songs
 yarn dynamo:start
 ```
 
-```bash
+```console
 # Without seeding. This will migrate an empty table
 yarn dynamo:start:noseed
 ```
 
+3. Query your table for all items to check for insertions
+
 ```javascript
 dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
   if (err) ppJson(err);
-  // an error occurred
-  else ppJson(data); // successful response
+  else ppJson(data);
 });
 ```
 
