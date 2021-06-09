@@ -1,12 +1,12 @@
 import config from '../config';
 
 import { DataMapper, QueryOptions } from '@aws/dynamodb-data-mapper';
-import { ConditionExpression, AndExpression } from '@aws/dynamodb-expressions';
+import { ConditionExpression } from '@aws/dynamodb-expressions';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-import { localDS } from '../utils/date';
+
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import { History } from '../models/history';
-import { KeyConditions } from 'aws-sdk/clients/dynamodb';
+import { History, HistoryElement } from '../models/history';
+
 type Options = DynamoDB.DocumentClient.DocumentClientOptions &
   ServiceConfigurationOptions &
   DynamoDB.ClientApiVersions;
@@ -25,40 +25,31 @@ const mapper = new DataMapper({
   client: new DynamoDB(params),
 });
 
-export const getLatest = async (timeStamp: string) => {
+export const getLatestHistory = async () => {
   const queryOptions: QueryOptions = {
     limit: 1,
     scanIndexForward: false,
   };
 
-  const dateFilter: ConditionExpression = {
-    type: 'LessThanOrEqualTo',
-    subject: 'timestamp',
-    object: timeStamp,
+  const params: ConditionExpression = {
+    type: 'Equals',
+    subject: 'type',
+    object: 'history',
   };
-
-  const params: AndExpression = {
-    type: 'And',
-    conditions: [
-      { type: 'Equals', subject: 'type', object: 'chapter' },
-      dateFilter,
-    ],
-  };
-
-  for await (const foo of mapper.query(History, params, queryOptions)) {
-    console.log(foo.data);
+  const iterator = mapper.query(History, params, queryOptions);
+  for await (const history of iterator) {
+    // Return the first element
+    return history;
   }
 };
 
-/* export const updateDateRef = async (timeStamp: number) => {
-  const params: DynamoItem = {
-    TableName: config.TABLE_NAME,
-    Item: {
-      dateId: config.masterDateRef,
-      lastPlayed: timeStamp,
-      lastPlayedString: localDS(timeStamp),
-    },
-  };
-  return client.put(params).promise();
+export const setHistory = async (timestamp: string, data: HistoryElement[]) => {
+  const timeStampForDate = parseInt(timestamp);
+  const newHistory: History = Object.assign(new History(), {
+    timestamp,
+    date: new Date(timeStampForDate).toISOString(),
+    songs: data,
+  });
+
+  return mapper.put(newHistory);
 };
- */

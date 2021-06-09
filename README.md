@@ -5,6 +5,8 @@
 5. Open up a separate tab in your console and stream logs in there via `serverless logs -f myFunction -t`.
 6. Write tests to run locally.
 
+- https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html
+
 ```js
 dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
   if (err) ppJson(err);

@@ -89,7 +89,9 @@ resources:
           WriteCapacityUnits: 1
 
 package:
-  exclude:
-    - .git/**
-    - README.md
-    - .gitignore
+  patterns:
+    - '!README.md'
+    - '!tsconfig.client.json'
+    - '!.env'
+    - '!.nvmrc'
+    - '!scripts/**'
