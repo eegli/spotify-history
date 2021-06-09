@@ -10,18 +10,18 @@
   "author": "Eric <43848365+eegli@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "dynamo:start": "sls dynamodb start --stage local --seed=test",
-    "dynamo:start:noseed": "sls dynamodb start --stage local",
-    "dev": "ts-node -r dotenv/config src/index.ts",
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
+    "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts",
+    "dynamo:start": "sls dynamodb start --stage local --seed=test",
+    "dynamo:start:noseed": "sls dynamodb start --stage local",
     "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
     "prod:deploy": "sls deploy -s prod",
     "stg:spotify:deploy": "sls deploy function -f spotify-history-lambda -s stg",
     "stg:deploy": "sls deploy -s stg --force",
     "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
-    "local:invoke": "sls invoke local -f spotify-history-lambda -s local",
-    "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts"
+    "local:invoke": "sls invoke local -f spotify-history-lambda -s local"
+
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",

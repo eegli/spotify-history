@@ -33,8 +33,8 @@
     };
 
     const tokenParams = new URLSearchParams();
-    for (const prop in params) {
-      tokenParams.set(prop, params[prop]);
+    for (const [key, value] of Object.entries(params)) {
+      tokenParams.set(key, value);
     }
 
     const getToken = async (): Promise<TokenServer.TokenResponse> => {

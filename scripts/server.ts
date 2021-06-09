@@ -19,8 +19,10 @@ if (!clientId || !clientSecret) {
 
 const app = express();
 app.use(express.json());
+
 // Get compiled client script
 const script = fs.readFileSync(__dirname + '/../browser/script.js', 'utf8');
+
 // This will be sent to the client
 const template = `<html><body><script>${script}</script></body></html>`;
 
@@ -51,7 +53,7 @@ app.post('/submit', (req, res) => {
   const jsonData = req.body as TokenServer.TokenSuccess;
   if (jsonData.access_token) {
     console.log(`Success! Saved token to file`);
-    jsonData.dateObtained = new Date().toISOString();
+    jsonData.dateObtained = new Date().toLocaleString();
     fs.writeFileSync(
       __dirname + '/../token.json',
       JSON.stringify(jsonData, null, 2)
