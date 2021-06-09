@@ -1,0 +1,35 @@
+[
+  {
+    "type": "history",
+    "timestamp": "1",
+    "date": "1990-01-01T00:00:00.001Z",
+    "data": {
+      "id": "1",
+      "name": "Old Song",
+      "artists": ["Rod Stewart", "Billy Idol"],
+      "album": "2000: Best of"
+    }
+  },
+  {
+    "type": "history",
+    "timestamp": "1577836800001",
+    "date": "2020-01-01T00:00:00.001Z",
+    "data": {
+      "id": "2",
+      "name": "New Song",
+      "artists": ["Drake", "Coldplay"],
+      "album": "2020: Best of"
+    }
+  },
+  {
+    "type": "history",
+    "timestamp": "1623223972097",
+    "date": "2021-06-09T07:32:52.097Z",
+    "data": {
+      "id": "3",
+      "name": "Super New Song",
+      "artists": ["Best Artist 1", "Best Artist 2"],
+      "album": "Best Albums EVER"
+    }
+  }
+]

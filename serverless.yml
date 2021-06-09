@@ -7,11 +7,28 @@ unresolvedVariablesNotificationMode: error
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-dynamodb-local
 
 custom:
   env: ${opt:stage,'stg'} # Define default stage
   prefix: ${self:custom.env}-${self:service}
-  dbName: ${self:custom.prefix}-db
+  tableName: ${self:custom.prefix}-db
+  dynamodb:
+    stages:
+      - local
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      heapInitial: 200m
+      heapMax: 1g
+      seed: false # Seed manually via CLI only
+      convertEmptyValues: true
+    seed:
+      test:
+        sources:
+          - table: ${self:custom.tableName}
+            sources: [./test/dynamo.json]
 
 provider:
   name: aws
@@ -23,11 +40,9 @@ provider:
   versionFunctions: false
   eventBridge:
     useCloudFormation: true
-  memorySize: 128 # Overwrite the default memory size. Default is 1024
-  timeout: 5 # The default is 6 seconds. Note: API Gateway current maximum is 30 seconds
-  logRetentionInDays: 7 # Set the default RetentionInDays for a CloudWatch LogGr
-  environment:
-    PUBLIC_TEST: Public 123
+  memorySize: 128
+  timeout: 5
+  logRetentionInDays: 7
   iam:
     role:
       statements:
@@ -36,7 +51,7 @@ provider:
             - dynamodb:Query
             - dynamodb:GetItem
             - dynamodb:PutItem
-          Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.dbName}'
+          Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}'
 
 functions:
   spotify-history-lambda:
@@ -46,31 +61,37 @@ functions:
       - eventBridge:
           schedule: cron(0 * * * ? *)
     environment:
+      TABLE_NAME: ${self:custom.tableName}
+      AWS_REGION: ${self:provider.region}
       STAGE: ${self:custom.env}
-      NODE_ENV: ${self:custom.env}
       CLIENT_ID: ${env:CLIENT_ID}
       CLIENT_SECRET: ${env:CLIENT_SECRET}
       REFRESH_TOKEN: ${env:REFRESH_TOKEN}
-      DB_NAME: ${self:custom.dbName}
 
 resources:
   Resources:
     SpotifyHistoryDb:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.dbName}
+        TableName: ${self:custom.tableName}
         AttributeDefinitions:
-          - AttributeName: dateId
+          - AttributeName: type
+            AttributeType: S
+          - AttributeName: timestamp
             AttributeType: S
         KeySchema:
-          - AttributeName: dateId
+          - AttributeName: type
             KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
 package:
-  exclude:
-    - .git/**
-    - README.md
-    - .gitignore
+  patterns:
+    - '!README.md'
+    - '!tsconfig.client.json'
+    - '!.env'
+    - '!.nvmrc'
+    - '!scripts/**'

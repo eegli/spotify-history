@@ -1,74 +1,55 @@
 import config from '../config';
 
-import AWS from 'aws-sdk';
-import { localDS } from '../utils/date';
+import { DataMapper, QueryOptions } from '@aws/dynamodb-data-mapper';
+import { ConditionExpression } from '@aws/dynamodb-expressions';
+import DynamoDB from 'aws-sdk/clients/dynamodb';
 
-interface DynamoBaseDoc {
-  TableName: string;
-}
+import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
+import { History, HistoryElement } from '../models/history';
 
-// Primary key for this table
-interface DynamoBaseKeys {
-  dateId: string;
-}
+type Options = DynamoDB.DocumentClient.DocumentClientOptions &
+  ServiceConfigurationOptions &
+  DynamoDB.ClientApiVersions;
 
-// For GET operations
-export interface DynamoRef extends DynamoBaseDoc {
-  Key: DynamoBaseKeys;
-}
-
-// For PUT operations
-export interface DynamoItem extends DynamoBaseDoc {
-  Item: DynamoBaseKeys & DynamoRecordAttrs;
-}
-
-// All non-required item attributes
-interface DynamoRecordAttrs {
-  lastPlayed: number;
-  lastPlayedString: string;
-  itemCount?: number;
-  items?: any;
-}
-
-const client = new AWS.DynamoDB.DocumentClient();
-
-export const saveToDynamo = async (data: unknown[], timeStamp: number) => {
-  const params: DynamoItem = {
-    TableName: config.dbName,
-    Item: {
-      // Primary db key as ISO date string
-      dateId: new Date().toISOString(),
-      // Timestamp in ms of last song that was scrobbed
-      lastPlayed: timeStamp,
-      // Same timestamp as above but readable
-      lastPlayedString: localDS(timeStamp),
-      // Array of songs
-      items: data, // TODO Type this
-      itemCount: data.length,
-    },
-  };
-  return client.put(params).promise();
+const params: Options = {
+  region: config.AWS_REGION,
+  apiVersion: '2012-08-10',
 };
 
-export const getDateRef = async (): Promise<number | undefined> => {
-  const params: DynamoRef = {
-    TableName: config.dbName,
-    Key: {
-      dateId: config.masterDateRef,
-    },
+if (process.env.stage === 'local') {
+  params.region = 'localhost';
+  params.endpoint = 'http://localhost:8000';
+}
+
+const mapper = new DataMapper({
+  client: new DynamoDB(params),
+});
+
+export const getLatestHistory = async () => {
+  const queryOptions: QueryOptions = {
+    limit: 1,
+    scanIndexForward: false,
   };
-  const ref = await client.get(params).promise();
-  return ref.Item?.lastPlayed;
+
+  const params: ConditionExpression = {
+    type: 'Equals',
+    subject: 'type',
+    object: 'history',
+  };
+  const iterator = mapper.query(History, params, queryOptions);
+  for await (const history of iterator) {
+    // Return the first element
+    return history;
+  }
 };
 
-export const updateDateRef = async (timeStamp: number) => {
-  const params: DynamoItem = {
-    TableName: config.dbName,
-    Item: {
-      dateId: config.masterDateRef,
-      lastPlayed: timeStamp,
-      lastPlayedString: localDS(timeStamp),
-    },
-  };
-  return client.put(params).promise();
+export const setHistory = async (timestamp: string, data: HistoryElement[]) => {
+  const timeStampForDate = parseInt(timestamp);
+  const newHistory: History = Object.assign(new History(), {
+    timestamp,
+    date: new Date(timeStampForDate).toISOString(),
+    songs: data,
+  });
+
+  return mapper.put(newHistory);
 };
