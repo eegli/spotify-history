@@ -46,10 +46,10 @@ export class Spotify {
 
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();
-    params.append('client_id', config.sptClientId);
-    params.append('client_secret', config.sptClientSecret);
+    params.append('client_id', config.SPT_CLIENT_ID);
+    params.append('client_secret', config.SPT_CLIENT_SECRET);
     params.append('grant_type', 'refresh_token');
-    params.append('refresh_token', config.sptRefreshToken);
+    params.append('refresh_token', config.SPT_REFRESH_TOKEN);
 
     const res = await axios.post<RefreshTokenRes>(
       'https://accounts.spotify.com/api/token',
@@ -60,7 +60,6 @@ export class Spotify {
         },
       }
     );
-    console.log(res);
     this.bearerToken = res.data.access_token || '';
   }
 
@@ -104,7 +103,7 @@ export class Spotify {
             })),
           })
         )
-        .catch(err => console.log(JSON.stringify(err)));
+        .catch(err => console.error(err));
       return acc;
     }, Promise.resolve(<TrackObjEnriched[]>[]));
   }

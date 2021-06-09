@@ -10,18 +10,21 @@
   "author": "Eric <43848365+eegli@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
+    "dynamo": "sls dynamodb start --stage local",
     "dev": "ts-node -r dotenv/config src/index.ts",
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
-    "prod:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s prod",
-    "prod:deploy": "serverless deploy -s prod",
-    "stg:spotify:deploy": "serverless deploy function -f spotify-history-lambda -s stg",
-    "stg:deploy": "serverless deploy -s stg --force",
-    "invoke:stg": "serverless invoke -f spotify-history-lambda -s stg",
-    "invoke:local": "serverless invoke local -f spotify-history-lambda -s stg",
+    "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
+    "prod:deploy": "sls deploy -s prod",
+    "stg:spotify:deploy": "sls deploy function -f spotify-history-lambda -s stg",
+    "stg:deploy": "sls deploy -s stg --force",
+    "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
+    "local:invoke": "sls invoke local -f spotify-history-lambda -s local",
     "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts"
   },
   "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "aws-sdk": "^2.878.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
@@ -36,6 +39,7 @@
     "@types/spotify-api": "^0.0.8",
     "express": "^4.17.1",
     "nanoid": "^3.1.22",
+    "serverless-dynamodb-local": "^0.2.39",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-node": "^9.1.1"
   }

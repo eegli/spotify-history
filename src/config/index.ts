@@ -1,19 +1,21 @@
 const { env } = process;
 
 type Config = {
-  dbName: string;
+  TABLE_NAME: string;
   masterDateRef: string;
-  sptClientId: string;
-  sptClientSecret: string;
-  sptRefreshToken: string;
+  SPT_CLIENT_ID: string;
+  SPT_CLIENT_SECRET: string;
+  SPT_REFRESH_TOKEN: string;
+  AWS_REGION: string;
 };
 
-const config: Config = {
-  dbName: env.DB_NAME || '',
+const config: Readonly<Config> = {
+  TABLE_NAME: env.TABLE_NAME || '',
   masterDateRef: '1970-01-01T00:00:00.001Z',
-  sptClientId: env.CLIENT_ID || '',
-  sptClientSecret: env.CLIENT_SECRET || '',
-  sptRefreshToken: env.REFRESH_TOKEN || '',
+  AWS_REGION: env.AWS_REGION || '',
+  SPT_CLIENT_ID: env.CLIENT_ID || '',
+  SPT_CLIENT_SECRET: env.CLIENT_SECRET || '',
+  SPT_REFRESH_TOKEN: env.REFRESH_TOKEN || '',
 };
 
 export default config;

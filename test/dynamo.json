@@ -1,0 +1,12 @@
+[
+  {
+    "type": "history",
+    "timestamp": "myRecordtimestamp",
+    "data": 2
+  },
+  {
+    "type": "history",
+    "timestamp": "myOtherRecord",
+    "data": 3
+  }
+]

@@ -1,6 +1,6 @@
 import { ScheduledHandler } from 'aws-lambda';
 
-import { saveToDynamo, getDateRef, updateDateRef } from './services/dynamo';
+import { getLatest } from './services/dynamo';
 
 import { HistoryParams, Spotify } from './models/spotify';
 
@@ -11,15 +11,16 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     // Use refresh token to get access token
     spotify.getRefreshToken();
     console.log(spotify.bearerToken);
+    getLatest('3');
 
     // Get the date of the last song that was saved in Dynamo (a.k.a
     // master date ref of the previous lambda invocation)
-    const lastPlayed = await getDateRef();
+    //  const lastPlayed = await getDateRef();
 
     // If this is deployed for the first time, there is no master date
     // ref (lambda runs for the first time). In this case, all songs
     // before "now" are fetched. The logic is all in the cursor params
-    const spotifyParams: HistoryParams = lastPlayed
+    /*     const spotifyParams: HistoryParams = lastPlayed
       ? {
           after: lastPlayed,
           limit: 50,
@@ -27,9 +28,9 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       : {
           before: Date.now(),
           limit: 50,
-        };
+        }; */
 
-    // Get songs
+    /*     // Get songs
     await spotify.getHistory(spotifyParams);
 
     // Check if we have new items since last invocation or if nothing
@@ -52,7 +53,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       // No new items since last scrobbed
     } else {
       console.log(`No new songs have been scrubbed!`);
-    }
+    } */
   } catch (err) {
     console.error('Something went wrong', err);
   }
