@@ -22,7 +22,7 @@ custom:
       migrate: true
       heapInitial: 200m
       heapMax: 1g
-      seed: true
+      seed: false # Seed manually via CLI only
       convertEmptyValues: true
     seed:
       test:

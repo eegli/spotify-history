@@ -10,7 +10,8 @@
   "author": "Eric <43848365+eegli@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "dynamo": "sls dynamodb start --stage local",
+    "dynamo:start": "sls dynamodb start --stage local --seed=test",
+    "dynamo:start:noseed": "sls dynamodb start --stage local",
     "dev": "ts-node -r dotenv/config src/index.ts",
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
