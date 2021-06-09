@@ -12,7 +12,7 @@ type Config = {
 const config: Readonly<Config> = {
   TABLE_NAME: env.TABLE_NAME || '',
   masterDateRef: '1970-01-01T00:00:00.001Z',
-  AWS_REGION: env.AWS_REGION || '',
+  AWS_REGION: env.CUSTOM_AWS_REGION || '',
   SPT_CLIENT_ID: env.CLIENT_ID || '',
   SPT_CLIENT_SECRET: env.CLIENT_SECRET || '',
   SPT_REFRESH_TOKEN: env.REFRESH_TOKEN || '',

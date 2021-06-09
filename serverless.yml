@@ -59,14 +59,14 @@ functions:
     handler: src/index.handler
     events:
       - eventBridge:
-          schedule: cron(0 * * * ? *)
+          schedule: cron(0 * * * ? *) # Cron job to run every hour
     environment:
-      TABLE_NAME: ${self:custom.tableName}
-      AWS_REGION: ${self:provider.region}
-      STAGE: ${self:custom.env}
-      CLIENT_ID: ${env:CLIENT_ID}
-      CLIENT_SECRET: ${env:CLIENT_SECRET}
-      REFRESH_TOKEN: ${env:REFRESH_TOKEN}
+      TABLE_NAME: ${self:custom.tableName} # Dynamo table name
+      CUSTOM_AWS_REGION: ${self:provider.region} # AWS_REGION is reserved so...
+      STAGE: ${self:custom.env} # Stage
+      CLIENT_ID: ${env:CLIENT_ID} # Spotify client id
+      CLIENT_SECRET: ${env:CLIENT_SECRET} # Spotify client secret
+      REFRESH_TOKEN: ${env:REFRESH_TOKEN} # Spotify refresh token
 
 resources:
   Resources:

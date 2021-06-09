@@ -1,16 +1,40 @@
-1. Write your functions
-2. Use `serverless deploy` only when you've made changes to serverless.yml and in CI/CD systems. For more information on setting up CI/CD for your Serverless app, read this article.
-3. Use `serverless deploy function -f myFunction` to rapidly deploy changes when you are working on a specific AWS Lambda Function.
-4. Use `serverless invoke -f myFunction -l` to test your AWS Lambda Functions on AWS.
-5. Open up a separate tab in your console and stream logs in there via `serverless logs -f myFunction -t`.
-6. Write tests to run locally.
+# Spotify History Lambda
 
-- https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html
+A simple Spotify scrobber. Deployed for free on AWS. Built with Serverless.
 
-```js
+## Running DynamoDB locally
+
+Make sure you have already installed the Node.js dependencies as mentioned above.
+
+1. Install the plugin:
+
+```bash
+sls dynamodb install
+```
+
+2. Launch DynamoDB. Both commands will migrate tables.
+
+```bash
+# With seeding. This will populate the table with 3 mocks songs
+yarn dynamo:start
+```
+
+```bash
+# Without seeding. This will migrate an empty table
+yarn dynamo:start:noseed
+```
+
+```javascript
 dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
   if (err) ppJson(err);
   // an error occurred
   else ppJson(data); // successful response
 });
 ```
+
+## Resources
+
+- [Amazon DynamoDB DataMapper For JavaScript](https://github.com/awslabs/dynamodb-data-mapper-js)
+- [Amazon DynamoDB DataMapper Annotations](https://github.com/awslabs/dynamodb-data-mapper-js/tree/master/packages/dynamodb-data-mapper-annotations)
+- [Using the DynamoDB Document Client](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html)
+- [Serverless DynamoDB Local](https://www.npmjs.com/package/serverless-dynamodb-local)
