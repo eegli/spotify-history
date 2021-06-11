@@ -7,7 +7,6 @@ import { Spotify, HistoryParams } from './services/spotify';
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
     const spotify = new Spotify();
-
     // Use refresh token to get access token
     await spotify.getRefreshToken();
 
@@ -37,7 +36,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     if (spotify.itemCount > 0) {
       const enrichedTracks = await spotify.enrichHistory();
       const currentTimestamp = spotify.cursors.before;
-
+      console.log(JSON.stringify(enrichedTracks));
       await setHistory(currentTimestamp, spotify.itemCount, enrichedTracks);
 
       const songs = spotify.itemCount === 1 ? 'song' : 'songs';

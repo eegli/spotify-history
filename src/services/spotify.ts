@@ -118,7 +118,8 @@ export class Spotify {
             artists: genre.data.artists.map(el => ({
               artistName: el.name,
               artistId: el.id,
-              genres: el.genres.join(','),
+              // JSON does not allow commas in a string
+              genres: el.genres.join(';'),
             })),
           })
         )

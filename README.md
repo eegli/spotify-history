@@ -43,6 +43,10 @@ dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
 });
 ```
 
+```console
+aws dynamodb query --table-name stg-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#ts, #dt" --expression-attribute-names '{\"#t\":\"type\", \"#ts\":\"timestamp\", \"#dt\":\"date\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}'
+```
+
 ## Resources
 
 - [Amazon DynamoDB DataMapper For JavaScript](https://github.com/awslabs/dynamodb-data-mapper-js)
