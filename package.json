@@ -20,8 +20,7 @@
     "stg:spotify:deploy": "sls deploy function -f spotify-history-lambda -s stg",
     "stg:deploy": "sls deploy -s stg --force",
     "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
-    "local:invoke": "sls invoke local -f spotify-history-lambda -s local",
-    "db:list-tables": "aws dynamodb list-tables --endpoint-url http://localhost:8000"
+    "local:invoke": "sls invoke local -f spotify-history-lambda -s local"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
@@ -29,7 +28,6 @@
     "aws-sdk": "^2.878.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
-    "open": "^8.0.4",
     "typescript": "^4.2.3"
   },
   "devDependencies": {
@@ -40,6 +38,7 @@
     "@types/spotify-api": "^0.0.8",
     "express": "^4.17.1",
     "nanoid": "^3.1.22",
+    "open": "^8.2.0",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-node": "^9.1.1"

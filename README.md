@@ -43,6 +43,14 @@ dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
 });
 ```
 
+List all local tables
+
+```console
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+```
+
+List all timestamps in local table
+
 ```console
 aws dynamodb query --table-name stg-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#ts, #dt" --expression-attribute-names '{\"#t\":\"type\", \"#ts\":\"timestamp\", \"#dt\":\"date\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}'
 ```
@@ -53,3 +61,4 @@ aws dynamodb query --table-name stg-spotify-history-db --key-condition-expressio
 - [Amazon DynamoDB DataMapper Annotations](https://github.com/awslabs/dynamodb-data-mapper-js/tree/master/packages/dynamodb-data-mapper-annotations)
 - [Using the DynamoDB Document Client](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html)
 - [Serverless DynamoDB Local](https://www.npmjs.com/package/serverless-dynamodb-local)
+- [TypeScript: adjusting types in reduce function with an async callback](https://dev.to/pedrohasantiago/typescript-adjusting-types-in-reduce-function-with-an-async-callback-2kc8)

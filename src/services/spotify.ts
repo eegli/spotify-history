@@ -71,7 +71,8 @@ export class Spotify {
     this.bearerToken = res.data.access_token || '';
   }
 
-  async getHistory(params: HistoryParams): Promise<void> {
+  // Gets the raw history from Spotify
+  async getHistoryFromSpotify(params: HistoryParams): Promise<void> {
     const requestParams: HistoryParams = { ...params, limit: 50 };
     const res = await axios.get<HistoryResponse>(
       'https://api.spotify.com/v1/me/player/recently-played',
@@ -95,8 +96,8 @@ export class Spotify {
     }
   }
 
-  // https://dev.to/pedrohasantiago/typescript-adjusting-types-in-reduce-function-with-an-async-callback-2kc8
-  async enrichHistory() {
+  // Create the actual history that will be saved in dynamo
+  async history() {
     return await this.items.reduce(async (acc, el) => {
       const genre = await axios.get<SpotifyApi.MultipleArtistsResponse>(
         `https://api.spotify.com/v1/artists`,

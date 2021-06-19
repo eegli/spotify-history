@@ -23,7 +23,7 @@
     const { clientId, clientSecret, state } = await getCredentials();
 
     if (state !== receivedState) {
-      throw Error("States don't match");
+      throw new Error("States don't match");
     }
 
     const params = {

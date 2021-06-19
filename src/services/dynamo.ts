@@ -25,7 +25,7 @@ const mapper = new DataMapper({
   client: new DynamoDB(params),
 });
 
-export const getLatestHistory = async () => {
+export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {
     limit: 1,
     scanIndexForward: false,
@@ -43,7 +43,7 @@ export const getLatestHistory = async () => {
   }
 };
 
-export const setHistory = async (
+export const dynamoSetHistory = async (
   timestamp: string,
   count: number,
   songs: HistoryElement[]

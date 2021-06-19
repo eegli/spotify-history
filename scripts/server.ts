@@ -14,7 +14,7 @@ const scopes =
 const state = nanoid(12);
 
 if (!clientId || !clientSecret) {
-  throw Error('Did you forget to pass in a client id/secret?');
+  throw new Error('Did you forget to pass in a client id/secret?');
 }
 
 const app = express();
@@ -61,7 +61,7 @@ app.post('/submit', (req, res) => {
     res.send('Successful! You can now close this window');
     process.exit(0);
   }
-  throw Error(
+  throw new Error(
     'No token obtained.\nDid you click "cancel" in the Spotify auth window?'
   );
 });
