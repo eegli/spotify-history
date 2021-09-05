@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Handler Should run without error 1`] = `
+exports[`Handler Should run without errors 1`] = `
 Array [
   Array [
-    Object {
+    History {
       "count": 3,
       "songs": Array [
         Object {

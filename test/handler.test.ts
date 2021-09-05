@@ -1,41 +1,38 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
 import { QueryIterator, StringToAnyObjectMap } from '@aws/dynamodb-data-mapper';
 import { handler } from '../src/';
-import { rawSpotifyHistory, enrichedSpotifyHistory } from './payloads';
+import {
+  rawSpotifyHistory,
+  enrichedSpotifyHistory,
+  dynamoData,
+} from './payloads';
+import { mocked } from 'ts-jest/utils';
+
+const mockFetchSpotifyData = jest.fn();
+const mockCreateHistory = jest.fn().mockResolvedValue(enrichedSpotifyHistory());
 
 jest.mock('@aws/dynamodb-data-mapper');
-jest.mock('../src/services/dynamo');
-
 jest.mock('../src/services/spotify', () => {
   return {
     Spotify: jest.fn().mockImplementation(() => {
       return {
         getRefreshToken: jest.fn(),
-        fetchSpotifyData: jest.fn(),
-        createHistory: jest.fn().mockResolvedValue(enrichedSpotifyHistory()),
+        fetchSpotifyData: mockFetchSpotifyData,
+        createHistory: mockCreateHistory,
         items: rawSpotifyHistory(),
       };
     }),
   };
 });
 
-import {
-  dynamoGetLatestHistory,
-  dynamoSetHistory,
-  mapper,
-} from '../src/services/dynamo';
+import { mapper } from '../src/services/dynamo';
+import { Spotify } from '../src/services/spotify';
 
-const mockGetLatestHistory = dynamoGetLatestHistory as jest.MockedFunction<
-  typeof dynamoGetLatestHistory
->;
-
-const mockSetHistory = dynamoSetHistory as jest.MockedFunction<
-  typeof dynamoSetHistory
->;
-
+const mockedSpotify = mocked(Spotify, true);
 const querySpy = jest.spyOn(mapper, 'query');
-const iteratorMock = jest.fn();
+const putSpy = jest.spyOn(mapper, 'put');
 
+const iteratorMock = jest.fn();
 // @ts-ignore
 const qi: QueryIterator<StringToAnyObjectMap> = QueryIterator;
 // @ts-ignore
@@ -45,21 +42,41 @@ querySpy.mockReturnValue(qi);
 
 beforeEach(() => {
   querySpy.mockClear();
+  putSpy.mockClear();
   iteratorMock.mockClear();
 });
 
 describe('Handler', () => {
-  it('Should run without error', async () => {
-    //  iteratorMock.mockReturnValueOnce(dynamoData().values());
+  it('Should run without errors', async () => {
+    iteratorMock.mockReturnValueOnce([].values());
+    await handler(
+      {} as EventBridgeEvent<'Scheduled Event', any>,
+      {} as Context,
+      () => {}
+    );
+    expect(mockedSpotify.mock.instances.length).toEqual(1);
+    expect(querySpy).toHaveBeenCalledTimes(1);
+    expect(putSpy).toHaveBeenCalledTimes(1);
+    expect(putSpy.mock.calls).toMatchSnapshot();
+  });
+
+  it('Should query for all songs if there are no existing ones', async () => {
+    iteratorMock.mockReturnValueOnce(dynamoData().values());
 
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
+  });
 
-    expect(mockSetHistory).toHaveBeenCalledTimes(1);
-    expect(mockSetHistory.mock.calls).toMatchSnapshot();
-    expect(mockGetLatestHistory).toHaveBeenCalledTimes(1);
+  it('Should query for new songs only if there are existing ones', async () => {
+    iteratorMock.mockReturnValueOnce([].values());
+
+    await handler(
+      {} as EventBridgeEvent<'Scheduled Event', any>,
+      {} as Context,
+      () => {}
+    );
   });
 });
