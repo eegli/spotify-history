@@ -10,6 +10,7 @@ import { mocked } from 'ts-jest/utils';
 
 const mockFetchSpotifyData = jest.fn();
 const mockCreateHistory = jest.fn().mockResolvedValue(enrichedSpotifyHistory());
+let mockItems: HistoryItems = rawSpotifyHistory();
 
 jest.mock('@aws/dynamodb-data-mapper');
 jest.mock('../src/services/spotify', () => {
@@ -19,14 +20,15 @@ jest.mock('../src/services/spotify', () => {
         getRefreshToken: jest.fn(),
         fetchSpotifyData: mockFetchSpotifyData,
         createHistory: mockCreateHistory,
-        items: rawSpotifyHistory(),
+        items: mockItems,
       };
     }),
   };
 });
 
 import { mapper } from '../src/services/dynamo';
-import { Spotify } from '../src/services/spotify';
+import { HistoryItems, Spotify } from '../src/services/spotify';
+import { HistoryParams } from '../src/config';
 
 const mockedSpotify = mocked(Spotify, true);
 const querySpy = jest.spyOn(mapper, 'query');
@@ -41,9 +43,12 @@ qi[Symbol.iterator] = iteratorMock;
 querySpy.mockReturnValue(qi);
 
 beforeEach(() => {
+  jest.resetModules();
   querySpy.mockClear();
   putSpy.mockClear();
   iteratorMock.mockClear();
+  mockFetchSpotifyData.mockClear();
+  mockCreateHistory.mockClear();
 });
 
 describe('Handler', () => {
@@ -62,21 +67,40 @@ describe('Handler', () => {
 
   it('Should query for all songs if there are no existing ones', async () => {
     iteratorMock.mockReturnValueOnce(dynamoData().values());
-
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
+    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
+      after: expect.any(Number),
+      limit: expect.any(Number),
+    });
   });
 
   it('Should query for new songs only if there are existing ones', async () => {
     iteratorMock.mockReturnValueOnce([].values());
-
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
+
+    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
+      before: expect.any(Number),
+      limit: expect.any(Number),
+    });
+  });
+
+  it('should save nothing to dynamo if there is nothing new', async () => {
+    iteratorMock.mockReturnValueOnce([].values());
+    // Act as if nothing was fetched from Spotify
+    mockItems = [];
+    await handler(
+      {} as EventBridgeEvent<'Scheduled Event', any>,
+      {} as Context,
+      () => {}
+    );
+    expect(putSpy).not.toHaveBeenCalled();
   });
 });
