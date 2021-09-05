@@ -13,34 +13,39 @@
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
     "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts",
-    "dynamo:start": "sls dynamodb start --stage local --seed=test",
-    "dynamo:start:noseed": "sls dynamodb start --stage local",
+    "dynamo": "sls dynamodb start --stage local",
+    "dynamo:seed": "sls dynamodb start --seed=test --stage local",
     "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
     "prod:deploy": "sls deploy -s prod",
     "stg:spotify:deploy": "sls deploy function -f spotify-history-lambda -s stg",
     "stg:deploy": "sls deploy -s stg --force",
     "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
-    "local:invoke": "sls invoke local -f spotify-history-lambda -s local"
+    "local": "sls invoke local -f spotify-history-lambda -s local",
+    "test": "jest",
+    "test:watch": "jest --watch --verbose"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "aws-sdk": "^2.878.0",
-    "axios": "^0.21.1",
-    "dotenv": "^8.2.0",
-    "typescript": "^4.2.3"
+    "aws-sdk": "^2.983.0",
+    "axios": "^0.21.3",
+    "dotenv": "^10.0.0",
+    "typescript": "^4.4.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.72",
+    "@types/aws-lambda": "^8.10.83",
     "@types/aws-sdk": "^2.7.0",
-    "@types/express": "^4.17.11",
-    "@types/node": "^14.14.35",
-    "@types/spotify-api": "^0.0.8",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.10",
+    "@types/spotify-api": "^0.0.11",
     "express": "^4.17.1",
-    "nanoid": "^3.1.22",
-    "open": "^8.2.0",
-    "serverless-dynamodb-local": "^0.2.39",
-    "serverless-plugin-typescript": "^1.1.9",
-    "ts-node": "^9.1.1"
+    "jest": "^27.1.0",
+    "nanoid": "^3.1.25",
+    "open": "^8.2.1",
+    "serverless-dynamodb-local": "0.2.39",
+    "serverless-plugin-typescript": "^2.0.0",
+    "ts-jest": "^27.0.5",
+    "ts-node": "^10.2.1"
   }
 }

@@ -3,27 +3,15 @@ import { URLSearchParams } from 'url';
 import config, { HistoryParams, RefreshTokenResponse } from '../config';
 import { HistoryElement } from '../models/history';
 
-type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
+export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 
-type HistoryItems = SpotifyApi.PlayHistoryObject[];
+export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export class Spotify {
-  private bearerToken: string = '';
-
-  private items: HistoryItems = [];
-  private cursorBefore: string = '';
-  private cursorAfter: string = '';
-
-  get itemCount() {
-    return this.items.length;
-  }
-
-  get cursors() {
-    return {
-      after: this.cursorAfter,
-      before: this.cursorBefore,
-    };
-  }
+  bearerToken: string = '';
+  items: HistoryItems = [];
+  cursorBefore: string = '';
+  cursorAfter: string = '';
 
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();
@@ -45,7 +33,7 @@ export class Spotify {
   }
 
   // Gets the raw history from Spotify
-  async fetchSpotifyHistory(params: HistoryParams): Promise<void> {
+  async fetchSpotifyData(params: HistoryParams): Promise<void> {
     const requestParams: HistoryParams = { ...params, limit: 50 };
     const res = await axios.get<HistoryResponse>(
       'https://api.spotify.com/v1/me/player/recently-played',
@@ -103,7 +91,7 @@ export class Spotify {
   }
 
   // Get schwifty
-  *[Symbol.iterator]() {
+  /*   *[Symbol.iterator]() {
     yield* this.items;
-  }
+  } */
 }

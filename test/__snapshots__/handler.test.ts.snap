@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Handler should save songs to dynamo 1`] = `Array []`;

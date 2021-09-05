@@ -21,7 +21,7 @@ if (process.env.stage === 'local') {
   params.endpoint = 'http://localhost:8000';
 }
 
-const mapper = new DataMapper({
+export const mapper = new DataMapper({
   client: new DynamoDB(params),
 });
 
@@ -57,5 +57,5 @@ export const dynamoSetHistory = async ({
     songs,
   });
 
-  return mapper.put(newHistory);
+  await mapper.put(newHistory);
 };

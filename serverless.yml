@@ -22,13 +22,13 @@ custom:
       migrate: true
       heapInitial: 200m
       heapMax: 1g
-      seed: false # Seed manually via CLI only
+      seed: false
       convertEmptyValues: true
     seed:
       test:
         sources:
           - table: ${self:custom.tableName}
-            sources: [./test/dynamo.json]
+            sources: [./test/payloads/dynamo-history.json]
 
 provider:
   name: aws

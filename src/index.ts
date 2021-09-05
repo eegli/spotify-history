@@ -29,28 +29,23 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       params.before = new Date().getTime();
     }
 
-    await spotify.fetchSpotifyHistory(params);
-
-    /*     for (const song of spotify) {
-      console.log(song);
-    } */
+    await spotify.fetchSpotifyData(params);
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
-    if (spotify.itemCount > 0) {
+    const count = spotify.items.length;
+    if (count > 0) {
       // Create the actual history for dynamo
       const history = await spotify.createHistory();
 
       await dynamoSetHistory({
-        timestamp: spotify.cursors.before,
-        count: spotify.itemCount,
+        timestamp: spotify.cursorBefore,
+        count,
         songs: history,
       });
 
-      const songs = spotify.itemCount === 1 ? 'song' : 'songs';
-      console.log(
-        `Success! ${spotify.itemCount} new ${songs} have been scrubbed!`
-      );
+      const songs = count === 1 ? 'song' : 'songs';
+      console.log(`Success! ${count} new ${songs} have been scrubbed!`);
       // No new items since last scrobbed
     } else {
       console.log(`No new songs have been scrubbed!`);
