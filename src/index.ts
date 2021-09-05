@@ -2,6 +2,7 @@ import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
 import { dynamoGetLatestHistory, dynamoSetHistory } from './services/dynamo';
 import { Spotify } from './services/spotify';
+import { isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -55,6 +56,15 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       console.log(`No new songs have been scrubbed!`);
     }
   } catch (err) {
-    console.error('Something went wrong', err);
+    if (isAxiosError(err)) {
+      const { config, response } = err;
+      console.error('Axios error', {
+        config,
+        status: response?.status,
+        statusText: response?.statusText,
+      });
+    } else {
+      console.error('Something went wrong', err);
+    }
   }
 };
