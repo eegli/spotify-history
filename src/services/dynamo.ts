@@ -57,5 +57,5 @@ export const dynamoSetHistory = async ({
     songs,
   });
 
-  await mapper.put(newHistory);
+  return mapper.put(newHistory);
 };

@@ -28,7 +28,7 @@ custom:
       test:
         sources:
           - table: ${self:custom.tableName}
-            sources: [./test/payloads/dynamo-history.json]
+            sources: [./dynamo-seed.json]
 
 provider:
   name: aws

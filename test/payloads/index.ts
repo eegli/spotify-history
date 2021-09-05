@@ -1,23 +1,20 @@
 import { History } from '../../src/models/history';
 import { HistoryItems } from '../../src/services/spotify';
-import dynamoHistoryData from './dynamo-history.json';
-import spotifyResponseData from './spotify';
+import dynamoDBData from '../../dynamo-seed.json';
+import spotifyResponse from './spotify-history-response';
+import spotifySongs from './spotify-songs';
 
 export const dynamoData = (): History[] => {
-  return dynamoHistoryData.map((hst: any) => {
+  return dynamoDBData.map((hst: any) => {
     const history: History = new History();
     Object.assign(history, { ...hst });
     return history;
   });
 };
 
-export const historyData = () => {
-  return dynamoHistoryData.map(spt => {
-    return spt.songs;
-  });
-};
+export const enrichedSpotifyHistory = () => spotifySongs;
 
-export const spotifyResponse = (): HistoryItems => {
-  const { items } = spotifyResponseData;
+export const rawSpotifyHistory = (): HistoryItems => {
+  const { items } = spotifyResponse;
   return items as any as HistoryItems;
 };

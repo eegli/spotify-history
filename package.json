@@ -22,7 +22,7 @@
     "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
     "local": "sls invoke local -f spotify-history-lambda -s local",
     "test": "jest",
-    "test:watch": "jest --watch --verbose"
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
