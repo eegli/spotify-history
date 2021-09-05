@@ -1,8 +1,7 @@
 import { ScheduledHandler } from 'aws-lambda';
-
+import { HistoryParams } from './config';
 import { dynamoGetLatestHistory, dynamoSetHistory } from './services/dynamo';
-
-import { Spotify, HistoryParams } from './services/spotify';
+import { Spotify } from './services/spotify';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -29,16 +28,23 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       params.before = new Date().getTime();
     }
 
-    await spotify.getHistoryFromSpotify(params);
+    await spotify.fetchSpotifyHistory(params);
+
+    /*     for (const song of spotify) {
+      console.log(song);
+    } */
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
     if (spotify.itemCount > 0) {
       // Create the actual history for dynamo
-      const history = await spotify.history();
-      const currTs = spotify.cursors.before;
-      console.log(JSON.stringify(history));
-      await dynamoSetHistory(currTs, spotify.itemCount, history);
+      const history = await spotify.createHistory();
+
+      await dynamoSetHistory({
+        timestamp: spotify.cursors.before,
+        count: spotify.itemCount,
+        songs: history,
+      });
 
       const songs = spotify.itemCount === 1 ? 'song' : 'songs';
       console.log(

@@ -5,7 +5,7 @@ import { ConditionExpression } from '@aws/dynamodb-expressions';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import { History, HistoryElement } from '../models/history';
+import { History } from '../models/history';
 
 type Options = DynamoDB.DocumentClient.DocumentClientOptions &
   ServiceConfigurationOptions &
@@ -43,11 +43,14 @@ export const dynamoGetLatestHistory = async () => {
   }
 };
 
-export const dynamoSetHistory = async (
-  timestamp: string,
-  count: number,
-  songs: HistoryElement[]
-) => {
+// Kind of a workaround for https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
+type FullHistory = Required<Omit<History, 'type' | 'created_at'>>;
+
+export const dynamoSetHistory = async ({
+  timestamp,
+  count,
+  songs,
+}: FullHistory) => {
   const newHistory: History = Object.assign(new History(), {
     timestamp,
     count,

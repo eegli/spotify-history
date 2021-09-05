@@ -1,27 +1,7 @@
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import config from '../config';
+import config, { HistoryParams, RefreshTokenResponse } from '../config';
 import { HistoryElement } from '../models/history';
-
-interface RefreshTokenParams {
-  client_id: string;
-  client_secret: string;
-  grant_type: 'refresh_token';
-  refresh_token: string;
-}
-
-interface RefreshTokenResponse {
-  access_token: string;
-  token_type: string;
-  scope: string;
-  expires_in: number;
-}
-
-export interface HistoryParams {
-  after?: number;
-  before?: number;
-  limit?: number;
-}
 
 type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 
@@ -33,13 +13,6 @@ export class Spotify {
   private items: HistoryItems = [];
   private cursorBefore: string = '';
   private cursorAfter: string = '';
-
-  private refreshTokenParams: Readonly<RefreshTokenParams> = {
-    client_id: config.SPT_CLIENT_ID,
-    client_secret: config.SPT_CLIENT_SECRET,
-    refresh_token: config.SPT_REFRESH_TOKEN,
-    grant_type: 'refresh_token',
-  };
 
   get itemCount() {
     return this.items.length;
@@ -55,7 +28,7 @@ export class Spotify {
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();
 
-    for (const [key, value] of Object.entries(this.refreshTokenParams)) {
+    for (const [key, value] of Object.entries(config.REFRESH_TOKEN_PARAMS)) {
       params.append(key, value);
     }
 
@@ -72,7 +45,7 @@ export class Spotify {
   }
 
   // Gets the raw history from Spotify
-  async getHistoryFromSpotify(params: HistoryParams): Promise<void> {
+  async fetchSpotifyHistory(params: HistoryParams): Promise<void> {
     const requestParams: HistoryParams = { ...params, limit: 50 };
     const res = await axios.get<HistoryResponse>(
       'https://api.spotify.com/v1/me/player/recently-played',
@@ -97,7 +70,7 @@ export class Spotify {
   }
 
   // Create the actual history that will be saved in dynamo
-  async history() {
+  async createHistory() {
     return await this.items.reduce(async (acc, el) => {
       const genre = await axios.get<SpotifyApi.MultipleArtistsResponse>(
         `https://api.spotify.com/v1/artists`,
@@ -127,5 +100,10 @@ export class Spotify {
         .catch(err => console.error(err));
       return acc;
     }, Promise.resolve(<HistoryElement[]>[]));
+  }
+
+  // Get schwifty
+  *[Symbol.iterator]() {
+    yield* this.items;
   }
 }

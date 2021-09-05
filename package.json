@@ -4,7 +4,7 @@
   "private": true,
   "main": "build/index.js",
   "engines": {
-    "node": "12.16.1"
+    "node": "14.17.4"
   },
   "repository": "git@github.com:eegli/spotify-history-lambda.git",
   "author": "Eric <43848365+eegli@users.noreply.github.com>",

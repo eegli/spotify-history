@@ -5,7 +5,6 @@ import {
   table,
 } from '@aws/dynamodb-data-mapper-annotations';
 import config from '../config';
-import { dt } from '../utils/date';
 
 // Define the properties of a song that is eventually saved to Dynamo
 export interface HistoryElement {
@@ -28,8 +27,11 @@ export class History {
   timestamp?: string;
 
   /* Date of when the songs were scrobbed */
-  @attribute({ defaultProvider: () => dt(new Date()) })
-  date?: string;
+  @attribute({
+    type: 'String',
+    defaultProvider: () => new Date().toISOString(),
+  })
+  created_at?: Date;
 
   /* Number of songs */
   @attribute()
