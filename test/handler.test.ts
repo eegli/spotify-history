@@ -35,6 +35,10 @@ const querySpy = jest.spyOn(mapper, 'query');
 const putSpy = jest.spyOn(mapper, 'put');
 
 const iteratorMock = jest.fn();
+
+// This will be overwritten sometimes
+iteratorMock.mockReturnValue([].values());
+
 // @ts-ignore
 const qi: QueryIterator<StringToAnyObjectMap> = QueryIterator;
 // @ts-ignore
@@ -43,7 +47,6 @@ qi[Symbol.iterator] = iteratorMock;
 querySpy.mockReturnValue(qi);
 
 beforeEach(() => {
-  jest.resetModules();
   querySpy.mockClear();
   putSpy.mockClear();
   iteratorMock.mockClear();
@@ -53,7 +56,6 @@ beforeEach(() => {
 
 describe('Handler', () => {
   it('Should run without errors', async () => {
-    iteratorMock.mockReturnValueOnce([].values());
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
@@ -65,35 +67,33 @@ describe('Handler', () => {
     expect(putSpy.mock.calls).toMatchSnapshot();
   });
 
-  it('Should query for all songs if there are no existing ones', async () => {
-    iteratorMock.mockReturnValueOnce(dynamoData().values());
+  it('Should query all songs if there are no existing ones', async () => {
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
-    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
-      after: expect.any(Number),
-      limit: expect.any(Number),
-    });
-  });
-
-  it('Should query for new songs only if there are existing ones', async () => {
-    iteratorMock.mockReturnValueOnce([].values());
-    await handler(
-      {} as EventBridgeEvent<'Scheduled Event', any>,
-      {} as Context,
-      () => {}
-    );
-
     expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
       before: expect.any(Number),
       limit: expect.any(Number),
     });
   });
 
+  it('Should only query new songs if there are existing ones', async () => {
+    iteratorMock.mockReturnValueOnce(dynamoData().values());
+    await handler(
+      {} as EventBridgeEvent<'Scheduled Event', any>,
+      {} as Context,
+      () => {}
+    );
+
+    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
+      after: expect.any(Number),
+      limit: expect.any(Number),
+    });
+  });
+
   it('should save nothing to dynamo if there is nothing new', async () => {
-    iteratorMock.mockReturnValueOnce([].values());
     // Act as if nothing was fetched from Spotify
     mockItems = [];
     await handler(
