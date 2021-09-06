@@ -5,6 +5,8 @@ import { HistoryElement } from '../models/history';
 
 export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 
+export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
+
 export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export default class Spotify {
@@ -60,7 +62,7 @@ export default class Spotify {
   // Create the actual history that will be saved in dynamo
   async createHistory() {
     return await this.items.reduce(async (acc, el) => {
-      const genre = await axios.get<SpotifyApi.MultipleArtistsResponse>(
+      const genre = await axios.get<MultipleArtistsResponse>(
         `https://api.spotify.com/v1/artists`,
         {
           params: {

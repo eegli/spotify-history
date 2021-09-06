@@ -6,6 +6,7 @@ import spotifyArtistsJSONResponse__1 from './spotify-artists-1.json';
 import spotifyArtistsJSONResponse__2 from './spotify-artists-2.json';
 import spotifyArtistsJSONResponse__3 from './spotify-artists-3.json';
 import { AxiosResponse } from 'axios';
+import { RefreshTokenResponse } from '../../src/config';
 
 function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
   return {
@@ -25,7 +26,12 @@ export const dynamoData = (): History[] => {
   });
 };
 
-export const spotifyPutTokenResponse = fakeAxiosRes({ access_token: 'token' });
+export const spotifyPutTokenResponse = fakeAxiosRes<RefreshTokenResponse>({
+  access_token: 'token',
+  token_type: '',
+  scope: '',
+  expires_in: 1,
+});
 
 // The initial GET request for the history
 // https://api.spotify.com/v1/me/player/recently-played'
