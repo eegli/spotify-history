@@ -55,7 +55,7 @@ app.post('/submit', (req, res) => {
     console.log(`Success! Saved token to file`);
     jsonData.dateObtained = new Date().toLocaleString();
     fs.writeFileSync(
-      __dirname + '/../token.json',
+      __dirname + '/../token_spotify.json',
       JSON.stringify(jsonData, null, 2)
     );
     res.send('Successful! You can now close this window');

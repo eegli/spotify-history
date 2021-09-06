@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
-    "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts",
+    "token:spotify": "yarn build:client && ts-node -r dotenv/config scripts/server.ts",
+    "token:google": "node scripts/google.js",
     "dynamo": "sls dynamodb start --stage local",
     "dynamo:seed": "sls dynamodb start --seed=test --stage local",
     "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
@@ -31,6 +32,7 @@
     "aws-sdk": "^2.983.0",
     "axios": "^0.21.3",
     "dotenv": "^10.0.0",
+    "googleapis": "^85.0.0",
     "typescript": "^4.4.2"
   },
   "devDependencies": {
