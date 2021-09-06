@@ -7,7 +7,7 @@ export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 
 export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
-export class Spotify {
+export default class Spotify {
   bearerToken: string = '';
   items: HistoryItems = [];
   cursorBefore: string = '';

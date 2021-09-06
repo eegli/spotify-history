@@ -14,20 +14,16 @@ let mockItems: HistoryItems = rawSpotifyHistory();
 
 jest.mock('@aws/dynamodb-data-mapper');
 jest.mock('../src/services/spotify', () => {
-  return {
-    Spotify: jest.fn().mockImplementation(() => {
-      return {
-        getRefreshToken: jest.fn(),
-        fetchSpotifyData: mockFetchSpotifyData,
-        createHistory: mockCreateHistory,
-        items: mockItems,
-      };
-    }),
-  };
+  return jest.fn().mockImplementation(() => ({
+    getRefreshToken: jest.fn(),
+    fetchSpotifyData: mockFetchSpotifyData,
+    createHistory: mockCreateHistory,
+    items: mockItems,
+  }));
 });
 
 import { mapper } from '../src/services/dynamo';
-import { HistoryItems, Spotify } from '../src/services/spotify';
+import Spotify, { HistoryItems } from '../src/services/spotify';
 import { HistoryParams } from '../src/config';
 
 const mockedSpotify = mocked(Spotify, true);
