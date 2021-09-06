@@ -1,8 +1,21 @@
 import { History } from '../../src/models/history';
-import { HistoryItems } from '../../src/services/spotify';
 import dynamoDBData from '../../dynamo-seed.json';
-import spotifyResponse from './spotify-history-response';
-import spotifySongs from './spotify-songs';
+
+import spotifyHistoryJSONResponse from './spotify-history.json';
+import spotifyArtistsJSONResponse__1 from './spotify-artists-1.json';
+import spotifyArtistsJSONResponse__2 from './spotify-artists-2.json';
+import spotifyArtistsJSONResponse__3 from './spotify-artists-3.json';
+import { AxiosResponse } from 'axios';
+
+function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
+  return {
+    data: payload,
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+    config: {},
+  };
+}
 
 export const dynamoData = (): History[] => {
   return dynamoDBData.map((hst: any) => {
@@ -12,9 +25,19 @@ export const dynamoData = (): History[] => {
   });
 };
 
-export const enrichedSpotifyHistory = () => spotifySongs;
+export const spotifyPutTokenResponse = fakeAxiosRes({ access_token: 'token' });
 
-export const rawSpotifyHistory = (): HistoryItems => {
-  const { items } = spotifyResponse;
-  return items as any as HistoryItems;
-};
+// The initial GET request for the history
+// https://api.spotify.com/v1/me/player/recently-played'
+export const spotifyHistoryResponse = fakeAxiosRes(spotifyHistoryJSONResponse);
+
+// Artists - three responses, mocking the three GET requests for the artists from the above response
+// https://api.spotify.com/v1/artists
+
+export const spotifyArtistsResponse: AxiosResponse[] = [
+  fakeAxiosRes(spotifyArtistsJSONResponse__1),
+  fakeAxiosRes(spotifyArtistsJSONResponse__2),
+  fakeAxiosRes(spotifyArtistsJSONResponse__3),
+];
+
+export const emptyResponse = fakeAxiosRes({ items: [] });

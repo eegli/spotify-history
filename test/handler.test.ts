@@ -2,31 +2,22 @@ import { Context, EventBridgeEvent } from 'aws-lambda';
 import { QueryIterator, StringToAnyObjectMap } from '@aws/dynamodb-data-mapper';
 import { handler } from '../src/';
 import {
-  rawSpotifyHistory,
-  enrichedSpotifyHistory,
+  spotifyHistoryResponse,
+  spotifyArtistsResponse,
   dynamoData,
+  spotifyPutTokenResponse,
+  emptyResponse,
 } from './payloads';
-import { mocked } from 'ts-jest/utils';
-
-const mockFetchSpotifyData = jest.fn();
-const mockCreateHistory = jest.fn().mockResolvedValue(enrichedSpotifyHistory());
-let mockItems: HistoryItems = rawSpotifyHistory();
+import Spotify from '../src/services/spotify';
 
 jest.mock('@aws/dynamodb-data-mapper');
-jest.mock('../src/services/spotify', () => {
-  return jest.fn().mockImplementation(() => ({
-    getRefreshToken: jest.fn(),
-    fetchSpotifyData: mockFetchSpotifyData,
-    createHistory: mockCreateHistory,
-    items: mockItems,
-  }));
-});
+jest.mock('axios');
 
 import { mapper } from '../src/services/dynamo';
-import Spotify, { HistoryItems } from '../src/services/spotify';
+
+import axios from 'axios';
 import { HistoryParams } from '../src/config';
 
-const mockedSpotify = mocked(Spotify, true);
 const querySpy = jest.spyOn(mapper, 'query');
 const putSpy = jest.spyOn(mapper, 'put');
 
@@ -42,61 +33,79 @@ qi[Symbol.iterator] = iteratorMock;
 
 querySpy.mockReturnValue(qi);
 
+const mockAxios = axios as jest.Mocked<typeof axios>;
+const fetchSpotifySpy = jest.spyOn(Spotify.prototype, 'fetchSpotifyData');
+
 beforeEach(() => {
+  mockAxios.post.mockResolvedValue(spotifyPutTokenResponse);
+
+  mockAxios.get
+    .mockResolvedValueOnce(spotifyHistoryResponse)
+    .mockResolvedValueOnce(spotifyArtistsResponse[0])
+    .mockResolvedValueOnce(spotifyArtistsResponse[1])
+    .mockResolvedValueOnce(spotifyArtistsResponse[2]);
+
+  fetchSpotifySpy.mockClear();
   querySpy.mockClear();
   putSpy.mockClear();
   iteratorMock.mockClear();
-  mockFetchSpotifyData.mockClear();
-  mockCreateHistory.mockClear();
 });
 
 describe('Handler', () => {
-  it('Should run without errors', async () => {
+  it('runs without errors', async () => {
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
-    expect(mockedSpotify.mock.instances.length).toEqual(1);
     expect(querySpy).toHaveBeenCalledTimes(1);
     expect(putSpy).toHaveBeenCalledTimes(1);
     expect(putSpy.mock.calls).toMatchSnapshot();
   });
 
-  it('Should query all songs if there are no existing ones', async () => {
+  it('queries all songs if there are no existing ones', async () => {
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
-    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
+
+    expect(fetchSpotifySpy.mock.calls[0][0]).toMatchObject<HistoryParams>({
       before: expect.any(Number),
       limit: expect.any(Number),
     });
   });
 
-  it('Should only query new songs if there are existing ones', async () => {
+  it('only queries new songs if there are existing ones', async () => {
     iteratorMock.mockReturnValueOnce(dynamoData().values());
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
-
-    expect(mockFetchSpotifyData.mock.calls[0][0]).toMatchObject<HistoryParams>({
+    expect(fetchSpotifySpy.mock.calls[0][0]).toMatchObject<HistoryParams>({
       after: expect.any(Number),
       limit: expect.any(Number),
     });
   });
 
-  it('should save nothing to dynamo if there is nothing new', async () => {
-    // Act as if nothing was fetched from Spotify
-    mockItems = [];
+  it('saves nothing to dynamo if there is nothing new', async () => {
+    // Overwrite initial history request, mock "no new songs"
+    mockAxios.get = jest.fn().mockResolvedValueOnce(emptyResponse);
+
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
     expect(putSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('Valid test payloads', () => {
+  it('fakes an artist request for each artist', () => {
+    expect(spotifyHistoryResponse.data.items.length).toEqual(
+      spotifyArtistsResponse.length
+    );
   });
 });

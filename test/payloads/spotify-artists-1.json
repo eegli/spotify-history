@@ -1,0 +1,43 @@
+{
+  "artists": [
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/0rasA5Z5h1ITtHelCpfu9R"
+      },
+      "followers": {
+        "href": null,
+        "total": 958840
+      },
+      "genres": [
+        "electronica",
+        "german techno",
+        "leipzig electronic",
+        "minimal techno",
+        "tech house"
+      ],
+      "href": "https://api.spotify.com/v1/artists/0rasA5Z5h1ITtHelCpfu9R",
+      "id": "0rasA5Z5h1ITtHelCpfu9R",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/ab6761610000e5ebabca5827f15d23bd5aabaa8a",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/ab67616100005174abca5827f15d23bd5aabaa8a",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/ab6761610000f178abca5827f15d23bd5aabaa8a",
+          "width": 160
+        }
+      ],
+      "name": "Paul Kalkbrenner",
+      "popularity": 68,
+      "type": "artist",
+      "uri": "spotify:artist:0rasA5Z5h1ITtHelCpfu9R"
+    }
+  ]
+}
