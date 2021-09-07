@@ -1,11 +1,15 @@
 const { env } = process;
 
-export interface RefreshTokenParams {
+interface BaseSecret {
+  refresh_token: string;
   client_id: string;
   client_secret: string;
-  grant_type: 'refresh_token';
-  refresh_token: string;
 }
+export interface SpotifySecrets extends BaseSecret {
+  grant_type: 'refresh_token';
+}
+
+export interface GoogleSecrets extends BaseSecret {}
 export interface RefreshTokenResponse {
   access_token: string;
   token_type: string;
@@ -20,19 +24,25 @@ export interface HistoryParams {
 }
 
 type Config = {
-  TABLE_NAME: string;
+  AWS_TABLE_NAME: string;
   AWS_REGION: string;
-  REFRESH_TOKEN_PARAMS: Readonly<RefreshTokenParams>;
+  SPOTIFY: Readonly<SpotifySecrets>;
+  GOOGLE: Readonly<GoogleSecrets>;
 };
 
 const config: Readonly<Config> = {
-  TABLE_NAME: env.TABLE_NAME || '',
+  AWS_TABLE_NAME: env.TABLE_NAME || '',
   AWS_REGION: env.CUSTOM_AWS_REGION || '',
-  REFRESH_TOKEN_PARAMS: {
-    client_id: env.CLIENT_ID || '',
-    client_secret: env.CLIENT_SECRET || '',
-    refresh_token: env.REFRESH_TOKEN || '',
+  SPOTIFY: {
+    client_id: env.SPOTIFY_CLIENT_ID || '',
+    client_secret: env.SPOTIFY_CLIENT_SECRET || '',
+    refresh_token: env.SPOTIFY_REFRESH_TOKEN || '',
     grant_type: 'refresh_token',
+  },
+  GOOGLE: {
+    client_id: env.GOOGLE_CLIENT_ID || '',
+    client_secret: env.GOOGLE_CLIENT_SECRET || '',
+    refresh_token: env.GOOGLE_REFRESH_TOKEN || '',
   },
 };
 

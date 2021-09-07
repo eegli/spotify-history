@@ -17,7 +17,7 @@ export interface HistoryElement {
   }[];
 }
 
-@table(config.TABLE_NAME)
+@table(config.AWS_TABLE_NAME)
 export class History {
   @hashKey({ defaultProvider: () => 'history' })
   type?: string;

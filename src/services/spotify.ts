@@ -18,7 +18,7 @@ export default class Spotify {
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();
 
-    for (const [key, value] of Object.entries(config.REFRESH_TOKEN_PARAMS)) {
+    for (const [key, value] of Object.entries(config.SPOTIFY)) {
       params.append(key, value);
     }
 

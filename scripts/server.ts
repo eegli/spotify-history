@@ -3,17 +3,19 @@ import express from 'express';
 import open from 'open';
 import fs from 'fs';
 import { nanoid } from 'nanoid';
+import { read } from './utils';
 
 // Port must correspond to the port set in the Spotify app
 const port = 3000;
-const clientId = process.env.CLIENT_ID || '';
-const clientSecret = process.env.CLIENT_SECRET || '';
-
 const scopes =
   'user-read-email user-top-read user-library-read user-read-recently-played';
+
+const credentials = read<TokenScripts.SpotifyCreds>('credentials_spotify.json');
+
+const { client_id, client_secret } = credentials;
 const state = nanoid(12);
 
-if (!clientId || !clientSecret) {
+if (!client_id || !client_secret) {
   throw new Error('Did you forget to pass in a client id/secret?');
 }
 
@@ -26,14 +28,12 @@ const script = fs.readFileSync(__dirname + '/../browser/script.js', 'utf8');
 // This will be sent to the client
 const template = `<html><body><script>${script}</script></body></html>`;
 
-const credentials: TokenServer.Credentials = { clientId, clientSecret, state };
-
 const spotifyUrl = () => {
   let url = 'https://accounts.spotify.com/authorize';
   url += '?response_type=code';
   url += '&show_dialog=true';
   url += '&state=' + encodeURIComponent(state);
-  url += '&client_id=' + encodeURIComponent(clientId);
+  url += '&client_id=' + encodeURIComponent(client_id);
   url += '&redirect_uri=' + encodeURIComponent('http://localhost:3000');
   url += '&scope=' + encodeURIComponent(scopes);
   return url;
@@ -45,12 +45,15 @@ app.get('/', (_, res) => {
   res.send(template);
 });
 
-app.get('/credentials', (_, res) => {
-  res.json(credentials);
-});
+app.get(
+  '/credentials',
+  (_, res: express.Response<TokenScripts.SpotifyTokenResponse>) => {
+    res.json({ ...credentials, state });
+  }
+);
 
 app.post('/submit', (req, res) => {
-  const jsonData = req.body as TokenServer.TokenSuccess;
+  const jsonData: TokenScripts.SpotifyTokenSuccess = req.body;
   if (jsonData.access_token) {
     console.log(`Success! Saved token to file`);
     jsonData.dateObtained = new Date().toLocaleString();

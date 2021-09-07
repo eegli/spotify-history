@@ -1,36 +1,17 @@
 import { google } from 'googleapis';
 import fs from 'fs';
+import config from '../config';
 
-type Credentials = {
-  installed: {
-    client_secret: string;
-    client_id: string;
-    redirect_uris: string[];
-  };
-};
-
-type Token = {
-  access_token: string;
-  refresh_token: string;
-  token_type: 'Bearer';
-  expiry_date: number;
-};
-
-(async () => {
-  const CREDENTIALS_PATH = 'google_credentials.json';
-  const TOKEN_PATH = 'token_google.json';
+export async function backupHistory() {
   const TEST_JSON = 'test/payloads/spotify-history.json';
 
-  const credentials: Credentials = JSON.parse(
-    fs.readFileSync(CREDENTIALS_PATH, 'utf-8')
-  );
-  const token: Token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf-8'));
+  const clientId = config.GOOGLE.client_id;
+  const clientSecret = config.GOOGLE.client_secret;
+  const refreshToken = config.GOOGLE.refresh_token;
 
-  const { client_secret, client_id } = credentials.installed;
+  const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret);
 
-  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret);
-
-  oAuth2Client.setCredentials(token);
+  oAuth2Client.setCredentials({ refresh_token: refreshToken });
 
   const drive = google.drive({ version: 'v3', auth: oAuth2Client });
 
@@ -72,4 +53,4 @@ type Token = {
   });
 
   console.log(file.data);
-})();
+}

@@ -2,7 +2,8 @@
 build
 token_spotify.json
 token_google.json
-google_credentials.json
+credentials_google.json
+credentials_spotify.json
 browser
 
 # Logs

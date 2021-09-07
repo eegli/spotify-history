@@ -1,11 +1,13 @@
 import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
 import { dynamoGetLatestHistory, dynamoSetHistory } from './services/dynamo';
+import { backupHistory } from './services/google';
 import Spotify from './services/spotify';
 import { isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
+    console.log(process.env);
     const spotify = new Spotify();
     // Use refresh token to get access token
     await spotify.getRefreshToken();
@@ -64,3 +66,5 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     }
   }
 };
+
+export const backup = backupHistory;
