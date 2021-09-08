@@ -1,8 +1,13 @@
 import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
-import { dynamoGetLatestHistory, dynamoSetHistory } from './services/dynamo';
+import {
+  dynamoGetLatestHistory,
+  dynamoGetWeeklyHistory,
+  dynamoSetHistory,
+} from './services/dynamo';
+import { backupHistory, BackupParams } from './services/google';
 import Spotify from './services/spotify';
-import { isAxiosError } from './utils';
+import { backupFileNameDates, fileSizeFormat, isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -25,7 +30,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     // timestamp is undefined since there is no history element in
     // dynamo. In this case, get all songs before now
     if (latestTimestamp) {
-      params.after = parseInt(latestTimestamp);
+      params.after = new Date(latestTimestamp).getTime();
     } else {
       params.before = new Date().getTime();
     }
@@ -34,22 +39,23 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
-    const count = spotify.items.length;
+    const count = spotify.count;
+
     if (count > 0) {
       // Create the actual history for dynamo
       const history = await spotify.createHistory();
 
       await dynamoSetHistory({
-        timestamp: spotify.cursorBefore,
+        timestamp: new Date(spotify.cursorBefore),
         count,
         songs: history,
       });
 
       const songs = count === 1 ? 'song' : 'songs';
-      console.log(`Success! ${count} new ${songs} have been scrubbed!`);
+      console.info(`Success! ${count} new ${songs} have been scrubbed!`);
       // No new items since last scrobbed
     } else {
-      console.log(`No new songs have been scrubbed!`);
+      console.info(`No new songs have been scrubbed!`);
     }
   } catch (err) {
     if (isAxiosError(err)) {
@@ -60,7 +66,45 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
         statusText: response?.statusText,
       });
     } else {
-      console.error('Something went wrong', err);
+      console.error('Could not get or create history', err);
     }
   }
+};
+
+export const backup: ScheduledHandler = async () => {
+  try {
+    const d = new Date();
+    const [year, month, week] = backupFileNameDates(d);
+
+    const historyItems = await dynamoGetWeeklyHistory();
+
+    const backupParams: BackupParams = {
+      fileName: `spotify_bp_${year}-${month}-w${week}`,
+      folderName: 'SpotifyHistory',
+      data: {
+        year: d.getFullYear(),
+        month: d.getMonth() + 1,
+        backup_created: d.toISOString(),
+        count: historyItems.length,
+        items: historyItems,
+      },
+    };
+
+    if (process.env.STAGE !== 'production') {
+      backupParams.folderName = 'STAGE_SpotifyHistory';
+    }
+
+    const backup = await backupHistory(backupParams);
+
+    const {
+      data: { size, webViewLink },
+    } = backup;
+
+    const fileSize = size ? parseInt(size) : 0;
+
+    console.info(`History backup for week ${week} completed.`);
+    console.info('Songs count: ', historyItems.length);
+    console.info('Backup file size: ', fileSizeFormat(fileSize));
+    console.info('Link: ', webViewLink);
+  } catch (e) {}
 };

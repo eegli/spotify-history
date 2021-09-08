@@ -9,6 +9,18 @@ Array [
         Object {
           "artists": Array [
             Object {
+              "artistId": "3rVvL036o05Y34SPRsW63P",
+              "artistName": "Elfenberg",
+              "genres": "ethnotronica;organic electronic;organic house",
+            },
+          ],
+          "id": "2HuWC2OLujMmdm1Mut8rjM",
+          "name": "Loma",
+          "playedAt": "2021-09-08T07:23:11.995Z",
+        },
+        Object {
+          "artists": Array [
+            Object {
               "artistId": "0rasA5Z5h1ITtHelCpfu9R",
               "artistName": "Paul Kalkbrenner",
               "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house",
@@ -16,31 +28,27 @@ Array [
           ],
           "id": "33R7eq2Yqrhjz7eP6XhCsy",
           "name": "Graf Zahl",
+          "playedAt": "2021-09-07T19:12:49.127Z",
         },
         Object {
           "artists": Array [
             Object {
-              "artistId": "5K4W6rqBFWDnAN6FQUkS6x",
-              "artistName": "Kanye West",
-              "genres": "chicago rap;rap",
+              "artistId": "54KTsBl98buzGkELjGlnuU",
+              "artistName": "Active Child",
+              "genres": "chillwave;metropopolis;vapor soul",
             },
-          ],
-          "id": "0RbW8kWozrVSIGb4V13o0o",
-          "name": "Hurricane",
-        },
-        Object {
-          "artists": Array [
             Object {
-              "artistId": "238y1dKPtMeFEpX3Y6H1Vr",
-              "artistName": "Parra for Cuva",
-              "genres": "downtempo;new french touch;tropical house",
+              "artistId": "1ehDqG6bFGAurxlAJeQgNT",
+              "artistName": "Matthew Dekay",
+              "genres": "deep progressive trance;organic electronic;organic house",
             },
           ],
-          "id": "0deYrVa6CGfy46WE4FoyOf",
-          "name": "Cuiva",
+          "id": "3SIIAdWl4RmLNYpppSUy7b",
+          "name": "Johnny Belinda - Matthew Dekay Remix",
+          "playedAt": "2021-09-08T07:27:05.283Z",
         },
       ],
-      "timestamp": "1630905719124",
+      "timestamp": 2021-09-08T07:23:11.995Z,
     },
   ],
 ]

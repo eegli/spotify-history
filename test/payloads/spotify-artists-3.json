@@ -2,40 +2,73 @@
   "artists": [
     {
       "external_urls": {
-        "spotify": "https://open.spotify.com/artist/238y1dKPtMeFEpX3Y6H1Vr"
+        "spotify": "https://open.spotify.com/artist/54KTsBl98buzGkELjGlnuU"
       },
       "followers": {
         "href": null,
-        "total": 125575
+        "total": 104282
       },
-      "genres": [
-        "downtempo",
-        "new french touch",
-        "tropical house"
-      ],
-      "href": "https://api.spotify.com/v1/artists/238y1dKPtMeFEpX3Y6H1Vr",
-      "id": "238y1dKPtMeFEpX3Y6H1Vr",
+      "genres": ["chillwave", "metropopolis", "vapor soul"],
+      "href": "https://api.spotify.com/v1/artists/54KTsBl98buzGkELjGlnuU",
+      "id": "54KTsBl98buzGkELjGlnuU",
       "images": [
         {
           "height": 640,
-          "url": "https://i.scdn.co/image/ab6761610000e5eb9ae586b52c79ccf40fa99973",
+          "url": "https://i.scdn.co/image/ab6761610000e5eb7ccdca3ed44538a96544dbb6",
           "width": 640
         },
         {
           "height": 320,
-          "url": "https://i.scdn.co/image/ab676161000051749ae586b52c79ccf40fa99973",
+          "url": "https://i.scdn.co/image/ab676161000051747ccdca3ed44538a96544dbb6",
           "width": 320
         },
         {
           "height": 160,
-          "url": "https://i.scdn.co/image/ab6761610000f1789ae586b52c79ccf40fa99973",
+          "url": "https://i.scdn.co/image/ab6761610000f1787ccdca3ed44538a96544dbb6",
           "width": 160
         }
       ],
-      "name": "Parra for Cuva",
-      "popularity": 63,
+      "name": "Active Child",
+      "popularity": 46,
       "type": "artist",
-      "uri": "spotify:artist:238y1dKPtMeFEpX3Y6H1Vr"
+      "uri": "spotify:artist:54KTsBl98buzGkELjGlnuU"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/1ehDqG6bFGAurxlAJeQgNT"
+      },
+      "followers": {
+        "href": null,
+        "total": 9070
+      },
+      "genres": [
+        "deep progressive trance",
+        "organic electronic",
+        "organic house"
+      ],
+      "href": "https://api.spotify.com/v1/artists/1ehDqG6bFGAurxlAJeQgNT",
+      "id": "1ehDqG6bFGAurxlAJeQgNT",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/ab6761610000e5eb9b6767abbfafea2dc5a47ed3",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/ab676161000051749b6767abbfafea2dc5a47ed3",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/ab6761610000f1789b6767abbfafea2dc5a47ed3",
+          "width": 160
+        }
+      ],
+      "name": "Matthew Dekay",
+      "popularity": 36,
+      "type": "artist",
+      "uri": "spotify:artist:1ehDqG6bFGAurxlAJeQgNT"
     }
   ]
 }

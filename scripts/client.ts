@@ -12,16 +12,13 @@
   const receivedState = urlParams.get('state');
 
   if (code) {
-    const getCredentials = async (): Promise<TokenServer.Credentials> => {
-      const result = await fetch(credentialsURL, {
-        credentials: 'same-origin',
-      });
+    const json = await fetch(credentialsURL, {
+      credentials: 'same-origin',
+    });
 
-      return result.json();
-    };
-
-    const { clientId, clientSecret, state } = await getCredentials();
-
+    const res: TokenScripts.SpotifyTokenResponse = await json.json();
+    const { client_id, client_secret, state } = res;
+    console.log(receivedState, state);
     if (state !== receivedState) {
       throw new Error("States don't match");
     }
@@ -37,12 +34,13 @@
       tokenParams.set(key, value);
     }
 
-    const getToken = async (): Promise<TokenServer.TokenResponse> => {
+    const getToken = async (): Promise<TokenScripts.SpotifyTokenSuccess> => {
       const res = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded',
-          Authorization: 'Basic ' + window.btoa(clientId + ':' + clientSecret),
+          Authorization:
+            'Basic ' + window.btoa(client_id + ':' + client_secret),
         },
         body: tokenParams,
       });

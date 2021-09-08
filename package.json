@@ -12,7 +12,9 @@
   "scripts": {
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
-    "token": "yarn build:client && ts-node -r dotenv/config scripts/server.ts",
+    "token:spotify": "yarn build:client && ts-node scripts/server.ts",
+    "token:google": "node scripts/google.js",
+    "google": "ts-node -T scripts/list.ts",
     "dynamo": "sls dynamodb start --stage local",
     "dynamo:seed": "sls dynamodb start --seed=test --stage local",
     "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
@@ -21,6 +23,7 @@
     "stg:deploy": "sls deploy -s stg --force",
     "stg:invoke": "sls invoke -f spotify-history-lambda -s stg",
     "local": "sls invoke local -f spotify-history-lambda -s local",
+    "local:backup": "sls invoke local -f spotify-history-lambda-backup -s local",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "postinstall": "husky install"
@@ -30,7 +33,8 @@
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "aws-sdk": "^2.983.0",
     "axios": "^0.21.3",
-    "dotenv": "^10.0.0",
+    "googleapis": "^85.0.0",
+    "moment": "^2.29.1",
     "typescript": "^4.4.2"
   },
   "devDependencies": {
@@ -40,10 +44,12 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.10",
     "@types/spotify-api": "^0.0.11",
+    "envfile": "^6.17.0",
     "express": "^4.17.1",
     "husky": "^7.0.2",
     "jest": "^27.1.0",
     "nanoid": "^3.1.25",
+    "nodemon": "^2.0.12",
     "open": "^8.2.1",
     "serverless-dynamodb-local": "0.2.39",
     "serverless-plugin-typescript": "^2.0.0",

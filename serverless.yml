@@ -43,6 +43,16 @@ provider:
   memorySize: 128
   timeout: 5
   logRetentionInDays: 7
+  environment:
+    TABLE_NAME: ${self:custom.tableName} # Dynamo table name
+    CUSTOM_AWS_REGION: ${self:provider.region} # AWS_REGION is reserved so...
+    STAGE: ${self:custom.env} # Stage
+    SPOTIFY_CLIENT_ID: ${file(./credentials_spotify.json):client_id}
+    SPOTIFY_CLIENT_SECRET: ${file(./credentials_spotify.json):client_secret}
+    SPOTIFY_REFRESH_TOKEN: ${file(./token_spotify.json):refresh_token}
+    GOOGLE_CLIENT_ID: ${file(./credentials_google.json):installed.client_id}
+    GOOGLE_CLIENT_SECRET: ${file(./credentials_google.json):installed.client_secret}
+    GOOGLE_REFRESH_TOKEN: ${file(./token_google.json):refresh_token}
   iam:
     role:
       statements:
@@ -60,13 +70,9 @@ functions:
     events:
       - eventBridge:
           schedule: cron(0 * * * ? *) # Cron job to run every hour
-    environment:
-      TABLE_NAME: ${self:custom.tableName} # Dynamo table name
-      CUSTOM_AWS_REGION: ${self:provider.region} # AWS_REGION is reserved so...
-      STAGE: ${self:custom.env} # Stage
-      CLIENT_ID: ${env:CLIENT_ID} # Spotify client id
-      CLIENT_SECRET: ${env:CLIENT_SECRET} # Spotify client secret
-      REFRESH_TOKEN: ${env:REFRESH_TOKEN} # Spotify refresh token
+  spotify-history-lambda-backup:
+    name: ${self:custom.prefix}-backup
+    handler: src/index.backup
 
 resources:
   Resources:

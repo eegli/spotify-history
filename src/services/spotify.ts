@@ -10,15 +10,20 @@ export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
 export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export default class Spotify {
-  bearerToken: string = '';
-  items: HistoryItems = [];
-  cursorBefore: string = '';
-  cursorAfter: string = '';
+  private bearerToken: string = '';
+  private items: HistoryItems = [];
+  // Unix timestamps
+  cursorBefore: number = 0;
+  cursorAfter: number = 0;
+
+  get count() {
+    return this.items.length;
+  }
 
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();
 
-    for (const [key, value] of Object.entries(config.REFRESH_TOKEN_PARAMS)) {
+    for (const [key, value] of Object.entries(config.SPOTIFY)) {
       params.append(key, value);
     }
 
@@ -54,8 +59,8 @@ export default class Spotify {
 
       // Manually set the cursors so that we know the time of the
       // first and last song of this history
-      this.cursorAfter = new Date(lastElem).getTime().toString();
-      this.cursorBefore = new Date(firstElem).getTime().toString();
+      this.cursorAfter = new Date(lastElem).getTime();
+      this.cursorBefore = new Date(firstElem).getTime();
     }
   }
 
@@ -79,6 +84,7 @@ export default class Spotify {
           a.push({
             name: el.track.name,
             id: el.track.id,
+            playedAt: new Date(el.played_at).toISOString(),
             artists: genre.data.artists.map(el => ({
               artistName: el.name,
               artistId: el.id,
