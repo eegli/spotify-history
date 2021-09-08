@@ -1,6 +1,10 @@
 import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
-import { dynamoGetLatestHistory, dynamoSetHistory } from './services/dynamo';
+import {
+  dynamoGetLatestHistory,
+  dynamoGetMonthlyHistory,
+  dynamoSetHistory,
+} from './services/dynamo';
 import { backupHistory } from './services/google';
 import Spotify from './services/spotify';
 import { isAxiosError } from './utils';
@@ -36,7 +40,8 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
-    const count = spotify.items.length;
+    const count = spotify.count;
+
     if (count > 0) {
       // Create the actual history for dynamo
       const history = await spotify.createHistory();
@@ -62,9 +67,13 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
         statusText: response?.statusText,
       });
     } else {
-      console.error('Something went wrong', err);
+      console.error('Could not get or create history', err);
     }
   }
 };
 
-export const backup = backupHistory;
+export const backup: ScheduledHandler = async () => {
+  try {
+    await dynamoGetMonthlyHistory();
+  } catch (e) {}
+};

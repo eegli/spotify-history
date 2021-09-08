@@ -5,11 +5,11 @@ interface BaseSecret {
   client_id: string;
   client_secret: string;
 }
-export interface SpotifySecrets extends BaseSecret {
+interface SpotifySecrets extends BaseSecret {
   grant_type: 'refresh_token';
 }
 
-export interface GoogleSecrets extends BaseSecret {}
+interface GoogleSecrets extends BaseSecret {}
 export interface RefreshTokenResponse {
   access_token: string;
   token_type: string;

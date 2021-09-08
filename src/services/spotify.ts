@@ -10,10 +10,14 @@ export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
 export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export default class Spotify {
-  bearerToken: string = '';
-  items: HistoryItems = [];
+  private bearerToken: string = '';
+  private items: HistoryItems = [];
   cursorBefore: string = '';
   cursorAfter: string = '';
+
+  get count() {
+    return this.items.length;
+  }
 
   async getRefreshToken(): Promise<void> {
     const params = new URLSearchParams();

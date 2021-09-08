@@ -1,8 +1,19 @@
-import { google } from 'googleapis';
-import fs from 'fs';
+import { drive_v3, google } from 'googleapis';
+import { PathLike, createReadStream } from 'fs';
 import config from '../config';
+import { PickType } from '../utils';
 
-export async function backupHistory() {
+type Params = {
+  fileName: string;
+  json: PathLike;
+};
+
+type RequestBody = PickType<
+  drive_v3.Params$Resource$Files$Create,
+  'requestBody'
+>;
+
+export const backupHistory = async ({ fileName, json }: Params) => {
   const TEST_JSON = 'test/payloads/spotify-history.json';
 
   const clientId = config.GOOGLE.client_id;
@@ -37,20 +48,22 @@ export async function backupHistory() {
     folderId = folder.data.id || '';
   }
   console.log(folderId);
-  const json = {
-    mineType: 'application/json',
-    body: fs.createReadStream(TEST_JSON),
-  };
+
   const now = new Date().toISOString();
 
+  const requestBody: RequestBody = {
+    name: 'test-file__' + now + '.json',
+    parents: [folderId],
+  };
+
   const file = await drive.files.create({
-    requestBody: {
-      name: 'test-file__' + now + '.json',
-      parents: [folderId],
+    requestBody,
+    media: {
+      mimeType: 'application/json',
+      body: createReadStream(TEST_JSON),
     },
-    media: json,
     fields: 'id',
   });
 
   console.log(file.data);
-}
+};

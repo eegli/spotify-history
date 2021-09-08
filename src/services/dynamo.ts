@@ -1,11 +1,12 @@
 import config from '../config';
 
 import { DataMapper, QueryOptions } from '@aws/dynamodb-data-mapper';
-import { ConditionExpression } from '@aws/dynamodb-expressions';
+import { ConditionExpression, AndExpression } from '@aws/dynamodb-expressions';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 import { History } from '../models/history';
+import moment from 'moment';
 
 type Options = DynamoDB.DocumentClient.DocumentClientOptions &
   ServiceConfigurationOptions &
@@ -58,4 +59,29 @@ export const dynamoSetHistory = async ({
   });
 
   return mapper.put(newHistory);
+};
+
+export const dynamoGetMonthlyHistory = async () => {
+  // timestamp needs to be a string just like the timestamp from the
+  // model
+  const timestamp = moment().subtract(1, 'week').unix().toString();
+  console.log(timestamp);
+
+  const dateFilter: ConditionExpression = {
+    type: 'GreaterThanOrEqualTo',
+    subject: 'timestamp',
+    object: timestamp,
+  };
+
+  const filters: AndExpression = {
+    type: 'And',
+    conditions: [
+      { type: 'Equals', subject: 'type', object: 'history' },
+      dateFilter,
+    ],
+  };
+
+  for await (const item of mapper.query(History, filters)) {
+    console.log(item);
+  }
 };
