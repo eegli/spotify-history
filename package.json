@@ -12,9 +12,8 @@
   "scripts": {
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
-    "token:spotify": "yarn build:client && ts-node scripts/server.ts",
-    "token:google": "node scripts/google.js",
-    "google": "ts-node -T scripts/list.ts",
+    "token:spotify": "yarn build:client && ts-node -T scripts/server.ts",
+    "token:google": "ts-node -T scripts/google.ts",
     "dynamo": "sls dynamodb start --stage local",
     "dynamo:seed": "sls dynamodb start --seed=test --stage local",
     "prod:spotify:deploy": "sls deploy function -f spotify-history-lambda -s prod",
