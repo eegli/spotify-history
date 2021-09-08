@@ -47,5 +47,54 @@
         ]
       }
     ]
+  },
+  {
+    "type": "history",
+    "timestamp": "2021-09-05T08:07:31.774Z",
+    "created_at": "2021-09-05T08:30:08.090Z",
+    "count": 3,
+    "songs": [
+      {
+        "name": "Johnny Belinda - Matthew Dekay Remix",
+        "id": "3SIIAdWl4RmLNYpppSUy7b",
+        "playedAt": "2021-09-05T08:07:31.774Z",
+        "artists": [
+          {
+            "artistName": "Active Child",
+            "artistId": "54KTsBl98buzGkELjGlnuU",
+            "genres": "chillwave;metropopolis;vapor soul"
+          },
+          {
+            "artistName": "Matthew Dekay",
+            "artistId": "1ehDqG6bFGAurxlAJeQgNT",
+            "genres": "deep progressive trance;organic electronic;organic house"
+          }
+        ]
+      },
+      {
+        "name": "Loma",
+        "id": "2HuWC2OLujMmdm1Mut8rjM",
+        "playedAt": "2021-09-05T07:23:11.995Z",
+        "artists": [
+          {
+            "artistName": "Elfenberg",
+            "artistId": "3rVvL036o05Y34SPRsW63P",
+            "genres": "ethnotronica;organic electronic;organic house"
+          }
+        ]
+      },
+      {
+        "name": "Graf Zahl",
+        "id": "33R7eq2Yqrhjz7eP6XhCsy",
+        "playedAt": "2021-09-04T19:12:49.127Z",
+        "artists": [
+          {
+            "artistName": "Paul Kalkbrenner",
+            "artistId": "0rasA5Z5h1ITtHelCpfu9R",
+            "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house"
+          }
+        ]
+      }
+    ]
   }
 ]

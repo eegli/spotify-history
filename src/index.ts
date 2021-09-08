@@ -2,12 +2,12 @@ import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
 import {
   dynamoGetLatestHistory,
-  dynamoGetMonthlyHistory,
+  dynamoGetWeeklyHistory,
   dynamoSetHistory,
 } from './services/dynamo';
-import { backupHistory } from './services/google';
+import { backupHistory, BackupParams } from './services/google';
 import Spotify from './services/spotify';
-import { isAxiosError } from './utils';
+import { backupFileNameDates, fileSizeFormat, isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -52,10 +52,10 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       });
 
       const songs = count === 1 ? 'song' : 'songs';
-      console.log(`Success! ${count} new ${songs} have been scrubbed!`);
+      console.info(`Success! ${count} new ${songs} have been scrubbed!`);
       // No new items since last scrobbed
     } else {
-      console.log(`No new songs have been scrubbed!`);
+      console.info(`No new songs have been scrubbed!`);
     }
   } catch (err) {
     if (isAxiosError(err)) {
@@ -73,6 +73,38 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
 export const backup: ScheduledHandler = async () => {
   try {
-    await dynamoGetMonthlyHistory();
+    const d = new Date();
+    const [year, month, week] = backupFileNameDates(d);
+
+    const historyItems = await dynamoGetWeeklyHistory();
+
+    const backupParams: BackupParams = {
+      fileName: `spotify_bp_${year}-${month}-w${week}`,
+      folderName: 'SpotifyHistory',
+      data: {
+        year: d.getFullYear(),
+        month: d.getMonth() + 1,
+        backup_created: d.toISOString(),
+        count: historyItems.length,
+        items: historyItems,
+      },
+    };
+
+    if (process.env.STAGE !== 'production') {
+      backupParams.folderName = 'STAGE_SpotifyHistory';
+    }
+
+    const backup = await backupHistory(backupParams);
+
+    const {
+      data: { size, webViewLink },
+    } = backup;
+
+    const fileSize = size ? parseInt(size) : 0;
+
+    console.info(`History backup for week ${week} completed.`);
+    console.info('Songs count: ', historyItems.length);
+    console.info('Backup file size: ', fileSizeFormat(fileSize));
+    console.info('Link: ', webViewLink);
   } catch (e) {}
 };
