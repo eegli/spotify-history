@@ -10,7 +10,10 @@ const port = 3000;
 const scopes =
   'user-read-email user-top-read user-library-read user-read-recently-played';
 
-const credentials = read<TokenScripts.SpotifyCreds>('credentials_spotify.json');
+const TOKEN_PATH = '.secrets/token_spotify.json';
+const CREDENTIALS_PATH = '.secrets/credentials_spotify.json';
+
+const credentials = read<TokenScripts.SpotifyCreds>(CREDENTIALS_PATH);
 
 const { client_id, client_secret } = credentials;
 const state = nanoid(12);
@@ -57,10 +60,7 @@ app.post('/submit', (req, res) => {
   if (jsonData.access_token) {
     console.log(`Success! Saved token to file`);
     jsonData.dateObtained = new Date().toLocaleString();
-    fs.writeFileSync(
-      __dirname + '/../token_spotify.json',
-      JSON.stringify(jsonData, null, 2)
-    );
+    fs.writeFileSync(TOKEN_PATH, JSON.stringify(jsonData, null, 2));
     res.send('Successful! You can now close this window');
     process.exit(0);
   }
