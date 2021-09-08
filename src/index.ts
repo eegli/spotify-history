@@ -44,7 +44,6 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     if (count > 0) {
       // Create the actual history for dynamo
       const history = await spotify.createHistory();
-      console.log(history);
 
       await dynamoSetHistory({
         timestamp: new Date(spotify.cursorBefore),

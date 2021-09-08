@@ -1,65 +1,48 @@
 [
   {
     "type": "history",
-    "created_at": "2021-09-05T09:41:59.189Z",
-    "timestamp": "2021-09-05T09:48:53.684Z",
+    "timestamp": "2021-09-07T08:07:31.774Z",
+    "created_at": "2021-09-07T08:30:08.090Z",
     "count": 3,
     "songs": [
       {
-        "name": "Red Dressed - Ben Böhmer Remix",
-        "id": "6XipzjrsT6p1zVKzrNHpNx",
+        "name": "Johnny Belinda - Matthew Dekay Remix",
+        "id": "3SIIAdWl4RmLNYpppSUy7b",
+        "playedAt": "2021-09-07T08:07:31.774Z",
         "artists": [
           {
-            "artistName": "Worakls",
-            "artistId": "5RPzPJCg4ER1LzQkorZ31p",
-            "genres": "deep minimal techno;high-tech minimal;minimal techno;new french touch;tropical house"
+            "artistName": "Active Child",
+            "artistId": "54KTsBl98buzGkELjGlnuU",
+            "genres": "chillwave;metropopolis;vapor soul"
           },
           {
-            "artistName": "Ben Böhmer",
-            "artistId": "5tDjiBYUsTqzd0RkTZxK7u",
-            "genres": "progressive house"
-          },
-          {
-            "artistName": "Eivør",
-            "artistId": "2dB4ya2W1Gvng8gjWSPu2H",
-            "genres": "faroese indie;faroese pop;medieval folk;melancholia;rune folk;viking folk"
+            "artistName": "Matthew Dekay",
+            "artistId": "1ehDqG6bFGAurxlAJeQgNT",
+            "genres": "deep progressive trance;organic electronic;organic house"
           }
         ]
       },
       {
-        "name": "Roller Coaster - Jan Blomqvist Remix",
-        "id": "4hZys9awWLo6Fc3N8dL8K7",
+        "name": "Loma",
+        "id": "2HuWC2OLujMmdm1Mut8rjM",
+        "playedAt": "2021-09-07T07:23:11.995Z",
         "artists": [
           {
-            "artistName": "Mako",
-            "artistId": "0Ye4nfYAA91T1X56gnlXAA",
-            "genres": "edm;electro house;electropop;indie poptimism;pop dance;pop edm;progressive electro house;tropical house"
-          },
-          {
-            "artistName": "Jan Blomqvist",
-            "artistId": "5wMlMjOLeJfS5DfxqGfm83",
-            "genres": "deep euro house;minimal techno;organic house;tropical house"
+            "artistName": "Elfenberg",
+            "artistId": "3rVvL036o05Y34SPRsW63P",
+            "genres": "ethnotronica;organic electronic;organic house"
           }
         ]
       },
       {
-        "name": "I Feel You - Sun Soaked Mix",
-        "id": "00BE2ycaBS1XJJy8T0ojdm",
+        "name": "Graf Zahl",
+        "id": "33R7eq2Yqrhjz7eP6XhCsy",
+        "playedAt": "2021-09-06T19:12:49.127Z",
         "artists": [
           {
-            "artistName": "Kaskade",
-            "artistId": "6TQj5BFPooTa08A7pk8AQ1",
-            "genres": "edm;electro house;house;pop dance;progressive house;tropical house;vocal house"
-          },
-          {
-            "artistName": "Zip Zip Through The Night",
-            "artistId": "5cqU2KGOvMlVg3K6J1SkNs",
-            "genres": ""
-          },
-          {
-            "artistName": "Pinguin Mofex",
-            "artistId": "2tFH063pax32e5uI879Xq8",
-            "genres": "utah indie"
+            "artistName": "Paul Kalkbrenner",
+            "artistId": "0rasA5Z5h1ITtHelCpfu9R",
+            "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house"
           }
         ]
       }
