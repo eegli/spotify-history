@@ -25,6 +25,7 @@
     "local:backup": "sls invoke local -f spotify-history-lambda-backup -s local",
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
     "postinstall": "husky install"
   },
   "dependencies": {

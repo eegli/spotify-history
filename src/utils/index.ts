@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { PathOrFileDescriptor, readFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 
 export const isAxiosError = (err: unknown): err is AxiosError =>
   axios.isAxiosError(err);

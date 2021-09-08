@@ -7,9 +7,9 @@ const config: InitialOptionsTsJest = {
       // https://huafu.github.io/ts-jest/user/config/
     },
   },
-  roots: ['<rootDir>/test'],
-  setupFiles: ['<rootDir>/test/jest.setup.ts'],
-  testEnvironment: 'node',
+  roots: ['./test', './src'],
+  setupFiles: ['./test/jest.setup.ts'],
   preset: 'ts-jest',
+  collectCoverageFrom: ['./src/**/*', '!./src/utils/**/*'],
 };
 export default config;
