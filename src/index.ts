@@ -55,7 +55,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       console.info(`Success! ${count} new ${songs} have been scrubbed!`);
       // No new items since last scrobbed
     } else {
-      console.info(`No new songs have been scrubbed!`);
+      console.info('No new songs have been scrubbed!');
     }
   } catch (err) {
     if (isAxiosError(err)) {
@@ -106,5 +106,7 @@ export const backup: ScheduledHandler = async () => {
     console.info('Songs count: ', historyItems.length);
     console.info('Backup file size: ', fileSizeFormat(fileSize));
     console.info('Link: ', webViewLink);
-  } catch (e) {}
+  } catch (err) {
+    console.error('Could not backup history', err);
+  }
 };

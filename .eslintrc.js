@@ -8,7 +8,8 @@ module.exports = {
       files: ['src/**/*'],
       // excludedFiles: '*.test.js',
       rules: {
-        quotes: ['error', 'single'],
+        // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/explicit-module-boundary-types.md
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
       },
     },
   ],

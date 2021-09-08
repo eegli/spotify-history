@@ -1,5 +1,4 @@
 import { drive_v3, google } from 'googleapis';
-import { PathLike, createReadStream } from 'fs';
 import config from '../config';
 import { PickType } from '../utils';
 
@@ -9,7 +8,7 @@ type RequestBody = PickType<
 >;
 
 export type BackupParams = {
-  data: any;
+  data: unknown;
   fileName: string;
   folderName: string;
 };
@@ -28,7 +27,7 @@ export const backupHistory = async ({
 
   const drive = google.drive({ version: 'v3', auth: oAuth2Client });
 
-  let folderId: string = '';
+  let folderId = '';
 
   // List all folders that this API client has already created
   const folders = await drive.files.list({

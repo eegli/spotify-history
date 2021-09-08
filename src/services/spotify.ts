@@ -10,11 +10,11 @@ export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
 export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export default class Spotify {
-  private bearerToken: string = '';
+  private bearerToken = '';
   private items: HistoryItems = [];
   // Unix timestamps
-  cursorBefore: number = 0;
-  cursorAfter: number = 0;
+  cursorBefore = 0;
+  cursorAfter = 0;
 
   get count() {
     return this.items.length;
