@@ -64,7 +64,7 @@ export const dynamoSetHistory = async ({
 export const dynamoGetMonthlyHistory = async () => {
   // timestamp needs to be a string just like the timestamp from the
   // model
-  const timestamp = moment().subtract(1, 'week').unix().toString();
+  const timestamp = moment().subtract(1, 'week').toISOString();
   console.log(timestamp);
 
   const dateFilter: ConditionExpression = {

@@ -11,7 +11,6 @@ import { isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
-    console.log(process.env);
     const spotify = new Spotify();
     // Use refresh token to get access token
     await spotify.getRefreshToken();
@@ -31,7 +30,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     // timestamp is undefined since there is no history element in
     // dynamo. In this case, get all songs before now
     if (latestTimestamp) {
-      params.after = parseInt(latestTimestamp);
+      params.after = new Date(latestTimestamp).getTime();
     } else {
       params.before = new Date().getTime();
     }
@@ -45,9 +44,10 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     if (count > 0) {
       // Create the actual history for dynamo
       const history = await spotify.createHistory();
+      console.log(history);
 
       await dynamoSetHistory({
-        timestamp: spotify.cursorBefore,
+        timestamp: new Date(spotify.cursorBefore),
         count,
         songs: history,
       });

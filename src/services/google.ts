@@ -2,6 +2,7 @@ import { drive_v3, google } from 'googleapis';
 import { PathLike, createReadStream } from 'fs';
 import config from '../config';
 import { PickType } from '../utils';
+import moment from 'moment';
 
 type Params = {
   fileName: string;
@@ -49,7 +50,7 @@ export const backupHistory = async ({ fileName, json }: Params) => {
   }
   console.log(folderId);
 
-  const now = new Date().toISOString();
+  const now = moment().toISOString();
 
   const requestBody: RequestBody = {
     name: 'test-file__' + now + '.json',
