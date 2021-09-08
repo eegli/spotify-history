@@ -1,12 +1,10 @@
-import config from '../config';
-
 import { DataMapper, QueryOptions } from '@aws/dynamodb-data-mapper';
-import { ConditionExpression, AndExpression } from '@aws/dynamodb-expressions';
+import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-
 import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
-import { History, HistoryElement } from '../models/history';
 import moment from 'moment';
+import config from '../config';
+import { History, HistoryElement } from '../models/history';
 
 type Options = DynamoDB.DocumentClient.DocumentClientOptions &
   ServiceConfigurationOptions &

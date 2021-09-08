@@ -1,22 +1,20 @@
-import { Context, EventBridgeEvent } from 'aws-lambda';
 import { QueryIterator, StringToAnyObjectMap } from '@aws/dynamodb-data-mapper';
+import { Context, EventBridgeEvent } from 'aws-lambda';
+import axios from 'axios';
 import { handler } from '../src/';
-import {
-  spotifyHistoryResponse,
-  spotifyArtistsResponse,
-  dynamoData,
-  spotifyPutTokenResponse,
-  emptyResponse,
-} from './payloads';
+import { HistoryParams } from '../src/config';
+import { mapper } from '../src/services/dynamo';
 import Spotify from '../src/services/spotify';
+import {
+  dynamoData,
+  emptyResponse,
+  spotifyArtistsResponse,
+  spotifyHistoryResponse,
+  spotifyPutTokenResponse,
+} from './payloads';
 
 jest.mock('@aws/dynamodb-data-mapper');
 jest.mock('axios');
-
-import { mapper } from '../src/services/dynamo';
-
-import axios from 'axios';
-import { HistoryParams } from '../src/config';
 
 const querySpy = jest.spyOn(mapper, 'query');
 const putSpy = jest.spyOn(mapper, 'put');
