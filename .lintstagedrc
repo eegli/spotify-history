@@ -1,0 +1,3 @@
+{
+  "!(*test).ts": "yarn lint"
+}
