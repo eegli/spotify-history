@@ -1,11 +1,11 @@
 import { ScheduledHandler } from 'aws-lambda';
 import { HistoryParams } from './config';
+import { backupHistory, BackupParams } from './routes/backup';
 import {
   dynamoGetLatestHistory,
   dynamoGetWeeklyHistory,
   dynamoSetHistory,
-} from './services/dynamo';
-import { backupHistory, BackupParams } from './services/google';
+} from './routes/history';
 import Spotify from './services/spotify';
 import { backupFileNameDates, fileSizeFormat, isAxiosError } from './utils';
 
@@ -74,7 +74,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 export const backup: ScheduledHandler = async () => {
   try {
     const d = new Date();
-    const [year, month, week] = backupFileNameDates(d);
+    const { year, month, week } = backupFileNameDates(d);
 
     const historyItems = await dynamoGetWeeklyHistory();
 

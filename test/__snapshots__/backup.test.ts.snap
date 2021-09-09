@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backup handler does not create a new folder if one is present 1`] = `
+Object {
+  "fields": "files(id, name)",
+  "pageSize": 10,
+  "q": "mimeType = 'application/vnd.google-apps.folder'",
+}
+`;
+
+exports[`Backup handler does not create a new folder if one is present 2`] = `
+Object {
+  "fields": "size,webViewLink",
+  "media": Object {
+    "body": "{
+  \\"test\\": true
+}",
+    "mimeType": "application/json",
+  },
+  "requestBody": Object {
+    "name": "file.json",
+    "parents": Array [
+      "id",
+    ],
+  },
+}
+`;

@@ -13,6 +13,7 @@ import {
   spotifyPutTokenResponse,
 } from './payloads';
 
+jest.mock('../src/services/dynamo');
 jest.mock('@aws/dynamodb-data-mapper');
 jest.mock('axios');
 
