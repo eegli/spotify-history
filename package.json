@@ -29,7 +29,8 @@
     "lint": "eslint src --ext .js,.ts",
     "lint:watch": "esw -w --color src --ext .js,.ts",
     "format": "prettier --write src",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
@@ -56,6 +57,7 @@
     "express": "^4.17.1",
     "husky": "^7.0.2",
     "jest": "^27.1.0",
+    "lint-staged": "^11.1.2",
     "mitm": "^1.7.2",
     "nanoid": "^3.1.25",
     "nodemon": "^2.0.12",
@@ -66,5 +68,9 @@
     "serverless-plugin-typescript": "^2.0.0",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.src": "prettier --write"
   }
 }

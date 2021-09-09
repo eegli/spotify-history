@@ -47,6 +47,8 @@ beforeEach(() => {
 });
 
 describe('Backup handler', () => {
+  jest.useFakeTimers('modern').setSystemTime(new Date(1));
+
   it('creates a backup', async () => {
     await backupHandler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
@@ -55,24 +57,9 @@ describe('Backup handler', () => {
     );
     expect(driveListSpy).toHaveBeenCalledTimes(1);
     expect(driveCreateSpy).toHaveBeenCalledTimes(2);
-
-    // Make sure drive.list is called with the right params
     expect(driveListSpy.mock.calls[0][0]).toMatchSnapshot();
-
-    // First call to drive.create to create the folder
-    expect(driveCreateSpy.mock.calls[0][0]).toMatchSnapshot();
-
-    // Second call to drive.create to create the actual json file
-    // Snapshot testing isn't possible cause of the ever changing date
-    expect(
-      JSON.parse(driveCreateSpy.mock.calls[1][0]?.media?.body)
-    ).toMatchObject({
-      count: mockDynamoData.length,
-      items: mockDynamoData,
-    });
-    expect(driveCreateSpy.mock.calls[1][0]?.media?.mimeType).toEqual(
-      'application/json'
-    );
+    expect(driveCreateSpy.mock.calls[0][0]).toMatchSnapshot('creates folder');
+    expect(driveCreateSpy.mock.calls[1][0]).toMatchSnapshot('creates file');
   });
 
   it('does not create a new folder if one is present', async () => {
