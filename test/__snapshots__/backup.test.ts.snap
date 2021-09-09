@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Backup handler does not create a new folder if one is present 1`] = `
+exports[`Backup handler creates a backup 1`] = `
 Object {
   "fields": "files(id, name)",
   "pageSize": 10,
@@ -8,20 +8,12 @@ Object {
 }
 `;
 
-exports[`Backup handler does not create a new folder if one is present 2`] = `
+exports[`Backup handler creates a backup 2`] = `
 Object {
-  "fields": "size,webViewLink",
-  "media": Object {
-    "body": "{
-  \\"test\\": true
-}",
-    "mimeType": "application/json",
-  },
+  "fields": "id",
   "requestBody": Object {
-    "name": "file.json",
-    "parents": Array [
-      "id",
-    ],
+    "mimeType": "application/vnd.google-apps.folder",
+    "name": "SpotifyHistory_test",
   },
 }
 `;

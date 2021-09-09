@@ -55,11 +55,24 @@ describe('Backup handler', () => {
     );
     expect(driveListSpy).toHaveBeenCalledTimes(1);
     expect(driveCreateSpy).toHaveBeenCalledTimes(2);
-    const r = driveCreateSpy.mock.calls[1][0]?.media?.body;
-    expect(JSON.parse(r)).toMatchObject({
+
+    // Make sure drive.list is called with the right params
+    expect(driveListSpy.mock.calls[0][0]).toMatchSnapshot();
+
+    // First call to drive.create to create the folder
+    expect(driveCreateSpy.mock.calls[0][0]).toMatchSnapshot();
+
+    // Second call to drive.create to create the actual json file
+    // Snapshot testing isn't possible cause of the ever changing date
+    expect(
+      JSON.parse(driveCreateSpy.mock.calls[1][0]?.media?.body)
+    ).toMatchObject({
       count: mockDynamoData.length,
       items: mockDynamoData,
     });
+    expect(driveCreateSpy.mock.calls[1][0]?.media?.mimeType).toEqual(
+      'application/json'
+    );
   });
 
   it('does not create a new folder if one is present', async () => {
@@ -68,8 +81,6 @@ describe('Backup handler', () => {
     const folderName = 'folder';
 
     await backupHistory({ data, fileName, folderName });
-    expect(driveListSpy.mock.calls[0][0]).toMatchSnapshot();
-    expect(driveCreateSpy.mock.calls[0][0]).toMatchSnapshot();
     expect(driveCreateSpy).toHaveBeenCalledTimes(1);
   });
 

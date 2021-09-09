@@ -20,10 +20,8 @@ jest.mock('axios');
 const querySpy = jest.spyOn(mapper, 'query');
 const putSpy = jest.spyOn(mapper, 'put');
 
-const iteratorMock = jest.fn();
-
 // This will be overwritten sometimes
-iteratorMock.mockReturnValue([].values());
+const iteratorMock = jest.fn().mockReturnValue([].values());
 
 // @ts-ignore
 const qi: QueryIterator<StringToAnyObjectMap> = QueryIterator;
