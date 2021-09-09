@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { GaxiosResponse } from 'googleapis-common';
+import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import dynamoDBData from '../../dynamo-seed.json';
 import { RefreshTokenResponse } from '../../src/config';
 import { History } from '../../src/models/history';
@@ -18,7 +19,7 @@ function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
   };
 }
 
-export function fakeGaxiosRes<T>(payload: T): GaxiosResponse<T> {
+function fakeGaxiosRes<T>(payload: T): GaxiosResponse<T> {
   return {
     config: {},
     data: payload,
@@ -29,13 +30,14 @@ export function fakeGaxiosRes<T>(payload: T): GaxiosResponse<T> {
   };
 }
 
-export const dynamoData = (): History[] => {
-  return dynamoDBData.map((hst: any) => {
-    const history: History = new History();
-    Object.assign(history, { ...hst });
-    return history;
-  });
-};
+export const driveListResponse = fakeGaxiosRes<drive_v3.Schema$FileList>({
+  files: [{ name: 'folder', id: 'id' }],
+});
+
+export const driveCreateResponse = fakeGaxiosRes<drive_v3.Schema$File>({
+  size: '69',
+  webViewLink: 'http://example.com',
+});
 
 export const spotifyPutTokenResponse = fakeAxiosRes<RefreshTokenResponse>({
   access_token: 'token',
@@ -58,3 +60,11 @@ export const spotifyArtistsResponse: AxiosResponse[] = [
 ];
 
 export const emptyResponse = fakeAxiosRes({ items: [] });
+
+export const dynamoData = (): History[] => {
+  return dynamoDBData.map((hst: any) => {
+    const history: History = new History();
+    Object.assign(history, { ...hst });
+    return history;
+  });
+};

@@ -4,16 +4,18 @@ import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import { backup as backupHandler } from '../src/index';
 import { backupHistory } from '../src/routes/backup';
 import { drive } from '../src/services/google';
-import { fakeGaxiosRes } from './payloads';
-
-jest.mock('../src/services/google');
+import { driveCreateResponse, driveListResponse } from './payloads';
 
 // Fake history response, length 1
 jest.mock('../src/routes/history', () => {
   return {
-    dynamoGetWeeklyHistory: jest.fn().mockReturnValue([{ music: true }]),
+    dynamoGetWeeklyHistory: jest.fn().mockImplementation(() => mockDynamoData),
   };
 });
+
+jest.mock('../src/services/google');
+
+const mockDynamoData = [{ music: true, tests: 'working!' }];
 
 // Setting the right method overloads manually
 type DriveListSpy = (
@@ -36,17 +38,8 @@ const driveCreateSpy = jest.spyOn(
   'create'
 ) as unknown as jest.MockedFunction<DriveCreateSpy>;
 
-const mockListResponse = fakeGaxiosRes<drive_v3.Schema$FileList>({
-  files: [{ name: 'folder', id: 'id' }],
-});
-
-const mockCreateResponse = fakeGaxiosRes<drive_v3.Schema$File>({
-  size: '69',
-  webViewLink: 'http://example.com',
-});
-
-driveListSpy.mockResolvedValue(mockListResponse);
-driveCreateSpy.mockResolvedValue(mockCreateResponse);
+driveListSpy.mockResolvedValue(driveListResponse);
+driveCreateSpy.mockResolvedValue(driveCreateResponse);
 
 beforeEach(() => {
   driveListSpy.mockClear();
@@ -54,14 +47,19 @@ beforeEach(() => {
 });
 
 describe('Backup handler', () => {
-  it('creates the history', async () => {
+  it('creates a backup', async () => {
     await backupHandler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
     );
-    expect(driveCreateSpy).toHaveBeenCalledTimes(2);
     expect(driveListSpy).toHaveBeenCalledTimes(1);
+    expect(driveCreateSpy).toHaveBeenCalledTimes(2);
+    const r = driveCreateSpy.mock.calls[1][0]?.media?.body;
+    expect(JSON.parse(r)).toMatchObject({
+      count: mockDynamoData.length,
+      items: mockDynamoData,
+    });
   });
 
   it('does not create a new folder if one is present', async () => {

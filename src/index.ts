@@ -1,5 +1,5 @@
 import { ScheduledHandler } from 'aws-lambda';
-import { HistoryParams } from './config';
+import config, { HistoryParams } from './config';
 import { backupHistory, BackupParams } from './routes/backup';
 import {
   dynamoGetLatestHistory,
@@ -78,9 +78,14 @@ export const backup: ScheduledHandler = async () => {
 
     const historyItems = await dynamoGetWeeklyHistory();
 
+    const folderName =
+      process.env.STAGE === 'production'
+        ? config.BACKUP_FOLDER_NAME_PROD
+        : config.BACKUP_FOLDER_NAME_STAGE;
+
     const backupParams: BackupParams = {
       fileName: `spotify_bp_${year}-${month}-w${week}`,
-      folderName: 'SpotifyHistory',
+      folderName,
       data: {
         year: d.getFullYear(),
         month: d.getMonth() + 1,
@@ -89,10 +94,6 @@ export const backup: ScheduledHandler = async () => {
         items: historyItems,
       },
     };
-
-    if (process.env.STAGE !== 'production') {
-      backupParams.folderName = 'STAGE_SpotifyHistory';
-    }
 
     const backup = await backupHistory(backupParams);
 
