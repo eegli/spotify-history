@@ -70,7 +70,6 @@
     "ts-node": "^10.2.1"
   },
   "lint-staged": {
-    "./src/*.{js,ts}": "eslint src --ext .js,.ts",
-    "./src": "prettier --write"
+    "./src": "eslint src --ext .js,.ts && prettier --write"
   }
 }
