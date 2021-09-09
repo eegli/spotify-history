@@ -9,8 +9,7 @@ interface SpotifySecrets extends BaseSecret {
   grant_type: 'refresh_token';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface GoogleSecrets extends BaseSecret {}
+type GoogleSecrets = BaseSecret
 export interface RefreshTokenResponse {
   access_token: string;
   token_type: string;
