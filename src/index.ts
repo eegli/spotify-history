@@ -7,7 +7,7 @@ import {
   dynamoSetHistory,
 } from './routes/history';
 import Spotify from './services/spotify';
-import { backupFileNameDates, fileSizeFormat, isAxiosError } from './utils';
+import { fileSizeFormat, getCurrDates, isAxiosError } from './utils';
 
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
@@ -73,8 +73,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
 export const backup: ScheduledHandler = async () => {
   try {
-    const d = new Date();
-    const { year, month, week } = backupFileNameDates(d);
+    const { year, month, week, ts } = getCurrDates();
 
     const historyItems = await dynamoGetWeeklyHistory();
 
@@ -88,10 +87,10 @@ export const backup: ScheduledHandler = async () => {
       fileName: `spotify_bp_${year}-${month}-w${week}`,
       folderName,
       data: {
-        year: d.getFullYear(),
-        month: d.getMonth() + 1,
+        year,
+        month,
         week,
-        backup_created: d.toISOString(),
+        backup_created: ts,
         count: historyItems.length,
         items: historyItems,
       },

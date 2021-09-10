@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { writeFileSync } from 'fs';
+import moment from 'moment';
 
 export const isAxiosError = (err: unknown): err is AxiosError =>
   axios.isAxiosError(err);
@@ -10,25 +11,18 @@ export const write = (data: unknown, fileName: string): void => {
   writeFileSync(fileName + '.json', JSON.stringify(data));
 };
 
-export const backupFileNameDates = (date: Date) => {
+export const getCurrDates = () => {
+  const m = moment();
   // Leading zero for month
-  const m = date.getMonth();
-  const month = m < 10 ? '0' + m : m.toString();
+  const _month = m.month() + 1;
+  const month = _month < 10 ? '0' + _month : _month.toString();
 
-  // Get number of week
-  // https://www.w3resource.com/javascript-exercises/javascript-date-exercise-24.php
-  const tdt = new Date(date.valueOf());
-  const dayn = (date.getDay() + 6) % 7;
-  tdt.setDate(tdt.getDate() - dayn + 3);
-  const firstThursday = tdt.valueOf();
-  tdt.setMonth(0, 1);
-  if (tdt.getDay() !== 4) {
-    tdt.setMonth(0, 1 + ((4 - tdt.getDay() + 7) % 7));
-  }
-  const week = 1 + Math.ceil((firstThursday - date.valueOf()) / 604800000);
+  const week = m.isoWeek();
+  const year = m.year();
+  const ts = m.toISOString();
 
   // Year, month, week
-  return { year: date.getFullYear(), month, week };
+  return { ts, year, month, week };
 };
 
 // https://stackoverflow.com/a/18650828
