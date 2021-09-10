@@ -10,6 +10,7 @@
   "author": "Eric <43848365+eegli@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
+    "install:ci": "yarn install --ignore-scripts --ignore-optional --frozen-lockfile ",
     "build": "tsc --build",
     "build:client": "tsc -p tsconfig.client.json",
     "token:spotify": "yarn build:client && ts-node -T scripts/server.ts",
