@@ -4,7 +4,7 @@ A simple Spotify scrobber.
 
 ## Features
 
-- Free of charge. Uses the AWS free tier
+- Free of charge. Uses the AWS free tier and the Google Drive API, which is free to use.
 - Easily customizable
 - Export to CSV via AWS Console
 
