@@ -73,6 +73,9 @@ functions:
   spotify-history-lambda-backup:
     name: ${self:custom.prefix}-backup
     handler: src/index.backup
+    events:
+      - eventBridge:
+          schedule: cron(30 0 ? * 0 *) # Cron job to run week on Sunday at 12:30 a.m
 
 resources:
   Resources:

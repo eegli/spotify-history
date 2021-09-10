@@ -8,6 +8,11 @@ A simple Spotify scrobber.
 - Easily customizable
 - Export to CSV via AWS Console
 
+## Motivation
+
+By default, Spotify only saves the [last 50 songs you've listened to](https://support.spotify.com/us/article/listening-history/).
+Apparently, Spotify counts as song as "listened to" when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams)
+
 ## Getting started
 
 1.  Create a Spotify app and add the client secret, client id and scopes to `credentials_spotify.json` in the root folder. The scopes need at least the string `user-read-recently-played`.
@@ -96,6 +101,11 @@ List all timestamps in local table
 ```console
 aws dynamodb query --table-name stg-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#ts, #dt" --expression-attribute-names '{\"#t\":\"type\", \"#ts\":\"timestamp\", \"#dt\":\"date\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}'
 ```
+
+## Customization
+
+- [AWS EventBridge schedule expressions (cron)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
+- [Cron expression tester](https://crontab.cronhub.io/)
 
 ## Resources
 
