@@ -83,12 +83,14 @@ export const backup: ScheduledHandler = async () => {
         ? config.BACKUP_FOLDER_NAME_PROD
         : config.BACKUP_FOLDER_NAME_STAGE;
 
+    // Include metadata (weekly backup)
     const backupParams: BackupParams = {
       fileName: `spotify_bp_${year}-${month}-w${week}`,
       folderName,
       data: {
         year: d.getFullYear(),
         month: d.getMonth() + 1,
+        week,
         backup_created: d.toISOString(),
         count: historyItems.length,
         items: historyItems,

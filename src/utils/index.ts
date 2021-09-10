@@ -16,9 +16,16 @@ export const backupFileNameDates = (date: Date) => {
   const month = m < 10 ? '0' + m : m.toString();
 
   // Get number of week
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
-  const week = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  // https://www.w3resource.com/javascript-exercises/javascript-date-exercise-24.php
+  const tdt = new Date(date.valueOf());
+  const dayn = (date.getDay() + 6) % 7;
+  tdt.setDate(tdt.getDate() - dayn + 3);
+  const firstThursday = tdt.valueOf();
+  tdt.setMonth(0, 1);
+  if (tdt.getDay() !== 4) {
+    tdt.setMonth(0, 1 + ((4 - tdt.getDay() + 7) % 7));
+  }
+  const week = 1 + Math.ceil((firstThursday - date.valueOf()) / 604800000);
 
   // Year, month, week
   return { year: date.getFullYear(), month, week };
