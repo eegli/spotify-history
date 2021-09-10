@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backup handler creates a backup 1`] = `
+Object {
+  "fields": "files(id, name)",
+  "pageSize": 10,
+  "q": "mimeType = 'application/vnd.google-apps.folder'",
+}
+`;
+
+exports[`Backup handler creates a backup: creates file 1`] = `
+Object {
+  "fields": "size,webViewLink",
+  "media": Object {
+    "body": "{
+  \\"year\\": 1970,
+  \\"month\\": 1,
+  \\"backup_created\\": \\"1970-01-01T00:00:00.001Z\\",
+  \\"count\\": 1,
+  \\"items\\": [
+    {
+      \\"music\\": true,
+      \\"tests\\": \\"working!\\"
+    }
+  ]
+}",
+    "mimeType": "application/json",
+  },
+  "requestBody": Object {
+    "name": "spotify_bp_1970-00-w1.json",
+    "parents": Array [
+      "",
+    ],
+  },
+}
+`;
+
+exports[`Backup handler creates a backup: creates folder 1`] = `
+Object {
+  "fields": "id",
+  "requestBody": Object {
+    "mimeType": "application/vnd.google-apps.folder",
+    "name": "SpotifyHistory_test",
+  },
+}
+`;

@@ -21,7 +21,7 @@ export const backupFileNameDates = (date: Date) => {
   const week = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 
   // Year, month, week
-  return [date.getFullYear(), month, week];
+  return { year: date.getFullYear(), month, week };
 };
 
 // https://stackoverflow.com/a/18650828

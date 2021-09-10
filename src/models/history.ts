@@ -24,8 +24,10 @@ export interface HistoryElement {
 const ISOdateType: CustomType<Date> = {
   type: 'Custom',
   marshall: (input: Date): AttributeValue => ({ S: input.toISOString() }),
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   unmarshall: (persistedValue: AttributeValue): Date =>
     new Date(persistedValue.S!),
+  /* eslint-enable */
 };
 
 @table(config.AWS_TABLE_NAME)

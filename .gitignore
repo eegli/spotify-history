@@ -1,9 +1,10 @@
+# Credentials and tokens
+
+.secrets
+
+# Build output
+
 .build
-build
-token_spotify.json
-token_google.json
-credentials_google.json
-credentials_spotify.json
 browser
 
 # Logs

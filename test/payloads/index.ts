@@ -1,12 +1,13 @@
-import { History } from '../../src/models/history';
+import { AxiosResponse } from 'axios';
+import { GaxiosResponse } from 'googleapis-common';
+import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import dynamoDBData from '../../dynamo-seed.json';
-
-import spotifyHistoryJSONResponse from './spotify-history.json';
+import { RefreshTokenResponse } from '../../src/config';
+import { History } from '../../src/models/history';
 import spotifyArtistsJSONResponse__1 from './spotify-artists-1.json';
 import spotifyArtistsJSONResponse__2 from './spotify-artists-2.json';
 import spotifyArtistsJSONResponse__3 from './spotify-artists-3.json';
-import { AxiosResponse } from 'axios';
-import { RefreshTokenResponse } from '../../src/config';
+import spotifyHistoryJSONResponse from './spotify-history.json';
 
 function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
   return {
@@ -18,13 +19,25 @@ function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
   };
 }
 
-export const dynamoData = (): History[] => {
-  return dynamoDBData.map((hst: any) => {
-    const history: History = new History();
-    Object.assign(history, { ...hst });
-    return history;
-  });
-};
+function fakeGaxiosRes<T>(payload: T): GaxiosResponse<T> {
+  return {
+    config: {},
+    data: payload,
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+    request: { responseURL: 'test' },
+  };
+}
+
+export const driveListResponse = fakeGaxiosRes<drive_v3.Schema$FileList>({
+  files: [{ name: 'folder', id: 'id' }],
+});
+
+export const driveCreateResponse = fakeGaxiosRes<drive_v3.Schema$File>({
+  size: '69',
+  webViewLink: 'http://example.com',
+});
 
 export const spotifyPutTokenResponse = fakeAxiosRes<RefreshTokenResponse>({
   access_token: 'token',
@@ -47,3 +60,11 @@ export const spotifyArtistsResponse: AxiosResponse[] = [
 ];
 
 export const emptyResponse = fakeAxiosRes({ items: [] });
+
+export const dynamoData = (): History[] => {
+  return dynamoDBData.map((hst: any) => {
+    const history: History = new History();
+    Object.assign(history, { ...hst });
+    return history;
+  });
+};
