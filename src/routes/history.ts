@@ -2,7 +2,7 @@ import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import moment from 'moment';
 import { History, HistoryElement } from '../models/history';
-import { mapper } from '../services/dynamo';
+import { dynamoDataMapper } from '../services/dynamo';
 export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {
     limit: 1,
@@ -14,7 +14,7 @@ export const dynamoGetLatestHistory = async () => {
     subject: 'type',
     object: 'history',
   };
-  const iterator = mapper.query(History, params, queryOptions);
+  const iterator = dynamoDataMapper.query(History, params, queryOptions);
   for await (const history of iterator) {
     // Return the first element
     return history;
@@ -34,7 +34,7 @@ export const dynamoSetHistory = async ({
     count,
     songs,
   });
-  return mapper.put(newHistory);
+  return dynamoDataMapper.put(newHistory);
 };
 
 export const dynamoGetWeeklyHistory = async () => {
@@ -58,7 +58,9 @@ export const dynamoGetWeeklyHistory = async () => {
 
   const items: History[] = [];
 
-  for await (const history of mapper.query(History, filters)) {
+  const iterator = dynamoDataMapper.query(History, filters);
+
+  for await (const history of iterator) {
     items.push(history);
   }
 

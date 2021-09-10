@@ -1,5 +1,5 @@
 import { drive_v3 } from 'googleapis';
-import { drive } from '../services/google';
+import { googleDrive } from '../services/google';
 import { PickType } from '../utils';
 
 type RequestBody = PickType<
@@ -21,7 +21,7 @@ export const backupHistory = async ({
   let folderId = '';
 
   // List all folders that this API client has already created
-  const folders = await drive.files.list({
+  const folders = await googleDrive.files.list({
     pageSize: 10,
     // Specify what fields we want to have in the response
     fields: 'files(id, name)',
@@ -41,7 +41,7 @@ export const backupHistory = async ({
 
   // Folder does not exist, create one
   if (!folderId) {
-    const folder = await drive.files.create({
+    const folder = await googleDrive.files.create({
       requestBody: {
         name: folderName,
         mimeType: 'application/vnd.google-apps.folder',
@@ -57,7 +57,7 @@ export const backupHistory = async ({
     parents: [folderId],
   };
 
-  return drive.files.create({
+  return googleDrive.files.create({
     requestBody,
     media: {
       mimeType: 'application/json',

@@ -3,7 +3,7 @@ import { GaxiosPromise, MethodOptions } from 'googleapis-common';
 import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import { backup as backupHandler } from '../src/index';
 import { backupHistory } from '../src/routes/backup';
-import { drive } from '../src/services/google';
+import { googleDrive } from '../src/services/google';
 import { driveCreateResponse, driveListResponse } from './payloads';
 
 // Fake history response, length 1
@@ -12,7 +12,7 @@ jest.mock('../src/routes/history', () => {
     dynamoGetWeeklyHistory: jest.fn().mockImplementation(() => mockDynamoData),
   };
 });
-
+// Mock the drive client
 jest.mock('../src/services/google');
 
 const mockDynamoData = [{ music: true, tests: 'working!' }];
@@ -29,14 +29,25 @@ type DriveCreateSpy = (
 ) => GaxiosPromise<drive_v3.Schema$File>;
 
 const driveListSpy = jest.spyOn(
-  drive.files,
+  googleDrive.files,
   'list'
 ) as unknown as jest.MockedFunction<DriveListSpy>;
 
 const driveCreateSpy = jest.spyOn(
-  drive.files,
+  googleDrive.files,
   'create'
 ) as unknown as jest.MockedFunction<DriveCreateSpy>;
+
+/* ____________ */
+
+/* Alternatively to jest.spyOn, use ts-jest's "mocked" */
+
+/* const mockDrive = mocked(googleDrive, true);
+const mockCreate = mockDrive.files
+  .create as unknown as jest.MockedFunction<DriveCreateSpy>;
+mockCreate.mockResolvedValue(driveCreateResponse); */
+
+/* ____________ */
 
 driveListSpy.mockResolvedValue(driveListResponse);
 driveCreateSpy.mockResolvedValue(driveCreateResponse);

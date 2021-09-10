@@ -17,6 +17,6 @@ if (process.env.stage === 'local') {
   params.endpoint = 'http://localhost:8000';
 }
 
-export const mapper = new DataMapper({
+export const dynamoDataMapper = new DataMapper({
   client: new DynamoDB(params),
 });

@@ -8,4 +8,4 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: config.GOOGLE.refresh_token });
 
-export const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+export const googleDrive = google.drive({ version: 'v3', auth: oAuth2Client });

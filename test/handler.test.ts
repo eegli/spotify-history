@@ -3,7 +3,7 @@ import { Context, EventBridgeEvent } from 'aws-lambda';
 import axios from 'axios';
 import { handler } from '../src/';
 import { HistoryParams } from '../src/config';
-import { mapper } from '../src/services/dynamo';
+import { dynamoDataMapper } from '../src/services/dynamo';
 import Spotify from '../src/services/spotify';
 import {
   dynamoData,
@@ -13,12 +13,13 @@ import {
   spotifyPutTokenResponse,
 } from './payloads';
 
+// Mock the dynamo client so that we don't accidentally hit the api
 jest.mock('../src/services/dynamo');
 jest.mock('@aws/dynamodb-data-mapper');
 jest.mock('axios');
 
-const querySpy = jest.spyOn(mapper, 'query');
-const putSpy = jest.spyOn(mapper, 'put');
+const querySpy = jest.spyOn(dynamoDataMapper, 'query');
+const putSpy = jest.spyOn(dynamoDataMapper, 'put');
 
 // This will be overwritten sometimes
 const iteratorMock = jest.fn().mockReturnValue([].values());
