@@ -1,11 +1,8 @@
 import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import moment from 'moment';
-import {
-  DynamoHistoryElement,
-  History,
-  HistoryRequired,
-} from '../models/history';
+import { DynamoHistoryElement } from '../config/types';
+import { History, HistoryRequired } from '../models/history';
 import { dynamoDataMapper } from '../services/dynamo';
 export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {

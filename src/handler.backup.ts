@@ -1,7 +1,7 @@
 import { ScheduledHandler } from 'aws-lambda';
 import moment from 'moment';
 import config from './config';
-import { DynamoHistoryElement } from './models/history';
+import { DynamoHistoryElement } from './config/types';
 import { backupHistory, BackupParams } from './routes/backup';
 import { dynamoGetWeeklyHistory } from './routes/history';
 import { fileSizeFormat, zeroPrefix } from './utils';
@@ -21,7 +21,6 @@ export const handler: ScheduledHandler = async () => {
   try {
     const historyItems = await dynamoGetWeeklyHistory();
 
-    // Include metadata (weekly backup)
     const backupParams: BackupParams<DynamoHistoryElement[]> = {
       fileName: `spotify_bp_${year}-${month}-w${week}`,
       folderName,

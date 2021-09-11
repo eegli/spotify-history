@@ -8,18 +8,7 @@ import { CustomType } from '@aws/dynamodb-data-marshaller';
 import { AttributeValue } from 'aws-sdk/clients/dynamodb';
 import moment from 'moment';
 import config from '../config';
-
-// Define the properties of a song that is eventually saved to Dynamo
-export interface DynamoHistoryElement {
-  name: string;
-  id: string;
-  playedAt: string;
-  artists: {
-    artistName: string;
-    artistId: string;
-    genres: string;
-  }[];
-}
+import { DynamoHistoryElement } from '../config/types';
 
 // Kind of a workaround for https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
 export type HistoryRequired = Required<

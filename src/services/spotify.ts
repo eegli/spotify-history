@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { URLSearchParams } from 'url';
 import config from '../config';
-import { DynamoHistoryElement } from '../models/history';
+import { DynamoHistoryElement } from '../config/types';
 
 export type HistoryParams = {
   limit: 50;

@@ -90,6 +90,49 @@ yarn
 
 10. Done!
 
+## Deploying
+
+This project includes both a staging and production environment. By default, **the schedules are only enabled for production** in order to save quota.
+
+In order to deploy the production version, run:
+
+```console
+yarn prod:deploy
+```
+
+If you want, you can deploy the staging version as well. The idea behind it is that you can test your changes on AWS if you customize the project.
+
+```console
+yarn stg:deploy
+```
+
+deploys the entire project while
+
+```console
+yarn stg:deploy:history
+```
+
+and
+
+```console
+yarn stg:deploy:backup
+```
+
+only deploys the lambda functions for scrobbing and backing up the history.
+Again, the staging functions are NOT scheduled as they are meant to be invoked manually.
+
+```console
+yarn stg:invoke:history
+```
+
+triggers getting the history from Spotify and saving it to DynamoDB.
+
+```console
+yarn stg:invoke:backup
+```
+
+triggers the backup.
+
 ## Customization
 
 ### Changing history properties
@@ -109,7 +152,7 @@ interface DynamoHistoryElement {
 }
 ```
 
-If you want to save other properties, simply change this interface in `src/models/history.ts` and TypeScript will show you where you'll need to make adjustments. I recommend storing at least the timestamp of the time the song was played (`playedAt`) and its id (`id`).
+If you want to save other properties, simply change this interface in `src/config/types.ts` and TypeScript will show you where you'll need to make adjustments. Obviously, it makes sense to at least store the timestamp of when the song was played (`playedAt`) and its id (`id`).
 
 ### Changing item expiration in the database
 
@@ -142,7 +185,7 @@ const timestamp = moment().subtract(1, 'month').toISOString();
 
 ### Changing the backup folder
 
--
+Update the stage and production folder names in `src/config/index.ts`.
 
 ## Development and Testing
 

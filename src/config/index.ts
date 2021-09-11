@@ -25,7 +25,7 @@ const config: Readonly<Config> = {
   AWS_TABLE_NAME: env.TABLE_NAME || '',
   AWS_REGION: env.CUSTOM_AWS_REGION || '',
   backupFolderNameProd: 'SpotifyHistory',
-  backUpFolderNameStage: 'SpotifyHistory_test',
+  backUpFolderNameStage: 'SpotifyHistory_stage',
   SPOTIFY: {
     client_id: env.SPOTIFY_CLIENT_ID || '',
     client_secret: env.SPOTIFY_CLIENT_SECRET || '',

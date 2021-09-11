@@ -49,7 +49,7 @@ Object {
   "fields": "id",
   "requestBody": Object {
     "mimeType": "application/vnd.google-apps.folder",
-    "name": "SpotifyHistory_test",
+    "name": "SpotifyHistory_stage",
   },
 }
 `;
