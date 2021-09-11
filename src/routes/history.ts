@@ -1,7 +1,7 @@
 import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import moment from 'moment';
-import { History, HistoryElement } from '../models/history';
+import { History, HistoryElement, HistoryRequired } from '../models/history';
 import { dynamoDataMapper } from '../services/dynamo';
 export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {
@@ -21,14 +21,11 @@ export const dynamoGetLatestHistory = async () => {
   }
 };
 
-// Kind of a workaround for https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
-type FullHistory = Required<Omit<History, 'type' | 'created_at'>>;
-
 export const dynamoSetHistory = async ({
   timestamp,
   count,
   songs,
-}: FullHistory) => {
+}: HistoryRequired) => {
   const newHistory: History = Object.assign(new History(), {
     timestamp,
     count,

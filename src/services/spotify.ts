@@ -1,7 +1,20 @@
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import config, { HistoryParams, RefreshTokenResponse } from '../config';
+import config from '../config';
 import { HistoryElement } from '../models/history';
+
+export type HistoryParams = {
+  limit: 50;
+  before?: number;
+  after?: number;
+};
+
+export interface RefreshTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: number;
+}
 
 export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 

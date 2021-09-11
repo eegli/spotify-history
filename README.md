@@ -87,7 +87,7 @@ yarn dynamo:start:noseed
 
 3. Query your table for all items to check for insertions
 
-```javascript
+```js
 dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
   if (err) ppJson(err);
   else ppJson(data);

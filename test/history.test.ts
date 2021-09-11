@@ -1,10 +1,9 @@
 import { QueryIterator, StringToAnyObjectMap } from '@aws/dynamodb-data-mapper';
 import { Context, EventBridgeEvent } from 'aws-lambda';
 import axios from 'axios';
-import { handler } from '../src/';
-import { HistoryParams } from '../src/config';
+import { historyHandler as handler } from '../src';
 import { dynamoDataMapper } from '../src/services/dynamo';
-import Spotify from '../src/services/spotify';
+import Spotify, { HistoryParams } from '../src/services/spotify';
 import {
   dynamoData,
   emptyResponse,

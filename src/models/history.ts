@@ -6,6 +6,7 @@ import {
 } from '@aws/dynamodb-data-mapper-annotations';
 import { CustomType } from '@aws/dynamodb-data-marshaller';
 import { AttributeValue } from 'aws-sdk/clients/dynamodb';
+import moment from 'moment';
 import config from '../config';
 
 // Define the properties of a song that is eventually saved to Dynamo
@@ -20,7 +21,17 @@ export interface HistoryElement {
   }[];
 }
 
-// Store dates as ISO strings
+// Kind of a workaround for https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
+export type HistoryRequired = Required<
+  Omit<History, 'type' | 'created_at' | 'expire_at'>
+>;
+
+// Store dates as ISO strings.
+
+// Note that for the TTL attribute, this decorator cannot be applied
+// as it needs to be stored as a Number data type.
+// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-before-you-start.html#time-to-live-ttl-before-you-start-formatting
+//
 const ISOdateType: CustomType<Date> = {
   type: 'Custom',
   marshall: (input: Date): AttributeValue => ({ S: input.toISOString() }),
@@ -34,6 +45,13 @@ const ISOdateType: CustomType<Date> = {
 export class History {
   @hashKey({ defaultProvider: () => 'history' })
   type?: string;
+
+  /* Songs expire after 30 days by default */
+  @attribute({
+    defaultProvider: () =>
+      moment().add(config.dynamoExpireAfter, 'days').toDate(),
+  })
+  expire_at?: Date;
 
   /* Date of the last song that was listened to */
   @rangeKey(ISOdateType)

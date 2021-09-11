@@ -11,33 +11,23 @@ interface SpotifySecrets extends BaseSecret {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface GoogleSecrets extends BaseSecret {}
-export interface RefreshTokenResponse {
-  access_token: string;
-  token_type: string;
-  scope: string;
-  expires_in: number;
-}
-
-export interface HistoryParams {
-  after?: number;
-  before?: number;
-  limit?: number;
-}
 
 type Config = {
   AWS_TABLE_NAME: string;
   AWS_REGION: string;
   SPOTIFY: Readonly<SpotifySecrets>;
   GOOGLE: Readonly<GoogleSecrets>;
-  BACKUP_FOLDER_NAME_PROD: string;
-  BACKUP_FOLDER_NAME_STAGE: string;
+  backupFolderNameProd: string;
+  backUpFolderNameStage: string;
+  dynamoExpireAfter: number;
 };
 
 const config: Readonly<Config> = {
   AWS_TABLE_NAME: env.TABLE_NAME || '',
   AWS_REGION: env.CUSTOM_AWS_REGION || '',
-  BACKUP_FOLDER_NAME_PROD: 'SpotifyHistory',
-  BACKUP_FOLDER_NAME_STAGE: 'SpotifyHistory_test',
+  backupFolderNameProd: 'SpotifyHistory',
+  backUpFolderNameStage: 'SpotifyHistory_test',
+  dynamoExpireAfter: 30,
   SPOTIFY: {
     client_id: env.SPOTIFY_CLIENT_ID || '',
     client_secret: env.SPOTIFY_CLIENT_SECRET || '',

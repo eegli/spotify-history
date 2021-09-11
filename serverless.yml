@@ -40,7 +40,7 @@ provider:
   versionFunctions: false
   eventBridge:
     useCloudFormation: true
-  memorySize: 128
+  memorySize: 256
   timeout: 5
   logRetentionInDays: 7
   environment:
@@ -64,15 +64,15 @@ provider:
           Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}'
 
 functions:
-  spotify-history-lambda:
+  spotify-history:
     name: ${self:custom.prefix}
-    handler: src/index.handler
+    handler: src/index.historyHandler
     events:
       - eventBridge:
           schedule: cron(0 * ? * * *) # Cron job to run every hour
-  spotify-history-lambda-backup:
+  spotify-history-backup:
     name: ${self:custom.prefix}-backup
-    handler: src/index.backup
+    handler: src/index.backupHandler
     events:
       - eventBridge:
           schedule: cron(30 0 ? * MON *) # Cron job to run weekly on Monday at 12:30 a.m
@@ -96,6 +96,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: 'expire_at'
+          Enabled: true
 
 package:
   patterns:

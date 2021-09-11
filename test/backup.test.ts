@@ -1,7 +1,7 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
 import { GaxiosPromise, MethodOptions } from 'googleapis-common';
 import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
-import { backup as backupHandler } from '../src/index';
+import { backupHandler as handler } from '../src/';
 import { backupHistory } from '../src/routes/backup';
 import { googleDrive } from '../src/services/google';
 import { driveCreateResponse, driveListResponse } from './payloads';
@@ -58,10 +58,10 @@ beforeEach(() => {
 });
 
 describe('Backup handler', () => {
-  jest.useFakeTimers('modern').setSystemTime(new Date(1));
+  jest.useFakeTimers('modern').setSystemTime(new Date(1996, 3, 21));
 
   it('creates a backup', async () => {
-    await backupHandler(
+    await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,
       () => {}
