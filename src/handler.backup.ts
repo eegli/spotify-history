@@ -1,32 +1,37 @@
 import { ScheduledHandler } from 'aws-lambda';
+import moment from 'moment';
 import config from './config';
+import { DynamoHistoryElement } from './models/history';
 import { backupHistory, BackupParams } from './routes/backup';
 import { dynamoGetWeeklyHistory } from './routes/history';
-import { fileSizeFormat, getCurrDates } from './utils';
+import { fileSizeFormat, zeroPrefix } from './utils';
 
 export const handler: ScheduledHandler = async () => {
-  try {
-    const { year, month, week, ts, date } = getCurrDates();
+  const m = moment();
 
+  const year = m.year();
+  const week = zeroPrefix(m.isoWeek());
+  const month = zeroPrefix(m.month() + 1);
+
+  const folderName =
+    process.env.STAGE === 'production'
+      ? config.backupFolderNameProd
+      : config.backUpFolderNameStage;
+
+  try {
     const historyItems = await dynamoGetWeeklyHistory();
 
-    const folderName =
-      process.env.STAGE === 'production'
-        ? config.backupFolderNameProd
-        : config.backUpFolderNameStage;
-
     // Include metadata (weekly backup)
-    const backupParams: BackupParams = {
+    const backupParams: BackupParams<DynamoHistoryElement[]> = {
       fileName: `spotify_bp_${year}-${month}-w${week}`,
       folderName,
-      data: {
-        year,
-        week,
-        created: date,
-        created_unix: ts,
-        count: historyItems.length,
-        items: historyItems,
+      // Time metadata for the backup
+      meta: {
+        week: week,
+        track_count: historyItems.length,
+        date_created: m.toString(),
       },
+      data: historyItems,
     };
 
     const backup = await backupHistory(backupParams);

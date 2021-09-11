@@ -1,20 +1,15 @@
-import { drive_v3 } from 'googleapis';
 import { googleDrive } from '../services/google';
-import { PickType } from '../utils';
 
-type RequestBody = PickType<
-  drive_v3.Params$Resource$Files$Create,
-  'requestBody'
->;
-
-export type BackupParams = {
-  data: unknown;
+export type BackupParams<T = unknown> = {
   fileName: string;
   folderName: string;
+  meta: Record<string, string | number>;
+  data: T;
 };
 
 export const backupHistory = async ({
   data,
+  meta,
   fileName,
   folderName,
 }: BackupParams) => {
@@ -52,17 +47,20 @@ export const backupHistory = async ({
     folderId = folder.data.id || '';
   }
 
-  const requestBody: RequestBody = {
-    name: fileName + '.json',
-    parents: [folderId],
+  const body = {
+    meta,
+    items: data,
   };
 
   return googleDrive.files.create({
-    requestBody,
+    requestBody: {
+      name: fileName + '.json',
+      parents: [folderId],
+    },
     media: {
       mimeType: 'application/json',
-      // Change to JSON.stringify(data) for more compact files
-      body: JSON.stringify(data, null, 2),
+      // Change to JSON.stringify(body) for more compact files
+      body: JSON.stringify(body, null, 2),
     },
     fields: 'size,webViewLink',
   });

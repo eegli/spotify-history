@@ -1,7 +1,11 @@
 import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import moment from 'moment';
-import { History, HistoryElement, HistoryRequired } from '../models/history';
+import {
+  DynamoHistoryElement,
+  History,
+  HistoryRequired,
+} from '../models/history';
 import { dynamoDataMapper } from '../services/dynamo';
 export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {
@@ -67,5 +71,5 @@ export const dynamoGetWeeklyHistory = async () => {
       acc.push(...curr.songs);
     }
     return acc;
-  }, <HistoryElement[]>[]);
+  }, <DynamoHistoryElement[]>[]);
 };

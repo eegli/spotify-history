@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { URLSearchParams } from 'url';
 import config from '../config';
-import { HistoryElement } from '../models/history';
+import { DynamoHistoryElement } from '../models/history';
 
 export type HistoryParams = {
   limit: 50;
@@ -16,15 +16,13 @@ export interface RefreshTokenResponse {
   expires_in: number;
 }
 
+// Export so we can use it in the tests
 export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
-
 export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
-
-export type HistoryItems = SpotifyApi.PlayHistoryObject[];
 
 export default class Spotify {
   private bearerToken = '';
-  private items: HistoryItems = [];
+  private items: SpotifyApi.PlayHistoryObject[] = [];
   // Unix timestamps
   cursorBefore = 0;
   cursorAfter = 0;
@@ -108,7 +106,7 @@ export default class Spotify {
         )
         .catch(err => console.error(err));
       return acc;
-    }, Promise.resolve(<HistoryElement[]>[]));
+    }, Promise.resolve(<DynamoHistoryElement[]>[]));
   }
 
   // Get schwifty

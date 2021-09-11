@@ -7,7 +7,9 @@ import Spotify, { HistoryParams } from '../src/services/spotify';
 import {
   dynamoData,
   emptyResponse,
-  spotifyArtistsResponse,
+  spotifyArtistsResponse1,
+  spotifyArtistsResponse2,
+  spotifyArtistsResponse3,
   spotifyHistoryResponse,
   spotifyPutTokenResponse,
 } from './payloads';
@@ -38,9 +40,9 @@ beforeEach(() => {
 
   mockAxios.get
     .mockResolvedValueOnce(spotifyHistoryResponse)
-    .mockResolvedValueOnce(spotifyArtistsResponse[0])
-    .mockResolvedValueOnce(spotifyArtistsResponse[1])
-    .mockResolvedValueOnce(spotifyArtistsResponse[2]);
+    .mockResolvedValueOnce(spotifyArtistsResponse1)
+    .mockResolvedValueOnce(spotifyArtistsResponse2)
+    .mockResolvedValueOnce(spotifyArtistsResponse3);
 
   fetchSpotifySpy.mockClear();
   querySpy.mockClear();
@@ -101,8 +103,6 @@ describe('Handler', () => {
 
 describe('Valid test payloads', () => {
   it('fakes an artist request for each artist', () => {
-    expect(spotifyHistoryResponse.data.items.length).toEqual(
-      spotifyArtistsResponse.length
-    );
+    expect(spotifyHistoryResponse.data.items.length).toEqual(3);
   });
 });

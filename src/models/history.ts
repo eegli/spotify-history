@@ -10,7 +10,7 @@ import moment from 'moment';
 import config from '../config';
 
 // Define the properties of a song that is eventually saved to Dynamo
-export interface HistoryElement {
+export interface DynamoHistoryElement {
   name: string;
   id: string;
   playedAt: string;
@@ -69,5 +69,5 @@ export class History {
 
   /* Actual songs */
   @attribute()
-  songs?: HistoryElement[];
+  songs?: DynamoHistoryElement[];
 }

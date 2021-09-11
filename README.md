@@ -97,7 +97,7 @@ yarn
 By default, these are the properties that are saved to the database (and backup):
 
 ```ts
-interface HistoryElement {
+interface DynamoHistoryElement {
   name: string;
   id: string;
   playedAt: string;
@@ -123,7 +123,7 @@ TimeToLiveSpecification:
 
 If you want to specify a different TTL, change the defaultProvider for the attribute `expire_at` in `src/models/history.ts`
 
-### Changing the schedules
+### Changing the backup schedule
 
 If you want to change the backup schedule, e.g. running it daily or monthly, you'll need to adjust the cron expression in `serverles.yml`. Here are some resources regarding cron jobs.
 
@@ -132,7 +132,7 @@ If you want to change the backup schedule, e.g. running it daily or monthly, you
 
 **⚠️ Keep in mind that the backup schedule, item expiration and time range to retrieve the items for the backup are logically connected! ⚠️**
 
-You can change the time range of the backup in `src/routes/history.ts`.
+If you change the backup schedule, you'll also need to change the time range of the backup in `src/routes/history.ts`.
 
 ```ts
 // Example: Include history from last month

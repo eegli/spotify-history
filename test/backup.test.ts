@@ -15,7 +15,11 @@ jest.mock('../src/routes/history', () => {
 // Mock the drive client
 jest.mock('../src/services/google');
 
-const mockDynamoData = [{ music: true, tests: 'working!' }];
+const mockDynamoData = [
+  { title: 'song 1', id: '1' },
+  { title: 'song 2', id: '2' },
+  { title: 'song 3', id: '3' },
+];
 
 // Setting the right method overloads manually
 type DriveListSpy = (
@@ -77,8 +81,9 @@ describe('Backup handler', () => {
     const data = { test: true };
     const fileName = 'file';
     const folderName = 'folder';
+    const meta = {};
 
-    await backupHistory({ data, fileName, folderName });
+    await backupHistory({ data, fileName, folderName, meta });
     expect(driveCreateSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -86,8 +91,9 @@ describe('Backup handler', () => {
     const data = { test: true };
     const fileName = 'file';
     const folderName = 'folder';
+    const meta = {};
 
-    const res = await backupHistory({ data, fileName, folderName });
+    const res = await backupHistory({ data, fileName, folderName, meta });
 
     expect(res.data).toHaveProperty('size');
     expect(res.data).toHaveProperty('webViewLink');

@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
 import { writeFileSync } from 'fs';
-import moment from 'moment';
 
 export type PickType<T, K extends keyof T> = T[K];
 
@@ -11,22 +10,8 @@ export const write = (data: unknown, fileName: string): void => {
   writeFileSync(fileName + '.json', JSON.stringify(data));
 };
 
-const zeroPrefix = (n: number): string => {
+export const zeroPrefix = (n: number): string => {
   return n < 10 ? '0' + n : n.toString();
-};
-
-export const getCurrDates = () => {
-  const m = moment();
-  // Leading zero for month
-  const month = zeroPrefix(m.month() + 1);
-
-  const week = zeroPrefix(m.isoWeek());
-  const year = m.year();
-  const ts = m.valueOf();
-  const date = m.toString();
-
-  // Year, month, week
-  return { ts, date, year, month, week };
 };
 
 // https://stackoverflow.com/a/18650828
