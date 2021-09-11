@@ -1,71 +1,98 @@
 # Spotify History Lambda
 
-A simple Spotify scrobber.
+A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database, and creates a weekly backup in Google Drive.
 
 ## Features
 
-- Free of charge. Uses the AWS free tier and the Google Drive API, which is free to use.
+- [Free of charge\*](#about-billing) - uses the AWS free tier and the Google Drive API, which is free to use
+- Utilities to get refresh tokens from both Google and Spotify
 - Easily customizable
-- Export to CSV via AWS Console
+- Weekly export to Google Drive
 
 ## Motivation
 
 By default, Spotify only saves the [last 50 songs you've listened to](https://support.spotify.com/us/article/listening-history/).
-Apparently, Spotify counts as song as "listened to" when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams)
 
-The backup is scheduled to run weekly at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+This project seeks to provide an easy solution for saving your Spotify listening history in an easily accessible place (Google Drive) where you can retrieve and analyze it quickly.
+
+## Before you start
+
+Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
+
+By default, the backup is scheduled to run weekly at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+
+By default, items in the database expire after 30 days since they have already been backed up and are not needed anymore.
+
+You can customize the backup, schedules and item expiration [here](#customization).
 
 ## Requirements
 
-- `node >= v14.17.4` , `serverless >= v2.56.0` (this version allows [disabling the schedule based on the stage](https://github.com/serverless/serverless/releases/tag/v2.56.0)disabling )
+- An AWS account
+- A Spotify account
+- `serverless >= v2.56.0` (this version allows [disabling the schedule based on the stage](https://github.com/serverless/serverless/releases/tag/v2.56.0))
 
-If you want to change the schedule, you will need to edit the cron expression of the `spotify-history-lambda-backup` function in `serverless.yml`. Optionally, you might want to adjust your backups' "metadata" in `src/index.ts - backupParams`
+- `node >= v14.17.4`
 
 ## Getting started
 
-1.  Create a Spotify app and add the client secret, client id and scopes to `credentials_spotify.json` in the root folder. The scopes need at least the string `user-read-recently-played`.
+Before you start, I recommend you [setup a budget in AWS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-create.html#create-cost-budget).
+You will need to set a budget of at least \$1. [More about billing and if it's "really" free](#about-billing)
+
+The following steps have to be done only one time, stick through it!
+
+1. Fork and download this repository
+2. [Create a Spotify application](https://developer.spotify.com/dashboard/applications) - app status "development" is fine - and set the redirect URL to `http://localhost:3000`.
+3. In the root directory, create a folder named `.secrets` (notice the dot!)
+4. Copy the client secret, client id and scopes to `.secrets/credentials_spotify.json` in the root folder. The scopes need at least the string `user-read-recently-played`. Your Spotify secrets file should look like this:
 
 ```json
 {
   "client_id": "<your-client-id>",
   "client_secret": "<your-client-secret>",
-  "scopes": "<your-scopes, user-read-recently-played>"
+  "scopes": "user-read-recently-played"
 }
 ```
 
-2.  Create a Google Cloud app and download the credentials file, rename to `credentials_google.json` and put it in the root dir. It should look like this:
+5. (Optional - Google Drive backup). [Follow the quickstart guide](https://developers.google.com/drive/api/v3/quickstart/nodejs) to create a Google Cloud project and enable the Drive API. Follow the steps. When asked to configure the consent screen, your publishing status should be _testing_. You will need to manually add the Google account who's drive you want to use under "Test users". In the end, you should be prompted to download your OAuth client credentials for your newly created desktop client as a JSON file.
+6. (Optional - Google Drive backup). Download the credentials file, rename it to `credentials_google.json` and put it in the `.secrets` folder. It should look like this:
 
 ```json
 {
   "installed": {
-    "client_id": "5893332219-vtm97e3akfloogqq06quu0t710l7ak34.apps.googleusercontent.com",
+    "client_id": "blablabla",
     "project_id": "spotify-history-32as4",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_secret": "ersRaKzZdQODDtRSQz4ygLZ",
+    "client_secret": "blablabla",
     "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob", "http://localhost"]
   }
 }
 ```
 
-3.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the root dir containing your long-lived Spotify refresh token.
+3.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. KEEP THIS FILE SECURE!
 
 ```console
 yarn token:spotify
 ```
 
-4.  Run the following command and follow the steps. This will create a `token_google.json` file in the root dir containing your long-lived Google Drive refresh token.
+4.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. KEEP THIS FILE SECURE!
 
 ```console
 yarn token:google
 ```
 
-5. Run the following command to generate the `.env` file containing all the secrets and env variables.
+5. Done! Serverless will automatically read the secrets from the json files and make them available in the Lambda functions.
 
-```console
-yarn generate:env
-```
+## Customization
+
+### Change history properties to be saved
+
+### Changing the schedules
+
+### Changing the backup folder
+
+-
 
 ## Running DynamoDB locally
 
@@ -123,3 +150,7 @@ aws dynamodb query --table-name stg-spotify-history-db --key-condition-expressio
 - [Using the DynamoDB Document Client](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html)
 - [Serverless DynamoDB Local](https://www.npmjs.com/package/serverless-dynamodb-local)
 - [TypeScript: adjusting types in reduce function with an async callback](https://dev.to/pedrohasantiago/typescript-adjusting-types-in-reduce-function-with-an-async-callback-2kc8)
+
+### About billing
+
+\* Serverless uses S3 to store the code of the deployed functions. Technically, S3 is not free. It costs [a fraction of a $](https://aws.amazon.com/s3/pricing/?nc=sn&loc=4) per GB, but a deployment takes up so little space, you most likely won't be billed. A full month of testing "cost" me 0.01\$ and I was not billed. Be aware that, if you change the schedules, this project may not be "free" anymore!

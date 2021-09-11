@@ -14,6 +14,7 @@ custom:
   tableName: ${self:custom.prefix}-db
   scheduleEnabled:
     prod: true
+    stg: false
   dynamodb:
     stages:
       - local
@@ -72,8 +73,10 @@ functions:
       - eventBridge:
           # Cron job to run every hour
           schedule: cron(0 * ? * * *)
-          # By default, enable schedule only in production
-          enabled: false
+          # By default, disable the schedule. Conditionally enable it
+          # based on the environment. Same goes for the backup
+          # handler.
+          enabled: ${self:custom.scheduleEnabled.${self:custom.env}, false}
   spotify-history-backup:
     name: ${self:custom.prefix}-backup
     handler: src/index.backupHandler
@@ -81,7 +84,6 @@ functions:
       - eventBridge:
           # Cron job to run weekly on Monday at 12:30 a.m
           schedule: cron(30 0 ? * MON *)
-          # By default, enable schedule only in production
           enabled: ${self:custom.scheduleEnabled.${self:custom.env}, false}
 
 resources:
