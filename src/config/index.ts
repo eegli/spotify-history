@@ -19,7 +19,6 @@ type Config = {
   GOOGLE: Readonly<GoogleSecrets>;
   backupFolderNameProd: string;
   backUpFolderNameStage: string;
-  dynamoExpireAfter: number;
 };
 
 const config: Readonly<Config> = {
@@ -27,7 +26,6 @@ const config: Readonly<Config> = {
   AWS_REGION: env.CUSTOM_AWS_REGION || '',
   backupFolderNameProd: 'SpotifyHistory',
   backUpFolderNameStage: 'SpotifyHistory_test',
-  dynamoExpireAfter: 30,
   SPOTIFY: {
     client_id: env.SPOTIFY_CLIENT_ID || '',
     client_secret: env.SPOTIFY_CLIENT_SECRET || '',

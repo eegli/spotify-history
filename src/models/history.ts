@@ -48,8 +48,7 @@ export class History {
 
   /* Songs expire after 30 days by default */
   @attribute({
-    defaultProvider: () =>
-      moment().add(config.dynamoExpireAfter, 'days').toDate(),
+    defaultProvider: () => moment().add(30, 'days').toDate(),
   })
   expire_at?: Date;
 

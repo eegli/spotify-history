@@ -19,11 +19,11 @@ This project seeks to provide an easy solution for saving your Spotify listening
 
 Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
 
-By default, the backup is scheduled to run weekly at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+By default, the backup is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
-By default, items in the database expire after 30 days since they have already been backed up and are not needed anymore.
+By default, **items in the database expire after 30 days** since they have already been backed up and are not needed anymore.
 
-You can customize the backup, schedules and item expiration [here](#customization).
+You can customize the backup, schedules, item expiration and much more. [Customization guide](#customization).
 
 ## Requirements
 
@@ -43,7 +43,7 @@ The following steps have to be done only one time, stick through it!
 1. Fork and download this repository
 2. [Create a Spotify application](https://developer.spotify.com/dashboard/applications) - app status "development" is fine - and set the redirect URL to `http://localhost:3000`.
 3. In the root directory, create a folder named `.secrets` (notice the dot!)
-4. Copy the client secret, client id and scopes to `.secrets/credentials_spotify.json` in the root folder. The scopes need at least the string `user-read-recently-played`. Your Spotify secrets file should look like this:
+4. Copy the client secret, client id and scopes to `.secrets/credentials_spotify.json`. The scopes need at least the string `user-read-recently-played`. Your Spotify secrets file should look like this:
 
 ```json
 {
@@ -53,8 +53,8 @@ The following steps have to be done only one time, stick through it!
 }
 ```
 
-5. (Optional - Google Drive backup). [Follow the quickstart guide](https://developers.google.com/drive/api/v3/quickstart/nodejs) to create a Google Cloud project and enable the Drive API. Follow the steps. When asked to configure the consent screen, your publishing status should be _testing_. You will need to manually add the Google account who's drive you want to use under "Test users". In the end, you should be prompted to download your OAuth client credentials for your newly created desktop client as a JSON file.
-6. (Optional - Google Drive backup). Download the credentials file, rename it to `credentials_google.json` and put it in the `.secrets` folder. It should look like this:
+5. [Follow the quickstart guide](https://developers.google.com/drive/api/v3/quickstart/nodejs) to create a Google Cloud project and enable the Drive API. Follow the steps. When asked to configure the consent screen, your publishing status should be _testing_. You will need to manually add the Google account who's drive you want to use under "Test users". In the end, you should be prompted to download your OAuth client credentials for your newly created desktop client as a JSON file.
+6. Download the credentials file, rename it to `credentials_google.json` and put it in the `.secrets` folder. It should look like this:
 
 ```json
 {
@@ -70,29 +70,81 @@ The following steps have to be done only one time, stick through it!
 }
 ```
 
-3.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. KEEP THIS FILE SECURE!
+7.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. KEEP THIS FILE SECURE!
 
 ```console
 yarn token:spotify
 ```
 
-4.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. KEEP THIS FILE SECURE!
+8.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. KEEP THIS FILE SECURE!
 
 ```console
 yarn token:google
 ```
 
-5. Done! Serverless will automatically read the secrets from the json files and make them available in the Lambda functions.
+9. Install the dependencies. Run
+
+```console
+yarn
+```
+
+10. Done!
 
 ## Customization
 
-### Change history properties to be saved
+### Changing history properties
+
+By default, these are the properties that are saved to the database (and backup):
+
+```ts
+interface HistoryElement {
+  name: string;
+  id: string;
+  playedAt: string;
+  artists: {
+    artistName: string;
+    artistId: string;
+    genres: string;
+  }[];
+}
+```
+
+If you want to save other properties, simply change this interface in `src/models/history.ts` and TypeScript will show you where you'll need to make adjustments. I recommend storing at least the timestamp of the time the song was played (`playedAt`) and its id (`id`).
+
+### Changing item expiration in the database
+
+By default, items in DynamoDB are set to expire after 30 days. If you wish to disable this, set the TTL specification in `serverless.yml` to `false` (or remove the implementation altogether for a cleaner codebase).
+
+```yml
+TimeToLiveSpecification:
+  AttributeName: 'expire_at'
+  Enabled: false
+```
+
+If you want to specify a different TTL, change the defaultProvider for the attribute `expire_at` in `src/models/history.ts`
 
 ### Changing the schedules
+
+If you want to change the backup schedule, e.g. running it daily or monthly, you'll need to adjust the cron expression in `serverles.yml`. Here are some resources regarding cron jobs.
+
+- [AWS EventBridge schedule expressions (cron)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
+- [Cron expression tester](https://crontab.cronhub.io/)
+
+**⚠️ Keep in mind that the backup schedule, item expiration and time range to retrieve the items for the backup are logically connected! ⚠️**
+
+You can change the time range of the backup in `src/routes/history.ts`.
+
+```ts
+// Example: Include history from last month
+
+const timestamp = moment().subtract(1, 'month').toISOString();
+```
 
 ### Changing the backup folder
 
 -
+
+## Development and Testing
 
 ## Running DynamoDB locally
 
@@ -136,11 +188,6 @@ List all timestamps in local table
 ```console
 aws dynamodb query --table-name stg-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#ts, #dt" --expression-attribute-names '{\"#t\":\"type\", \"#ts\":\"timestamp\", \"#dt\":\"date\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}'
 ```
-
-## Customization
-
-- [AWS EventBridge schedule expressions (cron)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
-- [Cron expression tester](https://crontab.cronhub.io/)
 
 ## Resources
 
