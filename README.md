@@ -15,6 +15,10 @@ Apparently, Spotify counts as song as "listened to" when you listen to it for ["
 
 The backup is scheduled to run weekly at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
+## Requirements
+
+- `node >= v14.17.4` , `serverless >= v2.56.0` (this version allows [disabling the schedule based on the stage](https://github.com/serverless/serverless/releases/tag/v2.56.0)disabling )
+
 If you want to change the schedule, you will need to edit the cron expression of the `spotify-history-lambda-backup` function in `serverless.yml`. Optionally, you might want to adjust your backups' "metadata" in `src/index.ts - backupParams`
 
 ## Getting started

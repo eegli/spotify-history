@@ -16,7 +16,7 @@ Object {
   \\"year\\": 1996,
   \\"week\\": \\"16\\",
   \\"created\\": \\"Sun Apr 21 1996 00:00:00 GMT+0200\\",
-  \\"created_unix\\": 830037600,
+  \\"created_unix\\": 830037600000,
   \\"count\\": 1,
   \\"items\\": [
     {

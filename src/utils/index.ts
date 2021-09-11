@@ -22,7 +22,7 @@ export const getCurrDates = () => {
 
   const week = zeroPrefix(m.isoWeek());
   const year = m.year();
-  const ts = m.unix();
+  const ts = m.valueOf();
   const date = m.toString();
 
   // Year, month, week

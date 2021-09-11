@@ -1,7 +1,6 @@
 service: spotify-history
 
-frameworkVersion: '2'
-useDotenv: true
+frameworkVersion: '^2.56.0'
 configValidationMode: error
 unresolvedVariablesNotificationMode: error
 
@@ -13,6 +12,8 @@ custom:
   env: ${opt:stage,'stg'} # Define default stage
   prefix: ${self:custom.env}-${self:service}
   tableName: ${self:custom.prefix}-db
+  scheduleEnabled:
+    prod: true
   dynamodb:
     stages:
       - local
@@ -32,7 +33,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: eu-central-1
   stackName: ${self:custom.prefix}-stack
   stage: ${self:custom.env}
@@ -69,13 +70,19 @@ functions:
     handler: src/index.historyHandler
     events:
       - eventBridge:
-          schedule: cron(0 * ? * * *) # Cron job to run every hour
+          # Cron job to run every hour
+          schedule: cron(0 * ? * * *)
+          # By default, enable schedule only in production
+          enabled: false
   spotify-history-backup:
     name: ${self:custom.prefix}-backup
     handler: src/index.backupHandler
     events:
       - eventBridge:
-          schedule: cron(30 0 ? * MON *) # Cron job to run weekly on Monday at 12:30 a.m
+          # Cron job to run weekly on Monday at 12:30 a.m
+          schedule: cron(30 0 ? * MON *)
+          # By default, enable schedule only in production
+          enabled: ${self:custom.scheduleEnabled.${self:custom.env}, false}
 
 resources:
   Resources:
