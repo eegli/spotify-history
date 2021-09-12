@@ -7,21 +7,27 @@ A simple Spotify scrobber. Gets your listening history from Spotify, saves it to
 - [Free of charge\*](#about-billing) - uses the AWS free tier and the Google Drive API, which is free to use
 - Utilities to get refresh tokens from both Google and Spotify
 - Easily customizable
-- Weekly export to Google Drive
+- Listening history export to Google Drive
 
 ## Motivation
 
-By default, Spotify only saves the [last 50 songs you've listened to](https://support.spotify.com/us/article/listening-history/).
+Spotify only saves the [last 50 songs you've listened to](https://support.spotify.com/us/article/listening-history/).
 
 This project seeks to provide an easy solution for saving your Spotify listening history in an easily accessible place (Google Drive) where you can retrieve and analyze it quickly.
 
 ## Before you start
 
+This project includes two AWS lambda functions, one for getting your history from Spotify and one for creating backups in Google Drive.
+
 Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
 
-By default, the backup is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+1. By default, the history scrobber (main lambda) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
 
-By default, **items in the database expire after 30 days** since they have already been backed up and are not needed anymore.
+2. By default, the backup lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+
+3. By default, **items in the database expire after 30 days** since they have already been backed up and are not needed anymore.
+
+4. You might want to adjust the region in `serverless.yml - provider.region` if you don't live near Frankfurt (default is `eu-central-1`). [Available regions](https://docs.aws.amazon.com/general/latest/gr/rande.html).
 
 You can customize the backup, schedules, item expiration and much more. [Customization guide](#customization).
 
@@ -29,21 +35,20 @@ You can customize the backup, schedules, item expiration and much more. [Customi
 
 - An AWS account
 - A Spotify account
-- `serverless >= v2.56.0` (this version allows [disabling the schedule based on the stage](https://github.com/serverless/serverless/releases/tag/v2.56.0))
-
+- `serverless >= v2.56.0`
 - `node >= v14.17.4`
 
 ## Getting started
 
-Before you start, I recommend you [setup a budget in AWS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-create.html#create-cost-budget).
-You will need to set a budget of at least \$1. [More about billing and if it's "really" free](#about-billing)
+Before you start, it's recommended you [setup a budget in AWS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-create.html#create-cost-budget).
+You will need to set a budget of at least \$1. [More about billing and if this project is "really" free](#about-billing)
 
 The following steps have to be done only one time, stick through it!
 
 1. Fork and download this repository
-2. [Create a Spotify application](https://developer.spotify.com/dashboard/applications) - app status "development" is fine - and set the redirect URL to `http://localhost:3000`.
+2. **Spotify setup** - [Create a Spotify application](https://developer.spotify.com/dashboard/applications) - app status "development" is fine - and set the redirect URL to `http://localhost:3000`.
 3. In the root directory, create a folder named `.secrets` (notice the dot!)
-4. Copy the client secret, client id and scopes to `.secrets/credentials_spotify.json`. The scopes need at least the string `user-read-recently-played`. Your Spotify secrets file should look like this:
+4. Create a file named `credentials_spotify.json` and copy the template below. Insert your client id and client secret. Your Spotify secrets file should look like this:
 
 ```json
 {
@@ -53,7 +58,7 @@ The following steps have to be done only one time, stick through it!
 }
 ```
 
-5. [Follow the quickstart guide](https://developers.google.com/drive/api/v3/quickstart/nodejs) to create a Google Cloud project and enable the Drive API. Follow the steps. When asked to configure the consent screen, your publishing status should be _testing_. You will need to manually add the Google account who's drive you want to use under "Test users". In the end, you should be prompted to download your OAuth client credentials for your newly created desktop client as a JSON file.
+5. **Google Drive setup** - [Follow the quickstart guide](https://developers.google.com/drive/api/v3/quickstart/nodejs) to create a Google Cloud project and enable the Drive API. When asked to configure the consent screen, your publishing status should be _testing_. You will need to manually add the Google account who's drive you want to use under "Test users". In the end, you should be prompted to download your OAuth client credentials for your newly created desktop client as a JSON file.
 6. Download the credentials file, rename it to `credentials_google.json` and put it in the `.secrets` folder. It should look like this:
 
 ```json
@@ -70,13 +75,15 @@ The following steps have to be done only one time, stick through it!
 }
 ```
 
-7.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. KEEP THIS FILE SECURE!
+Almost done!
+
+7.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. **KEEP THIS FILE SECURE!**
 
 ```console
 yarn token:spotify
 ```
 
-8.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. KEEP THIS FILE SECURE!
+8.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. **KEEP THIS FILE SECURE!**
 
 ```console
 yarn token:google
@@ -92,7 +99,15 @@ yarn
 
 ## Deploying
 
-This project includes both a staging and production environment. By default, **the schedules are only enabled for production** in order to save quota.
+This project includes both a staging and production environment. By default, **the schedules are only enabled in production** in order to save quota. The **staging version** is meant to be deployed but **invoked manually only**.
+If you wish to enable the schedule on staging as well, change `serverless.yml`:
+
+```yml
+custom:
+  scheduleEnabled:
+    prod: true
+    stg: true # Schedule enabled on staging
+```
 
 In order to deploy the production version, run:
 
@@ -121,17 +136,17 @@ yarn stg:deploy:backup
 only deploys the lambda functions for scrobbing and backing up the history.
 Again, the staging functions are NOT scheduled as they are meant to be invoked manually.
 
+The following command triggers getting the history from Spotify and saving it to DynamoDB.
+
 ```console
 yarn stg:invoke:history
 ```
 
-triggers getting the history from Spotify and saving it to DynamoDB.
+And this one invokes the backup handler.
 
 ```console
 yarn stg:invoke:backup
 ```
-
-triggers the backup.
 
 ## Customization
 
@@ -189,7 +204,33 @@ Update the stage and production folder names in `src/config/index.ts`.
 
 ## Development and Testing
 
-## Running DynamoDB locally
+### Useful CLI commands
+
+List local table
+
+```console
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+```
+
+List tables on AWS
+
+```console
+aws dynamodb list-tables
+```
+
+Peek the latest 3 entries in the staging table
+
+```console
+aws dynamodb query --table-name prod-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#dt, #created, #count",  --expression-attribute-names '{\"#t\":\"type\", \"#dt\":\"date\", \"#created\":\"created_at\", \"#count\":\"count\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}' --no-cli-pager --page-size 3
+```
+
+Peek the latest 3 entries in the production table
+
+```console
+aws dynamodb query --table-name prod-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#dt, #created, #count",  --expression-attribute-names '{\"#t\":\"type\", \"#dt\":\"date\", \"#created\":\"created_at\", \"#count\":\"count\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}' --no-cli-pager --page-size 3
+```
+
+### Running DynamoDB locally
 
 Make sure you have already installed the Node.js dependencies as mentioned above.
 
@@ -218,18 +259,6 @@ dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
   if (err) ppJson(err);
   else ppJson(data);
 });
-```
-
-List all local tables
-
-```console
-aws dynamodb list-tables --endpoint-url http://localhost:8000
-```
-
-List all timestamps in local table
-
-```console
-aws dynamodb query --table-name stg-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#ts, #dt" --expression-attribute-names '{\"#t\":\"type\", \"#ts\":\"timestamp\", \"#dt\":\"date\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}'
 ```
 
 ## Resources
