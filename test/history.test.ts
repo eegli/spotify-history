@@ -1,7 +1,7 @@
 import { QueryIterator, StringToAnyObjectMap } from '@aws/dynamodb-data-mapper';
 import { Context, EventBridgeEvent } from 'aws-lambda';
 import axios from 'axios';
-import { historyHandler as handler } from '../src';
+import { handler } from '../src/handler.history';
 import { dynamoDataMapper } from '../src/services/dynamo';
 import Spotify, { HistoryParams } from '../src/services/spotify';
 import {
@@ -103,6 +103,16 @@ describe('Handler', () => {
 
 describe('Valid test payloads', () => {
   it('fakes an artist request for each artist', () => {
+    const artists = spotifyHistoryResponse.data.items.map(i => i.track.artists);
     expect(spotifyHistoryResponse.data.items.length).toEqual(3);
+    expect(artists[0].length).toEqual(
+      spotifyArtistsResponse1.data.artists.length
+    );
+    expect(artists[1].length).toEqual(
+      spotifyArtistsResponse2.data.artists.length
+    );
+    expect(artists[2].length).toEqual(
+      spotifyArtistsResponse3.data.artists.length
+    );
   });
 });
