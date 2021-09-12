@@ -53,7 +53,6 @@ export const spotifyHistoryResponse = fakeAxiosRes(spotifyHistoryJSONResponse);
 
 // Artists - three responses, mocking the three GET requests for the artists from the above response
 // https://api.spotify.com/v1/artists
-// TODO make generics work
 export const spotifyArtistsResponse1 = fakeAxiosRes(
   spotifyArtistsJSONResponse__1
 );
