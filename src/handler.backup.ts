@@ -21,7 +21,8 @@ export const handler: ScheduledHandler = async () => {
       : defaults.backUpFolderNameStage;
 
   try {
-    const historyItems = await dynamoGetHistoryRange();
+    const history = await dynamoGetHistoryRange();
+    // Reduce the history to only get the songs
 
     const backupParams: BackupParams<DynamoHistoryElement[]> = {
       fileName,
@@ -29,10 +30,10 @@ export const handler: ScheduledHandler = async () => {
       meta: {
         date_created: m.toString(),
         for_week: m.isoWeek(),
-        track_count: historyItems.length,
+        track_count: history.length,
         environment: env.STAGE,
       },
-      data: historyItems,
+      data: history,
     };
 
     const backup = await backupHistory(backupParams);
@@ -44,7 +45,7 @@ export const handler: ScheduledHandler = async () => {
     const fileSize = size ? parseInt(size) : 0;
 
     console.info(`History backup for week ${week} completed.`);
-    console.info('Songs count: ', historyItems.length);
+    console.info('Songs count: ', history.length);
     console.info('Backup file size: ', fileSizeFormat(fileSize));
     console.info('Link: ', webViewLink);
   } catch (err) {

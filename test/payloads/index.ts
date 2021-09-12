@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { GaxiosResponse } from 'googleapis-common';
 import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
-import dynamoDBData from '../../dynamo-seed.json';
+import dynamoSeed from '../../dynamo-seed.json';
+import { DynamoHistoryElement } from '../../src/config/types';
 import { History } from '../../src/models/history';
 import { RefreshTokenResponse } from '../../src/services/spotify';
 import spotifyArtistsJSONResponse__1 from './spotify-artists-1.json';
@@ -65,10 +66,22 @@ export const spotifyArtistsResponse3 = fakeAxiosRes(
 
 export const emptyResponse = fakeAxiosRes({ items: [] });
 
-export const dynamoData = (): History[] => {
-  return dynamoDBData.map((hst: any) => {
+// Mock full dynamo data
+export const dynamoFullData = (): History[] => {
+  return dynamoSeed.map(elem => {
     const history: History = new History();
-    Object.assign(history, { ...hst });
+    Object.assign(history, { ...elem });
     return history;
   });
+};
+
+// Mock the data that is backed up
+export const dynamoBackupData = (): DynamoHistoryElement[] => {
+  // Reduce the history to only get the songs
+  return dynamoSeed.reduce((acc, curr) => {
+    if (curr.songs) {
+      acc.push(...curr.songs);
+    }
+    return acc;
+  }, <DynamoHistoryElement[]>[]);
 };

@@ -5,7 +5,7 @@ import { historyHandler as handler } from '../src';
 import { dynamoDataMapper } from '../src/services/dynamo';
 import Spotify, { HistoryParams } from '../src/services/spotify';
 import {
-  dynamoData,
+  dynamoFullData,
   emptyResponse,
   spotifyArtistsResponse1,
   spotifyArtistsResponse2,
@@ -76,7 +76,7 @@ describe('Handler', () => {
   });
 
   it('only queries new songs if there are existing ones', async () => {
-    iteratorMock.mockReturnValueOnce(dynamoData().values());
+    iteratorMock.mockReturnValueOnce(dynamoFullData().values());
     await handler(
       {} as EventBridgeEvent<'Scheduled Event', any>,
       {} as Context,

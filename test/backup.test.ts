@@ -4,22 +4,18 @@ import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import { backupHandler as handler } from '../src/';
 import { backupHistory } from '../src/routes/backup';
 import { googleDrive } from '../src/services/google';
-import { driveCreateResponse, driveListResponse } from './payloads';
+import {
+  driveCreateResponse,
+  driveListResponse,
+  dynamoBackupData,
+} from './payloads';
 
-// Fake history response, length 1
-jest.mock('../src/routes/history', () => {
-  return {
-    dynamoGetHistoryRange: jest.fn().mockImplementation(() => mockDynamoData),
-  };
-});
+// Fake the response from dynamo
+jest.mock('../src/routes/history', () => ({
+  dynamoGetHistoryRange: jest.fn().mockImplementation(() => dynamoBackupData()),
+}));
 // Mock the drive client
 jest.mock('../src/services/google');
-
-const mockDynamoData = [
-  { title: 'song 1', id: '1' },
-  { title: 'song 2', id: '2' },
-  { title: 'song 3', id: '3' },
-];
 
 // Setting the right method overloads manually
 type DriveListSpy = (

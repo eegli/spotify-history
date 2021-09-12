@@ -1,43 +1,37 @@
 [
   {
     "type": "history",
-    "timestamp": "2021-09-07T08:07:31.774Z",
-    "created_at": "2021-09-07T08:30:08.090Z",
+    "timestamp": "2021-09-11T19:19:33.993Z",
     "count": 3,
+    "created_at": "2021-09-11T19:59:51.359Z",
+    "expire_at": 1633982391,
     "songs": [
       {
-        "name": "Johnny Belinda - Matthew Dekay Remix",
-        "id": "3SIIAdWl4RmLNYpppSUy7b",
-        "playedAt": "2021-09-07T08:07:31.774Z",
+        "name": "On A Mountain - Flume Remix",
+        "id": "0lrIwNdTiHaOlw8gqwXk6L",
+        "playedAt": "2021-09-12T17:38:38.741Z",
         "artists": [
           {
-            "artistName": "Active Child",
-            "artistId": "54KTsBl98buzGkELjGlnuU",
-            "genres": "chillwave;metropopolis;vapor soul"
+            "artistName": "Danny L Harle",
+            "artistId": "1PNvaesh1mkKZucGhBuqgD",
+            "genres": "art pop;deconstructed club;electropop;escape room;hyperpop"
           },
           {
-            "artistName": "Matthew Dekay",
-            "artistId": "1ehDqG6bFGAurxlAJeQgNT",
-            "genres": "deep progressive trance;organic electronic;organic house"
-          }
-        ]
-      },
-      {
-        "name": "Loma",
-        "id": "2HuWC2OLujMmdm1Mut8rjM",
-        "playedAt": "2021-09-07T07:23:11.995Z",
-        "artists": [
+            "artistName": "DJ Danny",
+            "artistId": "3ReRflPpQwIKOE9gsZ6vTC",
+            "genres": ""
+          },
           {
-            "artistName": "Elfenberg",
-            "artistId": "3rVvL036o05Y34SPRsW63P",
-            "genres": "ethnotronica;organic electronic;organic house"
+            "artistName": "Flume",
+            "artistId": "6nxWCVXbOlEVRexSbLsTer",
+            "genres": "australian dance;australian electropop;australian indie;downtempo;edm"
           }
         ]
       },
       {
         "name": "Graf Zahl",
         "id": "33R7eq2Yqrhjz7eP6XhCsy",
-        "playedAt": "2021-09-06T19:12:49.127Z",
+        "playedAt": "2021-09-12T17:21:00.477Z",
         "artists": [
           {
             "artistName": "Paul Kalkbrenner",
@@ -45,53 +39,21 @@
             "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house"
           }
         ]
-      }
-    ]
-  },
-  {
-    "type": "history",
-    "timestamp": "2021-09-05T08:07:31.774Z",
-    "created_at": "2021-09-05T08:30:08.090Z",
-    "count": 3,
-    "songs": [
+      },
       {
-        "name": "Johnny Belinda - Matthew Dekay Remix",
-        "id": "3SIIAdWl4RmLNYpppSUy7b",
-        "playedAt": "2021-09-05T08:07:31.774Z",
+        "name": "Sane",
+        "id": "43DeMuEuwfEZ6FRLbpHMVb",
+        "playedAt": "2021-09-11T21:06:52.925Z",
         "artists": [
           {
-            "artistName": "Active Child",
-            "artistId": "54KTsBl98buzGkELjGlnuU",
-            "genres": "chillwave;metropopolis;vapor soul"
+            "artistName": "Fade Black",
+            "artistId": "6lczpQaXIogAbhZfhVOiEe",
+            "genres": "uk dnb"
           },
           {
-            "artistName": "Matthew Dekay",
-            "artistId": "1ehDqG6bFGAurxlAJeQgNT",
-            "genres": "deep progressive trance;organic electronic;organic house"
-          }
-        ]
-      },
-      {
-        "name": "Loma",
-        "id": "2HuWC2OLujMmdm1Mut8rjM",
-        "playedAt": "2021-09-05T07:23:11.995Z",
-        "artists": [
-          {
-            "artistName": "Elfenberg",
-            "artistId": "3rVvL036o05Y34SPRsW63P",
-            "genres": "ethnotronica;organic electronic;organic house"
-          }
-        ]
-      },
-      {
-        "name": "Graf Zahl",
-        "id": "33R7eq2Yqrhjz7eP6XhCsy",
-        "playedAt": "2021-09-04T19:12:49.127Z",
-        "artists": [
-          {
-            "artistName": "Paul Kalkbrenner",
-            "artistId": "0rasA5Z5h1ITtHelCpfu9R",
-            "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house"
+            "artistName": "Leo Law",
+            "artistId": "3xrSIs2cnY8G36UApbC1rv",
+            "genres": ""
           }
         ]
       }

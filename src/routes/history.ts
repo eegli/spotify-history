@@ -63,7 +63,7 @@ export const dynamoGetHistoryRange = async () => {
     items.push(history);
   }
 
-  // Only return the songs from each history
+  // Reduce the history to only get the songs
   return items.reduce((acc, curr) => {
     if (curr.songs) {
       acc.push(...curr.songs);

@@ -20,16 +20,55 @@ Object {
   },
   \\"items\\": [
     {
-      \\"title\\": \\"song 1\\",
-      \\"id\\": \\"1\\"
+      \\"name\\": \\"On A Mountain - Flume Remix\\",
+      \\"id\\": \\"0lrIwNdTiHaOlw8gqwXk6L\\",
+      \\"playedAt\\": \\"2021-09-12T17:38:38.741Z\\",
+      \\"artists\\": [
+        {
+          \\"artistName\\": \\"Danny L Harle\\",
+          \\"artistId\\": \\"1PNvaesh1mkKZucGhBuqgD\\",
+          \\"genres\\": \\"art pop;deconstructed club;electropop;escape room;hyperpop\\"
+        },
+        {
+          \\"artistName\\": \\"DJ Danny\\",
+          \\"artistId\\": \\"3ReRflPpQwIKOE9gsZ6vTC\\",
+          \\"genres\\": \\"\\"
+        },
+        {
+          \\"artistName\\": \\"Flume\\",
+          \\"artistId\\": \\"6nxWCVXbOlEVRexSbLsTer\\",
+          \\"genres\\": \\"australian dance;australian electropop;australian indie;downtempo;edm\\"
+        }
+      ]
     },
     {
-      \\"title\\": \\"song 2\\",
-      \\"id\\": \\"2\\"
+      \\"name\\": \\"Graf Zahl\\",
+      \\"id\\": \\"33R7eq2Yqrhjz7eP6XhCsy\\",
+      \\"playedAt\\": \\"2021-09-12T17:21:00.477Z\\",
+      \\"artists\\": [
+        {
+          \\"artistName\\": \\"Paul Kalkbrenner\\",
+          \\"artistId\\": \\"0rasA5Z5h1ITtHelCpfu9R\\",
+          \\"genres\\": \\"electronica;german techno;leipzig electronic;minimal techno;tech house\\"
+        }
+      ]
     },
     {
-      \\"title\\": \\"song 3\\",
-      \\"id\\": \\"3\\"
+      \\"name\\": \\"Sane\\",
+      \\"id\\": \\"43DeMuEuwfEZ6FRLbpHMVb\\",
+      \\"playedAt\\": \\"2021-09-11T21:06:52.925Z\\",
+      \\"artists\\": [
+        {
+          \\"artistName\\": \\"Fade Black\\",
+          \\"artistId\\": \\"6lczpQaXIogAbhZfhVOiEe\\",
+          \\"genres\\": \\"uk dnb\\"
+        },
+        {
+          \\"artistName\\": \\"Leo Law\\",
+          \\"artistId\\": \\"3xrSIs2cnY8G36UApbC1rv\\",
+          \\"genres\\": \\"\\"
+        }
+      ]
     }
   ]
 }",
