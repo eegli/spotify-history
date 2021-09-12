@@ -1,20 +1,22 @@
 import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
 import moment from 'moment';
+import { defaults } from '../config';
 import { DynamoHistoryElement } from '../config/types';
 import { History, HistoryRequired } from '../models/history';
 import { dynamoDataMapper } from '../services/dynamo';
+
+const params: ConditionExpression = {
+  type: 'Equals',
+  subject: 'type',
+  object: 'history',
+};
 export const dynamoGetLatestHistory = async () => {
   const queryOptions: QueryOptions = {
     limit: 1,
     scanIndexForward: false,
   };
 
-  const params: ConditionExpression = {
-    type: 'Equals',
-    subject: 'type',
-    object: 'history',
-  };
   const iterator = dynamoDataMapper.query(History, params, queryOptions);
   for await (const history of iterator) {
     // Return the first element
@@ -35,10 +37,12 @@ export const dynamoSetHistory = async ({
   return dynamoDataMapper.put(newHistory);
 };
 
-export const dynamoGetWeeklyHistory = async () => {
-  // For comparison, the timestamp needs to be an ISO string just like the
-  // timestamp from the model
-  const timestamp = moment().subtract(1, 'week').toISOString();
+export const dynamoGetHistoryRange = async () => {
+  // For comparison, the timestamp needs to be an ISO string just like
+  // the timestamp from the model
+  const timestamp = moment()
+    .subtract(...defaults.backupRange)
+    .toISOString();
 
   const dateFilter: ConditionExpression = {
     type: 'GreaterThanOrEqualTo',
@@ -48,10 +52,7 @@ export const dynamoGetWeeklyHistory = async () => {
 
   const filters: AndExpression = {
     type: 'And',
-    conditions: [
-      { type: 'Equals', subject: 'type', object: 'history' },
-      dateFilter,
-    ],
+    conditions: [params, dateFilter],
   };
 
   const items: History[] = [];

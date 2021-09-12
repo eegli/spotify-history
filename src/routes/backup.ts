@@ -3,7 +3,7 @@ import { googleDrive } from '../services/google';
 export type BackupParams<T = unknown> = {
   fileName: string;
   folderName: string;
-  meta: Record<string, string | number>;
+  meta: Record<string, string | number | undefined>;
   data: T;
 };
 

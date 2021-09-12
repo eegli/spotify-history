@@ -1,3 +1,4 @@
+export { default as defaults } from './defaults';
 const { env } = process;
 
 interface BaseSecret {
@@ -9,23 +10,18 @@ interface SpotifySecrets extends BaseSecret {
   grant_type: 'refresh_token';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface GoogleSecrets extends BaseSecret {}
+type GoogleSecrets = BaseSecret;
 
 type Config = {
   AWS_TABLE_NAME: string;
   AWS_REGION: string;
   SPOTIFY: Readonly<SpotifySecrets>;
   GOOGLE: Readonly<GoogleSecrets>;
-  backupFolderNameProd: string;
-  backUpFolderNameStage: string;
 };
 
 const config: Readonly<Config> = {
   AWS_TABLE_NAME: env.TABLE_NAME || '',
   AWS_REGION: env.CUSTOM_AWS_REGION || '',
-  backupFolderNameProd: 'SpotifyHistory',
-  backUpFolderNameStage: 'SpotifyHistory_stage',
   SPOTIFY: {
     client_id: env.SPOTIFY_CLIENT_ID || '',
     client_secret: env.SPOTIFY_CLIENT_SECRET || '',

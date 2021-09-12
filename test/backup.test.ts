@@ -9,7 +9,7 @@ import { driveCreateResponse, driveListResponse } from './payloads';
 // Fake history response, length 1
 jest.mock('../src/routes/history', () => {
   return {
-    dynamoGetWeeklyHistory: jest.fn().mockImplementation(() => mockDynamoData),
+    dynamoGetHistoryRange: jest.fn().mockImplementation(() => mockDynamoData),
   };
 });
 // Mock the drive client

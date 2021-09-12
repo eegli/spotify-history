@@ -7,10 +7,11 @@ import {
 import { CustomType } from '@aws/dynamodb-data-marshaller';
 import { AttributeValue } from 'aws-sdk/clients/dynamodb';
 import moment from 'moment';
-import config from '../config';
+import config, { defaults } from '../config';
 import { DynamoHistoryElement } from '../config/types';
 
-// Kind of a workaround for https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
+// Kind of a workaround for
+// https://github.com/awslabs/dynamodb-data-mapper-js/issues/136
 export type HistoryRequired = Required<
   Omit<History, 'type' | 'created_at' | 'expire_at'>
 >;
@@ -37,7 +38,10 @@ export class History {
 
   /* Songs expire after 30 days by default */
   @attribute({
-    defaultProvider: () => moment().add(30, 'days').toDate(),
+    defaultProvider: () =>
+      moment()
+        .add(...defaults.dynamoExpireAfter)
+        .toDate(),
   })
   expire_at?: Date;
 

@@ -14,9 +14,9 @@ Object {
   "media": Object {
     "body": "{
   \\"meta\\": {
-    \\"week\\": \\"16\\",
-    \\"track_count\\": 3,
-    \\"date_created\\": \\"Sun Apr 21 1996 00:00:00 GMT+0200\\"
+    \\"date_created\\": \\"Sun Apr 21 1996 00:00:00 GMT+0200\\",
+    \\"for_week\\": 16,
+    \\"track_count\\": 3
   },
   \\"items\\": [
     {
@@ -36,7 +36,7 @@ Object {
     "mimeType": "application/json",
   },
   "requestBody": Object {
-    "name": "spotify_bp_1996-04-w16.json",
+    "name": "spotify_history_1996-04-w16.json",
     "parents": Array [
       "",
     ],
@@ -49,7 +49,7 @@ Object {
   "fields": "id",
   "requestBody": Object {
     "mimeType": "application/vnd.google-apps.folder",
-    "name": "SpotifyHistory_stage",
+    "name": "SpotifyHistory_STG",
   },
 }
 `;

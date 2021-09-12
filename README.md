@@ -204,6 +204,26 @@ Update the stage and production folder names in `src/config/index.ts`.
 
 ## Development and Testing
 
+Example: Invoking the history Lambda on staging and getting the logs
+
+```console
+# Terminal window 1
+yarn stg:invoke:history
+
+# Terminal window 2
+sls logs -f spotify-history -s stg
+```
+
+Example: Invoking the backup Lambda on staging and getting the logs
+
+```console
+# Terminal window 1
+yarn stg:invoke:backup
+
+# Terminal window 2
+sls logs -f spotify-history-backup -s stg
+```
+
 ### Useful CLI commands
 
 List local table

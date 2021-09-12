@@ -10,8 +10,8 @@ export const write = (data: unknown, fileName: string): void => {
   writeFileSync(fileName + '.json', JSON.stringify(data));
 };
 
-export const zeroPrefix = (n: number): string => {
-  return n < 10 ? '0' + n : n.toString();
+export const zeroPrefix = (n: number, pad = 2): string => {
+  return n.toString().padStart(pad, '0');
 };
 
 // https://stackoverflow.com/a/18650828
