@@ -8,7 +8,7 @@ export type Defaults = Record<
 > & { backupFolderNameProd: string; backUpFolderNameStage: string };
 
 const defaults: Readonly<Defaults> = {
-  dynamoExpireAfter: [30, 'days'],
+  dynamoExpireAfter: [1, 'month'],
   backupRange: [1, 'week'],
   backupFolderNameProd: 'SpotifyHistory',
   backUpFolderNameStage: 'SpotifyHistory_STG',

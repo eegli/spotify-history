@@ -15,19 +15,21 @@ Spotify only saves the [last 50 songs you've listened to](https://support.spotif
 
 This project seeks to provide an easy solution for saving your Spotify listening history in an easily accessible place (Google Drive) where you can retrieve and analyze it quickly.
 
+Other than that, you can of course use everything here as a starting point/guideline to create something else with Spotify, AWS, Google Drive and Serverless.
+
 ## Before you start
 
-This project makes use of two AWS Lambda functions, one for getting your history from Spotify and one for creating backups in Google Drive.
+- This project makes use of two AWS Lambda functions, one for getting your history from Spotify and one for creating backups in Google Drive.
 
-Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
+- Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
 
-1. By default, the history Lambda (scrobber) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
+- By default, the history Lambda (scrobber) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
 
-2. By default, the backup lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+- By default, the backup lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
-3. By default, **items in the database expire after 30 days** since they have already been backed up and are not needed anymore.
+- By default, **items in the database expire after 30 days** since they have already been backed up and are not needed anymore.
 
-4. You might want to adjust the region in `serverless.yml - provider.region` if you don't live near Frankfurt (default is `eu-central-1`). [Available regions](https://docs.aws.amazon.com/general/latest/gr/rande.html).
+- You might want to adjust the region in `serverless.yml - provider.region` if you don't live near Frankfurt (default is `eu-central-1`). [Available regions](https://docs.aws.amazon.com/general/latest/gr/rande.html).
 
 You can customize the backup, schedules, item expiration and much more. [Customization guide](#customization).
 
@@ -41,7 +43,7 @@ You can customize the backup, schedules, item expiration and much more. [Customi
 ## Getting started
 
 Before you start, it's recommended you [setup a budget in AWS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-create.html#create-cost-budget).
-You will need to set a budget of at least \$1. [More about billing and if this project is "really" free](#about-billing)
+You will need to set a budget of at least \$1. [More about billing and if this project is "really" free](#about-billing).
 
 The following steps have to be done only one time, stick through it!
 
@@ -190,17 +192,25 @@ If you want to change the backup schedule, e.g. running it daily or monthly, you
 
 **⚠️ Keep in mind that the backup schedule, item expiration and time range to retrieve the items for the backup are logically connected! ⚠️**
 
-If you change the backup schedule, you'll also need to change the time range of the backup in `src/routes/history.ts`.
+If you change the backup schedule, you'll also need to change the time range of the backup and, most likely, the item TTL in `src/config/defaults.ts`.
 
 ```ts
 // Example: Include history from last month
 
-const timestamp = moment().subtract(1, 'month').toISOString();
+const defaults: Readonly<Defaults> = {
+  dynamoExpireAfter: [2, 'months'], // Extend the expiration date
+  backupRange: [1, 'month'], // Extend the backup range
+  ...
+};
 ```
 
 ### Changing the backup folder
 
 Update the stage and production folder names in `src/config/index.ts`.
+
+Note that, for security reasons, the backup handler only has access to folders and files it has created itself (see [OAuth 2.0 scopes](https://developers.google.com/drive/api/v2/about-auth) and `scripts/google.ts`). For simplicity, the backup folder is created at the root of your Google Drive.
+
+If you like, can change the implementation to create a nested folder instead.
 
 ## Development and Testing
 
@@ -252,6 +262,12 @@ aws dynamodb query --table-name prod-spotify-history-db --key-condition-expressi
 
 ### Running DynamoDB locally
 
+Retrieve items from the local table
+
+```console
+aws dynamodb query --table-name local-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#dt, #created, #count",  --expression-attribute-names '{\"#t\":\"type\", \"#dt\":\"date\", \"#created\":\"created_at\", \"#count\":\"count\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}' --no-cli-pager --endpoint-url http://localhost:8000
+```
+
 Make sure you have already installed the Node.js dependencies as mentioned above.
 
 1. Install the plugin:
@@ -264,12 +280,12 @@ sls dynamodb install
 
 ```console
 # With seeding. This will populate the table with 3 mocks songs
-yarn dynamo:start
+yarn dynamo:seed
 ```
 
 ```console
 # Without seeding. This will migrate an empty table
-yarn dynamo:start:noseed
+yarn dynamo
 ```
 
 3. Query your table for all items to check for insertions
