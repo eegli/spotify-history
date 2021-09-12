@@ -1,4 +1,4 @@
-# Spotify History Lambda
+# Spotify History
 
 A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database, and creates a weekly backup in Google Drive.
 
@@ -17,11 +17,11 @@ This project seeks to provide an easy solution for saving your Spotify listening
 
 ## Before you start
 
-This project includes two AWS lambda functions, one for getting your history from Spotify and one for creating backups in Google Drive.
+This project makes use of two AWS Lambda functions, one for getting your history from Spotify and one for creating backups in Google Drive.
 
 Unlike Last.FM, Spotify counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
 
-1. By default, the history scrobber (main lambda) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
+1. By default, the history Lambda (scrobber) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
 
 2. By default, the backup lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
@@ -133,7 +133,7 @@ and
 yarn stg:deploy:backup
 ```
 
-only deploys the lambda functions for scrobbing and backing up the history.
+only deploys the Lambda functions for scrobbing and backing up the history.
 Again, the staging functions are NOT scheduled as they are meant to be invoked manually.
 
 The following command triggers getting the history from Spotify and saving it to DynamoDB.
