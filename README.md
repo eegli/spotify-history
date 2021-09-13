@@ -53,9 +53,13 @@ You will need to set a budget of at least \$1. [More about billing and if this p
 
 The following steps have to be done only once, stick through it!
 
-1. Fork and download this repository. In the root dir, run:
+1. Fork and/or clone this repository and install dependencies:
 
-```console
+```bash
+git clone git@github.com:eegli/spotify-history.git
+
+cd spotify-history
+
 yarn
 ```
 
@@ -92,13 +96,13 @@ Almost done!
 
 7.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. **KEEP THIS FILE SECURE!**
 
-```console
+```bash
 yarn token:spotify
 ```
 
 8.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. **KEEP THIS FILE SECURE!**
 
-```console
+```bash
 yarn token:google
 ```
 
@@ -120,13 +124,13 @@ custom:
 
 In order to deploy the production version, run:
 
-```console
+```bash
 yarn prod:deploy
 ```
 
 You can deploy the staging version as well:
 
-```console
+```bash
 # Deploy everything
 yarn stg:deploy
 
@@ -137,7 +141,7 @@ yarn stg:deploy:backup
 
 Again, the staging functions are **NOT scheduled** by default as they are meant to be invoked manually:
 
-```console
+```bash
 # Get history from Spotify and save to DynamoDB
 yarn stg:invoke:history
 
@@ -151,7 +155,7 @@ To check the logs of your Lambda functions, either go to the AWS CloudWatch dash
 
 Example: Getting the logs for production in the last 24h
 
-```console
+```bash
 sls logs -f spotify-history -s prod --startTime 1d
 sls logs -f spotify-history-backup -s prod --startTime 1d
 ```
@@ -228,25 +232,25 @@ For local development, you can use `dynamodb local`. Make sure you have already 
 
 1. Install the plugin:
 
-```console
+```bash
 sls dynamodb install
 ```
 
 2. Launch DynamoDB. Both commands will migrate tables:
 
-```console
+```bash
 # With seeding. This will populate the table with 1 item
 yarn dynamo:seed
 ```
 
-```console
+```bash
 # Without seeding. This will migrate an empty table
 yarn dynamo
 ```
 
 3. Check items in the local table:
 
-```console
+```bash
 aws dynamodb query --table-name local-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#dt, #created, #count",  --expression-attribute-names '{\"#t\":\"type\", \"#dt\":\"date\", \"#created\":\"created_at\", \"#count\":\"count\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}' --no-cli-pager --endpoint-url http://localhost:8000
 ```
 
@@ -261,7 +265,7 @@ dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
 
 4. Invoke locally:
 
-```console
+```bash
 # Gets the history and saves it to local DynamoDB
 yarn local:history
 
@@ -273,13 +277,13 @@ yarn local:history
 
 List local table
 
-```console
+```bash
 aws dynamodb list-tables --endpoint-url http://localhost:8000
 ```
 
 List tables on AWS
 
-```console
+```bash
 aws dynamodb list-tables
 ```
 
