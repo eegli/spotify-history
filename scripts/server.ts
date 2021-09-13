@@ -1,8 +1,8 @@
 /// <reference path="./types.ts"/>
 import express from 'express';
-import open from 'open';
 import fs from 'fs';
 import { nanoid } from 'nanoid';
+import open from 'open';
 import { read } from './utils';
 
 // Port must correspond to the port set in the Spotify app

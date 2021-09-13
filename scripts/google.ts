@@ -2,8 +2,8 @@
 /* https://developers.google.com/drive/api/v3/quickstart/nodejs */
 
 import fs from 'fs';
-import readline from 'readline';
 import { google } from 'googleapis';
+import readline from 'readline';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
