@@ -40,12 +40,11 @@ const driveCreateSpy = jest.spyOn(
 
 /* ____________ */
 
-/* Alternatively to jest.spyOn, use ts-jest's "mocked" */
+/* Alternatively to jest.spyOn */
 
-/* const mockDrive = mocked(googleDrive, true);
-const mockCreate = mockDrive.files
+const mockCreate = googleDrive.files
   .create as unknown as jest.MockedFunction<DriveCreateSpy>;
-mockCreate.mockResolvedValue(driveCreateResponse); */
+mockCreate.mockResolvedValue(driveCreateResponse);
 
 /* ____________ */
 

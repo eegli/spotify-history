@@ -89,7 +89,7 @@ Object {
   "fields": "id",
   "requestBody": Object {
     "mimeType": "application/vnd.google-apps.folder",
-    "name": "SpotifyHistory_STG",
+    "name": "SpotifyHistory_LOCAL",
   },
 }
 `;

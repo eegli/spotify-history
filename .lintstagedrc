@@ -1,3 +1,3 @@
 {
-    "*": "yarn lint"
+    "./src/*.{js,ts}": "yarn lint"
 }
