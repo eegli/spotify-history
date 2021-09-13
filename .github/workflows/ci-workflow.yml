@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Read .nvmrc
         run: echo NVMRC=`cat .nvmrc` >> $GITHUB_ENV
-    
+
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -38,7 +38,7 @@ jobs:
 
       # Only run the coverage once
       # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
-        name: Run tests and get coverage
+      - name: Run tests and get coverage
         run: |
           # var SUMMARY = [
           #   '',
@@ -54,7 +54,7 @@ jobs:
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
-        name: Create the Badge
+      - name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.1.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
