@@ -15,23 +15,17 @@ export const handler: ScheduledHandler = async () => {
 
   const fileName = `spotify_history_${m.year()}-${month}-w${week}`;
 
-  const folderName =
-    env.STAGE === 'production'
-      ? defaults.backupFolderNameProd
-      : defaults.backUpFolderNameStage;
-
   try {
     const history = await dynamoGetHistoryRange();
-    // Reduce the history to only get the songs
 
     const backupParams: BackupParams<DynamoHistoryElement[]> = {
       fileName,
-      folderName,
+      folderName: defaults.backupFolderName,
       meta: {
         date_created: m.toString(),
         for_week: m.isoWeek(),
         track_count: history.length,
-        environment: env.STAGE,
+        environment: env.NODE_ENV,
       },
       data: history,
     };

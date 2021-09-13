@@ -48,13 +48,7 @@ provider:
   environment:
     TABLE_NAME: ${self:custom.tableName} # Dynamo table name
     CUSTOM_AWS_REGION: ${self:provider.region} # AWS_REGION is reserved so...
-    STAGE: ${self:custom.env} # Stage
-    SPOTIFY_CLIENT_ID: ${file(./.secrets/credentials_spotify.json):client_id}
-    SPOTIFY_CLIENT_SECRET: ${file(./.secrets/credentials_spotify.json):client_secret}
-    SPOTIFY_REFRESH_TOKEN: ${file(./.secrets/token_spotify.json):refresh_token}
-    GOOGLE_CLIENT_ID: ${file(./.secrets/credentials_google.json):installed.client_id}
-    GOOGLE_CLIENT_SECRET: ${file(./.secrets/credentials_google.json):installed.client_secret}
-    GOOGLE_REFRESH_TOKEN: ${file(./.secrets/token_google.json):refresh_token}
+    NODE_ENV: ${self:custom.env}
   iam:
     role:
       statements:
@@ -69,6 +63,10 @@ functions:
   spotify-history:
     name: ${self:custom.prefix}
     handler: src/index.historyHandler
+    environment:
+      SPOTIFY_CLIENT_ID: ${file(./.secrets/credentials_spotify.json):client_id}
+      SPOTIFY_CLIENT_SECRET: ${file(./.secrets/credentials_spotify.json):client_secret}
+      SPOTIFY_REFRESH_TOKEN: ${file(./.secrets/token_spotify.json):refresh_token}
     events:
       - eventBridge:
           # Cron job to run every hour
@@ -80,6 +78,10 @@ functions:
   spotify-history-backup:
     name: ${self:custom.prefix}-backup
     handler: src/index.backupHandler
+    environment:
+      GOOGLE_CLIENT_ID: ${file(./.secrets/credentials_google.json):installed.client_id}
+      GOOGLE_CLIENT_SECRET: ${file(./.secrets/credentials_google.json):installed.client_secret}
+      GOOGLE_REFRESH_TOKEN: ${file(./.secrets/token_google.json):refresh_token}
     events:
       - eventBridge:
           # Cron job to run weekly on Monday at 12:30 a.m

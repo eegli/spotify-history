@@ -12,7 +12,7 @@ const params: Options = {
   apiVersion: '2012-08-10',
 };
 
-if (process.env.stage === 'local') {
+if (process.env.NODE_ENV === 'local') {
   params.region = 'localhost';
   params.endpoint = 'http://localhost:8000';
 }
