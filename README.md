@@ -4,8 +4,8 @@ A simple Spotify scrobber. Gets your listening history from Spotify, saves it to
 
 <p align="center">
  <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eegli/6a89dcb0ccbc9b64058e7c6a426c6ccb/raw/spotify_history_coverage.json" alt="Coverage">
- <img src="https://img.shields.io/github/languages/top/eegli/spotify-history" alt="Languages" />
- <img src="https://img.shields.io/david/eegli/spotify-history" alt="Dependencies" />
+ <img src="https://img.shields.io/github/languages/top/eegli/spotify-history?label=TypeScript" alt="Languages" />
+ <img src="https://img.shields.io/david/eegli/spotify-history?label=Dependencies" alt="Dependencies" />
 </p>
 
 ## Features
