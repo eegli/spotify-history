@@ -32,9 +32,8 @@
     "test:summary": "jest --coverage --coverageReporters=\"text-summary\"",
     "lint": "eslint src --ext .js,.ts",
     "lint:watch": "esw -w --color src --ext .js,.ts",
-    "format": "prettier --write \"src/**/*.{ts,js}\" \"scripts/**/*.{ts,js}\"",
-    "postinstall": "husky install",
-    "prepare": "husky install"
+    "format": "prettier --write src/**/*.{ts,js}",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
@@ -71,8 +70,5 @@
     "serverless-plugin-typescript": "^2.0.0",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1"
-  },
-  "lint-staged": {
-    "*.src/*.{js,ts}": "eslint --cache"
   }
 }
