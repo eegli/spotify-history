@@ -6,7 +6,8 @@
   "engines": {
     "node": ">=14.17.4"
   },
-  "repository": "git@github.com:eegli/spotify-history-lambda.git",
+  "repository": "git@github.com:eegli/spotify-history.git",
+  "homepage": "https://github.com/eegli/spotify-history",
   "author": "Eric <43848365+eegli@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
