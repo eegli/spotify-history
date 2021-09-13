@@ -1,6 +1,6 @@
 # Spotify History
 
-A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database, and creates a weekly backup in Google Drive.
+A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database and creates a weekly backup in Google Drive.
 
 <p align="center">
  <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eegli/6a89dcb0ccbc9b64058e7c6a426c6ccb/raw/spotify_history_coverage.json" alt="Coverage">
