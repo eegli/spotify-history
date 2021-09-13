@@ -31,7 +31,7 @@ Other than that, you can of course use everything here as a starting point/guide
 
 - By default, the history Lambda (scrobber) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
 
-- By default, the backup lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
+- By default, the backup Lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
 - By default, **items in the database expire after 1 month** since they have already been backed up and are not needed anymore.
 
@@ -135,17 +135,13 @@ yarn stg:deploy:history
 yarn stg:deploy:backup
 ```
 
-Again, the staging functions are **NOT scheduled** by default as they are meant to be invoked manually.
-
-The following command triggers getting the history from Spotify and saving it to DynamoDB.
+Again, the staging functions are **NOT scheduled** by default as they are meant to be invoked manually:
 
 ```console
+# Get history from Spotify and save to DynamoDB
 yarn stg:invoke:history
-```
 
-And this one invokes the backup handler.
-
-```console
+# Create backup in Google Drive
 yarn stg:invoke:backup
 ```
 
@@ -195,7 +191,7 @@ TimeToLiveSpecification:
   Enabled: false
 ```
 
-If you want to specify a different TTL, change the `dynamoExpireAfter` default in `src/config/index.ts`
+If you want to specify a different TTL, change the `dynamoExpireAfter` default in `src/config/defaults.ts`
 
 ### Changing the backup schedule
 
