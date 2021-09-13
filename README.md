@@ -2,6 +2,12 @@
 
 A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database, and creates a weekly backup in Google Drive.
 
+<p align="center">
+ <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eegli/6a89dcb0ccbc9b64058e7c6a426c6ccb/raw/spotify_history_coverage.json" alt="Coverage">
+ <img src="https://img.shields.io/david/eegli/spotify-history" alt="Dependencies" />
+ <img src="https://img.shields.io/github/languages/top/eegli/spotify-history" alt="Languages" />
+</p>
+
 ## Features
 
 - [Free of charge\*](#about-billing) - uses the AWS free tier and the Google Drive API, which is free to use

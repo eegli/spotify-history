@@ -40,16 +40,6 @@ jobs:
       # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
       - name: Run tests and get coverage
         run: |
-          # var SUMMARY = [
-          #   '',
-          #   '=============================== Coverage summary ===============================',
-          #   'Statements   : 32.5% ( 39/120 )',
-          #   'Branches     : 38.89% ( 21/54 )',
-          #   'Functions    : 21.74% ( 5/23 )',
-          #   'Lines        : 31.93% ( 38/119 )',
-          #   '================================================================================',
-          #   ''
-          # ];
           SUMMARY="$(yarn test --coverage --coverageReporters='text-summary' | tail -3 | head -1)"
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
