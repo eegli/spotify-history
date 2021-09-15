@@ -19,7 +19,7 @@ A simple Spotify scrobber. Gets your listening history from Spotify, saves it to
 
 Spotify's API only exposes the [last 50 songs you've listened to](https://support.spotify.com/us/article/listening-history/).
 
-This project seeks to provide an easy solution for saving your Spotify listening history in an easily accessible place (Google Drive) where you can retrieve and analyze it quickly.
+This project seeks to provide an easy and free solution to saving your Spotify listening history in an accessible place (Google Drive) where you can retrieve and analyze it quickly.
 
 Other than that, you can of course use everything here as a starting point/guideline to create something else with Spotify, AWS, Google Drive and Serverless.
 
