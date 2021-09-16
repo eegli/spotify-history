@@ -17,7 +17,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
     };
 
     // If we already have something in dynamo from the last time we
-    // scrobbed, request all songs before that date.
+    // scrobbled, request all songs before that date.
 
     // Else, if this is deployed for the first time, the returned
     // timestamp is undefined since there is no history element in
@@ -46,7 +46,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
       const songs = count === 1 ? 'song' : 'songs';
       console.info(`Success! ${count} new ${songs} have been scrubbed!`);
-      // No new items since last scrobbed
+      // No new items since last scrobbled
     } else {
       console.info('No new songs have been scrubbed!');
     }

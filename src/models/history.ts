@@ -49,7 +49,7 @@ export class History {
   @rangeKey(ISOdateType)
   timestamp?: Date;
 
-  /* Date of when the songs were scrobbed */
+  /* Date of when the songs were scrobbled */
   @attribute({
     ...ISOdateType,
     defaultProvider: () => new Date(),

@@ -1,6 +1,6 @@
 # Spotify History
 
-A simple Spotify scrobber. Gets your listening history from Spotify, saves it to a database and creates a weekly backup in Google Drive.
+A simple Spotify scrobbler. Gets your listening history from Spotify, saves it to a database and creates a weekly backup in Google Drive.
 
 <p align="center">
  <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eegli/6a89dcb0ccbc9b64058e7c6a426c6ccb/raw/spotify_history_coverage.json" alt="Coverage">
@@ -29,7 +29,7 @@ Other than that, you can of course use everything here as a starting point/guide
 
 - Unlike Last.FM, Spotify apparently counts as song as _listened to_ when you listen to it for ["over 30 seconds"](https://artists.spotify.com/help/article/how-we-count-streams). The exact behaviour of how Spotify counts a song as _listened to_ is not clear to me, but it seems like 30 seconds are the minimum.
 
-- By default, the history Lambda (scrobber) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
+- By default, the history Lambda (scrobbler) is **scheduled to get the history from Spotify at an hourly interval**. With this interval, most "regular" users who listen through a song will have their full listening history captured. Assuming a very low average song duration of ~2 minutes would mean that one could listen to max. 30 songs per hour. As Spotify keeps track of the last 50 songs you've listened to, this interval would cover the entire hour. However, you may change the schedule.
 
 - By default, the backup Lambda is **scheduled to run weekly** at the start of the week (Monday at 12:30 a.m.). A week is defined according to the [ISO 8610 standard](https://en.wikipedia.org/wiki/ISO_8601#Week_dates) and thus starts on Monday.
 
