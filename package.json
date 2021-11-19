@@ -42,8 +42,7 @@
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "axios": "^0.23.0",
     "googleapis": "^88.2.0",
-    "moment": "^2.29.1",
-    "typescript": "^4.4.4"
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.84",
@@ -67,8 +66,12 @@
     "prettier": "^2.4.1",
     "prettier-plugin-organize-imports": "^2.3.4",
     "serverless-dynamodb-local": "0.2.40",
-    "serverless-plugin-typescript": "^2.1.0",
+    "serverless-webpack": "^5.5.5",
     "ts-jest": "^27.0.6",
-    "ts-node": "^10.3.0"
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.4",
+    "webpack": "^5.64.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }
