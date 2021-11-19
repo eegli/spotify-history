@@ -287,6 +287,10 @@ List tables on AWS
 aws dynamodb list-tables
 ```
 
+## Good to know
+
+The core of this project uses [AWS DynamoDB Data Mapper](https://github.com/awslabs/dynamodb-data-mapper-js). Unfortunately, this package does not seem to be actively maintaned and is only compatible with the AWS SDK v2. By default, [the AWS SDK v2 is included in the Lambda runtime environment](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html), but not the modular version 3. Those are the reasons why it is currently not possible to upgrade this project to use the modular AWS SDK.
+
 ## Resources
 
 - [Mocking TS method overloads with Jest](https://javascript.plainenglish.io/mocking-ts-method-overloads-with-jest-e9c3d3f1ce0c)
@@ -296,6 +300,6 @@ aws dynamodb list-tables
 - [Serverless DynamoDB Local](https://www.npmjs.com/package/serverless-dynamodb-local)
 - [TypeScript: adjusting types in reduce function with an async callback](https://dev.to/pedrohasantiago/typescript-adjusting-types-in-reduce-function-with-an-async-callback-2kc8)
 
-### About billing
+## About billing
 
 \* Serverless uses S3 to store the code of the deployed functions. Technically, S3 is not free. It costs [a fraction of a $](https://aws.amazon.com/s3/pricing/?nc=sn&loc=4) per GB, but a deployment takes up so little space, you most likely won't be billed. A full month of testing "cost" me 0.01\$ and I was not billed. Be aware that, if you change the schedules, this project may not be "free" anymore!

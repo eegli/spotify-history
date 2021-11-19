@@ -18,7 +18,6 @@
 
     const res: TokenScripts.SpotifyTokenResponse = await json.json();
     const { client_id, client_secret, state } = res;
-    console.log(receivedState, state);
     if (state !== receivedState) {
       throw new Error("States don't match");
     }

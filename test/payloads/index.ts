@@ -1,6 +1,6 @@
+import { drive_v3 } from '@googleapis/drive';
 import { AxiosResponse } from 'axios';
 import { GaxiosResponse } from 'googleapis-common';
-import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import dynamoSeed from '../../dynamo-seed.json';
 import { DynamoHistoryElement } from '../../src/config/types';
 import { History } from '../../src/models/history';

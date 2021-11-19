@@ -5,7 +5,7 @@ configValidationMode: error
 unresolvedVariablesNotificationMode: error
 
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-dynamodb-local
 
 custom:
@@ -31,6 +31,10 @@ custom:
         sources:
           - table: ${self:custom.tableName}
             sources: [./dynamo-seed.json]
+  webpack:
+    packager: yarn
+    includeModules: true
+    excludeFiles: test/**/*
 
 provider:
   name: aws
@@ -112,6 +116,7 @@ resources:
           Enabled: true
 
 package:
+  individually: true
   patterns:
     - '!README.md'
     - '!tsconfig.client.json'

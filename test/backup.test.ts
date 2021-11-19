@@ -1,6 +1,6 @@
+import { drive_v3 } from '@googleapis/drive';
 import { Context, EventBridgeEvent } from 'aws-lambda';
 import { GaxiosPromise, MethodOptions } from 'googleapis-common';
-import { drive_v3 } from 'googleapis/build/src/apis/drive/v3';
 import { handler } from '../src/handler.backup';
 import { backupHistory } from '../src/routes/backup';
 import { googleDrive } from '../src/services/google';
