@@ -12,8 +12,7 @@ const params: Options = {
   apiVersion: '2012-08-10',
 };
 
-// In local mode, Webpack sets NODE_ENV to 'development'
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'local') {
   params.region = 'localhost';
   params.endpoint = 'http://localhost:8000';
 }

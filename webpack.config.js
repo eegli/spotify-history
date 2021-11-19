@@ -2,6 +2,7 @@ const path = require('path');
 const slsw = require('serverless-webpack');
 const nodeExternals = require('webpack-node-externals');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { EnvironmentPlugin } = require('webpack');
 
 /** @type {import('webpack').Configuration} */
 const config = {
@@ -19,6 +20,7 @@ const config = {
     filename: '[name].js',
   },
   optimization: {
+    nodeEnv: false,
     concatenateModules: false,
   },
   target: 'node',
@@ -42,7 +44,12 @@ const config = {
       },
     ],
   },
-  plugins: [new ForkTsCheckerWebpackPlugin()],
+  plugins: [
+    new ForkTsCheckerWebpackPlugin(),
+    new EnvironmentPlugin({
+      NODE_ENV: slsw.lib.options.stage,
+    }),
+  ],
   stats: slsw.lib.webpack.isLocal ? 'minimal' : 'summary',
 };
 
