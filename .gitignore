@@ -5,6 +5,7 @@
 # Build output
 
 .build
+.webpack
 browser
 
 # Logs

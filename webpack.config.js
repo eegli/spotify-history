@@ -43,7 +43,7 @@ const config = {
     ],
   },
   plugins: [new ForkTsCheckerWebpackPlugin()],
-  stats: 'summary',
+  stats: slsw.lib.webpack.isLocal ? 'minimal' : 'summary',
 };
 
 module.exports = config;
