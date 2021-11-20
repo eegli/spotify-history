@@ -2,7 +2,6 @@ const path = require('path');
 const slsw = require('serverless-webpack');
 const nodeExternals = require('webpack-node-externals');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const { EnvironmentPlugin } = require('webpack');
 
 /** @type {import('webpack').Configuration} */
 const config = {
@@ -30,13 +29,6 @@ const config = {
       {
         test: /\.(tsx?)$/,
         loader: 'ts-loader',
-        exclude: [
-          [
-            path.resolve(__dirname, 'node_modules'),
-            path.resolve(__dirname, '.serverless'),
-            path.resolve(__dirname, '.webpack'),
-          ],
-        ],
         options: {
           transpileOnly: true,
           experimentalWatchApi: true,
@@ -44,12 +36,7 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new ForkTsCheckerWebpackPlugin(),
-    new EnvironmentPlugin({
-      NODE_ENV: slsw.lib.options.stage,
-    }),
-  ],
+  plugins: [new ForkTsCheckerWebpackPlugin()],
   stats: slsw.lib.webpack.isLocal ? 'minimal' : 'summary',
 };
 

@@ -34,6 +34,7 @@ custom:
   webpack:
     packager: yarn
     includeModules: true
+    keepOutputDirectory: true
     excludeFiles: test/**/*
 
 provider:
