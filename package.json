@@ -48,7 +48,7 @@
     "@types/node": "^16.11.11",
     "@types/spotify-api": "^0.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "aws-sdk": "^2.1032.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
