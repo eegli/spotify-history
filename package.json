@@ -36,7 +36,7 @@
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "@googleapis/drive": "^2.0.2",
+    "@googleapis/drive": "^2.1.0",
     "axios": "^0.23.0",
     "moment": "^2.29.1"
   },
