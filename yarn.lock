@@ -4659,7 +4659,7 @@ node-releases@^2.0.1:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.1.tgz#3d1d395f204f1f2f29a54358b9fb678765ad2fc5"
   integrity sha512-CqyzN6z7Q6aMeF/ktcMVTzhAHCEpf8SOarwpzpf8pNBY2k5/oM34UHldUwp8VKI7uxct2HxSRdJjBaZeESzcxA==
 
-nodemon@^2.0.15:
+nodemon@^2.0.13:
   version "2.0.15"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.15.tgz#504516ce3b43d9dc9a955ccd9ec57550a31a8d4e"
   integrity sha512-gdHMNx47Gw7b3kWxJV64NI+Q5nfl0y5DgDbiVtShiwa7Z0IZ07Ll4RLFo6AjrhzMtoEZn5PDE3/c2AbVsiCkpA==
@@ -5376,10 +5376,10 @@ serverless-dynamodb-local@0.2.40:
     dynamodb-localhost "0.0.9"
     lodash "^4.17.0"
 
-serverless-webpack@^5.5.5:
-  version "5.5.5"
-  resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.5.5.tgz#8934bd0adf5b5978085b31ddf5cff647b71e5606"
-  integrity sha512-j40gbCLl/VQqGvSYYYGMq8hTIH0jiCN0gtwjEx2QtEsvzf3dttYTLOGAjcgJKVhvls9F+LkfQjHvkNiZuCHGVg==
+serverless-webpack@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.6.0.tgz#4abf495b469e0b17d168e705b34bbcc44d0d5a37"
+  integrity sha512-merTpkO+dylC6kUStZ0bOhTVW8hAziVF9A0Jg8rHOxT25IOZviCyaOoLemL84Cvdh7YIEWlCY8UDURBRe3D9hw==
   dependencies:
     bestzip "^2.2.0"
     bluebird "^3.7.2"
@@ -5903,7 +5903,7 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.5.2:
+typescript@^4.4.4:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.2.tgz#8ac1fba9f52256fdb06fb89e4122fa6a346c2998"
   integrity sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==
