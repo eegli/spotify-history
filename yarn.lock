@@ -409,10 +409,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@googleapis/drive@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@googleapis/drive/-/drive-2.0.2.tgz#b117e2318bf836c9a297d149c4b22ed29db64371"
-  integrity sha512-d4nsot0kJ834BqTpYRYQV7Qf1cP/L++ZFYXP7utExPkU26rlMvTXuoVt/rpq1jE9AZyE8pk3jPB/lUMzu0ly8A==
+"@googleapis/drive@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@googleapis/drive/-/drive-2.1.0.tgz#2c62ce6184784f433725810edc5dc1798f9da4a3"
+  integrity sha512-k+4URSgxStPUW01XyzYOf6pNfPC9sT/GN0RbsI3DwaR05bGimkXYDdMe8ATcrfFbr/rs6D1eGuN8uxfn1MiVZA==
   dependencies:
     googleapis-common "^5.0.1"
 
