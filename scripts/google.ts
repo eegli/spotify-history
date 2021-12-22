@@ -1,8 +1,8 @@
 /* Copy-paste from */
 /* https://developers.google.com/drive/api/v3/quickstart/nodejs */
 
+import { auth } from '@googleapis/oauth2';
 import fs from 'fs';
-import { google } from 'googleapis';
 import readline from 'readline';
 
 // If modifying these scopes, delete token.json.
@@ -28,7 +28,7 @@ fs.readFile(CREDENTIALS_PATH, (err, content) => {
  */
 function authorize(credentials, callback) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
-  const oAuth2Client = new google.auth.OAuth2(
+  const oAuth2Client = new auth.OAuth2(
     client_id,
     client_secret,
     redirect_uris[0]

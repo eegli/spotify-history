@@ -69,8 +69,8 @@ functions:
     name: ${self:custom.prefix}
     handler: src/index.historyHandler
     environment:
-      SPOTIFY_CLIENT_ID: ${file(./.secrets/credentials_spotify.json):client_id}
-      SPOTIFY_CLIENT_SECRET: ${file(./.secrets/credentials_spotify.json):client_secret}
+      SPOTIFY_CLIENT_ID: ${file(./.secrets/credentials_spotify.json):clientId}
+      SPOTIFY_CLIENT_SECRET: ${file(./.secrets/credentials_spotify.json):clientSecret}
       SPOTIFY_REFRESH_TOKEN: ${file(./.secrets/token_spotify.json):refresh_token}
     events:
       - eventBridge:
