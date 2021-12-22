@@ -69,9 +69,8 @@ yarn
 
 ```json
 {
-  "client_id": "<your-client-id>",
-  "client_secret": "<your-client-secret>",
-  "scopes": "user-read-recently-played"
+  "clientId": "<your-client-id>",
+  "clientSecret": "<your-client-secret>"
 }
 ```
 
