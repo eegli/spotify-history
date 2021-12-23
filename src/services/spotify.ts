@@ -32,15 +32,9 @@ export default class Spotify {
   }
 
   async getRefreshToken(): Promise<void> {
-    const params = new URLSearchParams();
-
-    for (const [key, value] of Object.entries(config.SPOTIFY)) {
-      params.append(key, value);
-    }
-
     const res = await axios.post<RefreshTokenResponse>(
       'https://accounts.spotify.com/api/token',
-      params,
+      new URLSearchParams(config.SPOTIFY),
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

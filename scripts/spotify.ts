@@ -8,6 +8,5 @@ auth({
   port: 3000,
   outDir: '.secrets',
   outFileName: 'token_spotify',
-  scopes:
-    'user-read-email user-top-read user-library-read user-read-recently-played',
+  scopes: 'user-read-recently-played',
 });
