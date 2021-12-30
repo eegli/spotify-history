@@ -5024,10 +5024,10 @@ source-map@^0.7.3, source-map@~0.7.2:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
-spotify-auth-token@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/spotify-auth-token/-/spotify-auth-token-2.1.1.tgz#fe638dec3eb7826b8b233bd566b44b1cf16ccb79"
-  integrity sha512-AQ8ZRy+gXSsQGYZeuRB06OlNOwNpfISjshjXjvbAWlsZwi+pLV2oupBI75sZj0bxynTKlVtHIYl4+uWRDv1jhA==
+spotify-auth-token@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/spotify-auth-token/-/spotify-auth-token-3.1.0.tgz#a505fc7dcf17c09e3462668dcea8a8438e126a85"
+  integrity sha512-DdEou86QlwoBgxOYHjs2vXu2oOMatJHg9gBsPRm5IMIEQhzuZCSwmioSfrDRdsvHI7e6gzvTCFaG1aTc1Uinng==
 
 sprintf-js@~1.0.2:
   version "1.0.3"

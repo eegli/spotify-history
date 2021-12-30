@@ -4,7 +4,8 @@ import { read } from './utils';
 const credentials = read<UserConfig>('.secrets/credentials_spotify.json');
 
 auth({
-  ...credentials,
+  clientId: credentials.clientId,
+  clientSecret: credentials.clientSecret,
   port: 3000,
   outDir: '.secrets',
   outFileName: 'token_spotify',
