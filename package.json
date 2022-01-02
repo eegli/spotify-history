@@ -51,7 +51,7 @@
     "@typescript-eslint/parser": "^5.8.0",
     "aws-sdk": "^2.1033.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.4.1",
+    "eslint": "^8.6.0",
     "eslint-watch": "^7.0.0",
     "fork-ts-checker-webpack-plugin": "^6.5.0",
     "husky": "^7.0.4",
