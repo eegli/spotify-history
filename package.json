@@ -43,7 +43,7 @@
   "devDependencies": {
     "@googleapis/oauth2": "^0.2.0",
     "@types/aws-lambda": "^8.10.92",
-    "@types/jest": "^27.4.0",
+    "@types/jest": "^27.4.1",
     "@types/mitm": "^1.3.4",
     "@types/node": "^16.11.13",
     "@types/spotify-api": "^0.0.11",
