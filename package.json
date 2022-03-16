@@ -5,7 +5,10 @@
   "homepage": "https://github.com/eegli/spotify-history",
   "repository": "git@github.com:eegli/spotify-history.git",
   "license": "MIT",
-  "author": "Eric <43848365+eegli@users.noreply.github.com>",
+  "author": {
+    "name": "Eric Egli",
+    "email": "lx180777+npm@gmail.com"
+  },
   "main": "build/index.js",
   "scripts": {
     "build": "tsc --build",
