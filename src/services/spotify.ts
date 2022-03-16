@@ -45,7 +45,7 @@ export default class Spotify {
   }
 
   // Gets the raw history from Spotify
-  async fetchSpotifyData(params: HistoryParams): Promise<void> {
+  async fetchHistory(params: HistoryParams): Promise<void> {
     const requestParams: HistoryParams = { ...params, limit: 50 };
     const res = await axios.get<HistoryResponse>(
       'https://api.spotify.com/v1/me/player/recently-played',
@@ -70,41 +70,20 @@ export default class Spotify {
   }
 
   // Create the actual history that will be saved in dynamo
-  async createHistory() {
-    return await this.items.reduce(async (acc, el) => {
-      const genre = await axios.get<MultipleArtistsResponse>(
-        `https://api.spotify.com/v1/artists`,
-        {
-          params: {
-            ids: el.track.artists.map(artist => artist.id).join(','),
-          },
-          headers: {
-            Authorization: `Bearer ${this.bearerToken}`,
-          },
-        }
-      );
+  createHistory(): DynamoHistoryElement[] {
+    return this.items.reduce((acc, el) => {
+      acc.push({
+        name: el.track.name,
+        id: el.track.id,
+        playedAt: new Date(el.played_at).toISOString(),
+        artists: el.track.artists.map(artist => ({
+          name: artist.name,
+          id: artist.id,
+          // JSON does not allow commas in a string
+        })),
+      });
 
-      acc
-        .then(a =>
-          a.push({
-            name: el.track.name,
-            id: el.track.id,
-            playedAt: new Date(el.played_at).toISOString(),
-            artists: genre.data.artists.map(el => ({
-              artistName: el.name,
-              artistId: el.id,
-              // JSON does not allow commas in a string
-              genres: el.genres.join(';'),
-            })),
-          })
-        )
-        .catch(err => console.error(err));
       return acc;
-    }, Promise.resolve(<DynamoHistoryElement[]>[]));
+    }, <DynamoHistoryElement[]>[]);
   }
-
-  // Get schwifty
-  /*   *[Symbol.iterator]() {
-    yield* this.items;
-  } */
 }
