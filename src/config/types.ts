@@ -2,11 +2,9 @@
 export interface DynamoHistoryElement {
   name: string;
   id: string;
-  // TODO Date?
   playedAt: string;
   artists: {
-    artistName: string;
-    artistId: string;
-    genres: string;
+    name: string;
+    id: string;
   }[];
 }

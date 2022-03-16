@@ -5,9 +5,6 @@ import dynamoSeed from '../../dynamo-seed.json';
 import { DynamoHistoryElement } from '../../src/config/types';
 import { History } from '../../src/models/history';
 import { RefreshTokenResponse } from '../../src/services/spotify';
-import spotifyArtistsJSONResponse__1 from './spotify-artists-1.json';
-import spotifyArtistsJSONResponse__2 from './spotify-artists-2.json';
-import spotifyArtistsJSONResponse__3 from './spotify-artists-3.json';
 import spotifyHistoryJSONResponse from './spotify-history.json';
 
 function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
@@ -50,18 +47,6 @@ export const spotifyPutTokenResponse = fakeAxiosRes<RefreshTokenResponse>({
 // The initial GET request for the history
 // https://api.spotify.com/v1/me/player/recently-played'
 export const spotifyHistoryResponse = fakeAxiosRes(spotifyHistoryJSONResponse);
-
-// Artists - three responses, mocking the three GET requests for the artists from the above response
-// https://api.spotify.com/v1/artists
-export const spotifyArtistsResponse1 = fakeAxiosRes(
-  spotifyArtistsJSONResponse__1
-);
-export const spotifyArtistsResponse2 = fakeAxiosRes(
-  spotifyArtistsJSONResponse__2
-);
-export const spotifyArtistsResponse3 = fakeAxiosRes(
-  spotifyArtistsJSONResponse__3
-);
 
 export const emptyResponse = fakeAxiosRes({ items: [] });
 

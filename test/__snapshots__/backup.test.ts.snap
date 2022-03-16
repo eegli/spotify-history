@@ -26,19 +26,16 @@ Object {
       \\"playedAt\\": \\"2021-09-12T17:38:38.741Z\\",
       \\"artists\\": [
         {
-          \\"artistName\\": \\"Danny L Harle\\",
-          \\"artistId\\": \\"1PNvaesh1mkKZucGhBuqgD\\",
-          \\"genres\\": \\"art pop;deconstructed club;electropop;escape room;hyperpop\\"
+          \\"name\\": \\"Danny L Harle\\",
+          \\"id\\": \\"1PNvaesh1mkKZucGhBuqgD\\"
         },
         {
-          \\"artistName\\": \\"DJ Danny\\",
-          \\"artistId\\": \\"3ReRflPpQwIKOE9gsZ6vTC\\",
-          \\"genres\\": \\"\\"
+          \\"name\\": \\"DJ Danny\\",
+          \\"id\\": \\"3ReRflPpQwIKOE9gsZ6vTC\\"
         },
         {
-          \\"artistName\\": \\"Flume\\",
-          \\"artistId\\": \\"6nxWCVXbOlEVRexSbLsTer\\",
-          \\"genres\\": \\"australian dance;australian electropop;australian indie;downtempo;edm\\"
+          \\"name\\": \\"Flume\\",
+          \\"id\\": \\"6nxWCVXbOlEVRexSbLsTer\\"
         }
       ]
     },
@@ -48,9 +45,8 @@ Object {
       \\"playedAt\\": \\"2021-09-12T17:21:00.477Z\\",
       \\"artists\\": [
         {
-          \\"artistName\\": \\"Paul Kalkbrenner\\",
-          \\"artistId\\": \\"0rasA5Z5h1ITtHelCpfu9R\\",
-          \\"genres\\": \\"electronica;german techno;leipzig electronic;minimal techno;tech house\\"
+          \\"name\\": \\"Paul Kalkbrenner\\",
+          \\"id\\": \\"0rasA5Z5h1ITtHelCpfu9R\\"
         }
       ]
     },
@@ -60,14 +56,12 @@ Object {
       \\"playedAt\\": \\"2021-09-11T21:06:52.925Z\\",
       \\"artists\\": [
         {
-          \\"artistName\\": \\"Fade Black\\",
-          \\"artistId\\": \\"6lczpQaXIogAbhZfhVOiEe\\",
-          \\"genres\\": \\"uk dnb\\"
+          \\"name\\": \\"Fade Black\\",
+          \\"id\\": \\"6lczpQaXIogAbhZfhVOiEe\\"
         },
         {
-          \\"artistName\\": \\"Leo Law\\",
-          \\"artistId\\": \\"3xrSIs2cnY8G36UApbC1rv\\",
-          \\"genres\\": \\"\\"
+          \\"name\\": \\"Leo Law\\",
+          \\"id\\": \\"3xrSIs2cnY8G36UApbC1rv\\"
         }
       ]
     }

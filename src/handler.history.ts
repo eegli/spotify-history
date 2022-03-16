@@ -28,7 +28,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
       params.before = new Date().getTime();
     }
 
-    await spotify.fetchSpotifyData(params);
+    await spotify.fetchHistory(params);
 
     // Check if we have new items since last invocation or if nothing
     // has been listened to during that time
@@ -36,7 +36,7 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
     if (count > 0) {
       // Create the actual history for dynamo
-      const history = await spotify.createHistory();
+      const history = spotify.createHistory();
 
       await dynamoSetHistory({
         timestamp: new Date(spotify.cursorBefore),

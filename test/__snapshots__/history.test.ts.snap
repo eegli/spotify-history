@@ -9,9 +9,8 @@ Array [
         Object {
           "artists": Array [
             Object {
-              "artistId": "3rVvL036o05Y34SPRsW63P",
-              "artistName": "Elfenberg",
-              "genres": "ethnotronica;organic electronic;organic house",
+              "id": "3rVvL036o05Y34SPRsW63P",
+              "name": "Elfenberg",
             },
           ],
           "id": "2HuWC2OLujMmdm1Mut8rjM",
@@ -21,9 +20,8 @@ Array [
         Object {
           "artists": Array [
             Object {
-              "artistId": "0rasA5Z5h1ITtHelCpfu9R",
-              "artistName": "Paul Kalkbrenner",
-              "genres": "electronica;german techno;leipzig electronic;minimal techno;tech house",
+              "id": "0rasA5Z5h1ITtHelCpfu9R",
+              "name": "Paul Kalkbrenner",
             },
           ],
           "id": "33R7eq2Yqrhjz7eP6XhCsy",
@@ -33,14 +31,12 @@ Array [
         Object {
           "artists": Array [
             Object {
-              "artistId": "54KTsBl98buzGkELjGlnuU",
-              "artistName": "Active Child",
-              "genres": "chillwave;metropopolis;vapor soul",
+              "id": "54KTsBl98buzGkELjGlnuU",
+              "name": "Active Child",
             },
             Object {
-              "artistId": "1ehDqG6bFGAurxlAJeQgNT",
-              "artistName": "Matthew Dekay",
-              "genres": "deep progressive trance;organic electronic;organic house",
+              "id": "1ehDqG6bFGAurxlAJeQgNT",
+              "name": "Matthew Dekay",
             },
           ],
           "id": "3SIIAdWl4RmLNYpppSUy7b",

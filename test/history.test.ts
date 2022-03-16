@@ -7,9 +7,6 @@ import Spotify, { HistoryParams } from '../src/services/spotify';
 import {
   dynamoFullData,
   emptyResponse,
-  spotifyArtistsResponse1,
-  spotifyArtistsResponse2,
-  spotifyArtistsResponse3,
   spotifyHistoryResponse,
   spotifyPutTokenResponse,
 } from './payloads';
@@ -33,16 +30,12 @@ qi[Symbol.iterator] = iteratorMock;
 querySpy.mockReturnValue(qi);
 
 const mockAxios = axios as jest.Mocked<typeof axios>;
-const fetchSpotifySpy = jest.spyOn(Spotify.prototype, 'fetchSpotifyData');
+const fetchSpotifySpy = jest.spyOn(Spotify.prototype, 'fetchHistory');
 
 beforeEach(() => {
   mockAxios.post.mockResolvedValue(spotifyPutTokenResponse);
 
-  mockAxios.get
-    .mockResolvedValueOnce(spotifyHistoryResponse)
-    .mockResolvedValueOnce(spotifyArtistsResponse1)
-    .mockResolvedValueOnce(spotifyArtistsResponse2)
-    .mockResolvedValueOnce(spotifyArtistsResponse3);
+  mockAxios.get.mockResolvedValueOnce(spotifyHistoryResponse);
 
   fetchSpotifySpy.mockClear();
   querySpy.mockClear();
@@ -98,21 +91,5 @@ describe('Handler', () => {
       () => {}
     );
     expect(putSpy).not.toHaveBeenCalled();
-  });
-});
-
-describe('Valid test payloads', () => {
-  it('fakes an artist request for each artist', () => {
-    const artists = spotifyHistoryResponse.data.items.map(i => i.track.artists);
-    expect(spotifyHistoryResponse.data.items.length).toEqual(3);
-    expect(artists[0].length).toEqual(
-      spotifyArtistsResponse1.data.artists.length
-    );
-    expect(artists[1].length).toEqual(
-      spotifyArtistsResponse2.data.artists.length
-    );
-    expect(artists[2].length).toEqual(
-      spotifyArtistsResponse3.data.artists.length
-    );
   });
 });
