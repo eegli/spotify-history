@@ -173,16 +173,13 @@ interface DynamoHistoryElement {
   id: string;
   playedAt: string;
   artists: {
-    artistName: string;
-    artistId: string;
-    genres: string;
+    name: string;
+    id: string;
   }[];
 }
 ```
 
 If you want to save other song properties, simply change this interface in `src/config/types.ts` and TypeScript will show you where you'll need to make adjustments. Obviously, it makes sense to at least store the timestamp of when the song was played (`playedAt`) and its id (`id`).
-
-Regarding the `genres` property, read this [blog post](https://eric.film/blog/getting-started-with-the-spotify-api#getting-the-track-genres).
 
 ### Changing item expiration in the database
 
