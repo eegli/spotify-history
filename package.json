@@ -41,7 +41,7 @@
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@googleapis/drive": "^2.3.0",
     "axios": "^0.26.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.2"
   },
   "devDependencies": {
     "@googleapis/oauth2": "^0.2.0",
