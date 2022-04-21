@@ -59,7 +59,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.1",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "lint-staged": "^12.3.6",
+    "lint-staged": "^12.4.0",
     "nodemon": "^2.0.13",
     "prettier": "^2.6.0",
     "prettier-plugin-organize-imports": "^2.3.4",
