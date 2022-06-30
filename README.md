@@ -43,15 +43,11 @@ You can customize the backup, schedules, item expiration and much more. [Customi
 
 - An AWS account
 - A Spotify account
-- `serverless >= v2.56.0`
+- `serverless >= 3`
 - `node >= v14.17.4`
+- Docker (optional)
 
 ## Getting started
-
-Before you start, it's recommended you [setup a budget in AWS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-create.html#create-cost-budget).
-You will need to set a budget of at least \$1. [More about billing and if this project is "really" free](#about-billing).
-
-The following steps have to be done only once, stick through it!
 
 1. Fork and/or clone this repository and install dependencies:
 
@@ -172,10 +168,6 @@ interface DynamoHistoryElement {
   name: string;
   id: string;
   playedAt: string;
-  artists: {
-    name: string;
-    id: string;
-  }[];
 }
 ```
 
@@ -224,40 +216,26 @@ Note that, for security reasons, the backup handler only has access to folders a
 
 ### Running DynamoDB locally
 
-For local development, you can use `dynamodb local`. Make sure you have already installed the Node.js dependencies as mentioned above. You'll need this plugin if you want to invoke the Lambdas locally.
+For local development and testing the db integration, AWS's official DynamoDB Docker image can be run along with another image that provides a nice GUI for inspecting the tables and items.
 
-1. Install the plugin:
-
-```bash
-sls dynamodb install
-```
-
-2. Launch DynamoDB. Both commands will migrate tables:
+1. Start the containers (DynamoDB and GUI):
 
 ```bash
-# With seeding. This will populate the table with 1 item
-yarn dynamo:seed
+yarn dynamo:start
+
+or
+
+docker-compose up
 ```
+
+2. Migrate the table and seed:
 
 ```bash
-# Without seeding. This will migrate an empty table
-yarn dynamo
+
+yarn dynamo:migrate
 ```
 
-3. Check items in the local table:
-
-```bash
-aws dynamodb query --table-name local-spotify-history-db --key-condition-expression "#t = :h" --projection-expression "#dt, #created, #count",  --expression-attribute-names '{\"#t\":\"type\", \"#dt\":\"date\", \"#created\":\"created_at\", \"#count\":\"count\"}' --expression-attribute-values '{\":h\":{\"S\":\"history\"}}' --no-cli-pager --endpoint-url http://localhost:8000
-```
-
-Alternatively, go to the shell at `http://localhost:8000/shell/` and query the local table:
-
-```js
-dynamodb.scan({ TableName: 'local-spotify-history-db' }, function (err, data) {
-  if (err) ppJson(err);
-  else ppJson(data);
-});
-```
+3. If you want to check if everything has been setup correctly, visit http://localhost:8001/
 
 4. Invoke locally:
 
@@ -267,20 +245,6 @@ yarn local:history
 
 # Backs up the history to Google Drive
 yarn local:history
-```
-
-### Useful CLI commands
-
-List local table
-
-```bash
-aws dynamodb list-tables --endpoint-url http://localhost:8000
-```
-
-List tables on AWS
-
-```bash
-aws dynamodb list-tables
 ```
 
 ## Good to know

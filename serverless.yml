@@ -1,8 +1,7 @@
 service: spotify-history
 
-frameworkVersion: '^2.56.0'
+frameworkVersion: '3'
 configValidationMode: error
-unresolvedVariablesNotificationMode: error
 
 plugins:
   - serverless-webpack
@@ -20,11 +19,9 @@ custom:
       - local
     start:
       port: 8000
-      inMemory: true
+      noStart: true
       migrate: true
-      heapInitial: 200m
-      heapMax: 1g
-      seed: false
+      seed: true
       convertEmptyValues: true
     seed:
       test:
@@ -39,14 +36,11 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   region: eu-central-1
   stackName: ${self:custom.prefix}-stack
   stage: ${self:custom.env}
-  lambdaHashingVersion: 20201221
   versionFunctions: false
-  eventBridge:
-    useCloudFormation: true
   memorySize: 256
   timeout: 5
   logRetentionInDays: 7

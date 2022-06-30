@@ -41,7 +41,7 @@ export default class Spotify {
         },
       }
     );
-    this.bearerToken = res.data.access_token || '';
+    this.bearerToken = res.data.access_token;
   }
 
   // Gets the raw history from Spotify
@@ -76,11 +76,6 @@ export default class Spotify {
         name: el.track.name,
         id: el.track.id,
         playedAt: new Date(el.played_at).toISOString(),
-        artists: el.track.artists.map(artist => ({
-          name: artist.name,
-          id: artist.id,
-          // JSON does not allow commas in a string
-        })),
       });
 
       return acc;

@@ -26,12 +26,10 @@ export const dynamoGetLatestHistory = async () => {
 
 export const dynamoSetHistory = async ({
   timestamp,
-  count,
   songs,
 }: HistoryRequired) => {
   const newHistory: History = Object.assign(new History(), {
     timestamp,
-    count,
     songs,
   });
   return dynamoDataMapper.put(newHistory);
