@@ -1,11 +1,11 @@
-import { DurationInputArg1, DurationInputArg2 } from 'moment';
+import dayjs from 'dayjs';
 import { env } from 'process';
 
-type DurationArgs = [DurationInputArg1, DurationInputArg2];
+type newDurArgs = [number, dayjs.ManipulateType];
 
 export type Defaults = Record<
   'dynamoExpireAfter' | 'backupRange',
-  DurationArgs
+  newDurArgs
 > & { backupFolderName: string };
 
 const defaults: Readonly<Defaults> = {

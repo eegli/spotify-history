@@ -6,7 +6,7 @@ import {
 } from '@aws/dynamodb-data-mapper-annotations';
 import { CustomType } from '@aws/dynamodb-data-marshaller';
 import { AttributeValue } from 'aws-sdk/clients/dynamodb';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import config, { defaults } from '../config';
 import { DynamoHistoryElement } from '../config/types';
 
@@ -39,7 +39,7 @@ export class History {
   /* Songs expire after 30 days by default */
   @attribute({
     defaultProvider: () =>
-      moment()
+      dayjs()
         .add(...defaults.dynamoExpireAfter)
         .toDate(),
   })

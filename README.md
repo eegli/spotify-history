@@ -239,12 +239,14 @@ yarn dynamo:migrate
 
 4. Invoke locally:
 
+   Note that `yarn local:backup` will, despite its naming, **still** hit the Google Drive API but save the content in a folder separate from `stg` and `prod` (`local`).
+
 ```bash
 # Gets the history and saves it to local DynamoDB
 yarn local:history
 
 # Backs up the history to Google Drive
-yarn local:history
+yarn local:backup
 ```
 
 ## Good to know

@@ -1,5 +1,7 @@
 import { ScheduledHandler } from 'aws-lambda';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import utc from 'dayjs/plugin/utc';
 import { env } from 'process';
 import { defaults } from './config';
 import { DynamoHistoryElement } from './config/types';
@@ -7,13 +9,16 @@ import { backupHistory, BackupParams } from './routes/backup';
 import { dynamoGetHistoryRange } from './routes/history';
 import { fileSizeFormat, zeroPrefix } from './utils';
 
+dayjs.extend(isoWeek);
+dayjs.extend(utc);
+
 export const handler: ScheduledHandler = async () => {
-  const m = moment();
+  const now = dayjs();
 
-  const week = zeroPrefix(m.isoWeek());
-  const month = zeroPrefix(m.month() + 1);
+  const week = zeroPrefix(now.isoWeek());
+  const month = zeroPrefix(now.month() + 1);
 
-  const fileName = `spotify_history_${m.year()}-${month}-w${week}`;
+  const fileName = `spotify_history_${now.year()}-${month}-w${week}`;
 
   try {
     const history = await dynamoGetHistoryRange();
@@ -22,8 +27,8 @@ export const handler: ScheduledHandler = async () => {
       fileName,
       folderName: defaults.backupFolderName,
       meta: {
-        date_created: m.toString(),
-        for_week: m.isoWeek(),
+        date_created: now.utc().toString(),
+        for_week: now.isoWeek(),
         track_count: history.length,
         environment: env.NODE_ENV,
       },

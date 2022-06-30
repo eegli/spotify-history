@@ -1,6 +1,6 @@
 import { QueryOptions } from '@aws/dynamodb-data-mapper';
 import { AndExpression, ConditionExpression } from '@aws/dynamodb-expressions';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { defaults } from '../config';
 import { DynamoHistoryElement } from '../config/types';
 import { History, HistoryRequired } from '../models/history';
@@ -38,7 +38,7 @@ export const dynamoSetHistory = async ({
 export const dynamoGetHistoryRange = async () => {
   // For comparison, the timestamp needs to be an ISO string just like
   // the timestamp from the model
-  const timestamp = moment()
+  const timestamp = dayjs()
     .subtract(...defaults.backupRange)
     .toISOString();
 

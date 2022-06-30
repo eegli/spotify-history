@@ -14,7 +14,7 @@ Object {
   "media": Object {
     "body": "{
   \\"meta\\": {
-    \\"date_created\\": \\"Sun Apr 21 1996 00:00:00 GMT+0200\\",
+    \\"date_created\\": \\"Sat, 20 Apr 1996 22:00:00 GMT\\",
     \\"for_week\\": 16,
     \\"track_count\\": 3,
     \\"environment\\": \\"test\\"
