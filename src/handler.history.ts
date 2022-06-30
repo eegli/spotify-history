@@ -40,13 +40,14 @@ export const handler: ScheduledHandler = async (): Promise<void> => {
 
       await dynamoSetHistory({
         timestamp: new Date(spotify.cursorBefore),
-        count,
         songs: history,
       });
 
-      const songs = count === 1 ? 'song' : 'songs';
-      console.info(`Success! ${count} new ${songs} have been scrubbed!`);
-      // No new items since last scrobbled
+      console.info(
+        `Success! ${count} new ${
+          count === 1 ? 'song' : 'songs'
+        } have been scrubbed!`
+      );
     } else {
       console.info('No new songs have been scrubbed!');
     }

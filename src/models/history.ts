@@ -56,10 +56,6 @@ export class History {
   })
   created_at?: Date;
 
-  /* Number of songs */
-  @attribute()
-  count?: number;
-
   /* Actual songs */
   @attribute()
   songs?: DynamoHistoryElement[];

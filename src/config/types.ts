@@ -3,8 +3,4 @@ export interface DynamoHistoryElement {
   name: string;
   id: string;
   playedAt: string;
-  artists: {
-    name: string;
-    id: string;
-  }[];
 }

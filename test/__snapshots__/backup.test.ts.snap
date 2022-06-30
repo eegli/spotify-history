@@ -23,47 +23,17 @@ Object {
     {
       \\"name\\": \\"On A Mountain - Flume Remix\\",
       \\"id\\": \\"0lrIwNdTiHaOlw8gqwXk6L\\",
-      \\"playedAt\\": \\"2021-09-12T17:38:38.741Z\\",
-      \\"artists\\": [
-        {
-          \\"name\\": \\"Danny L Harle\\",
-          \\"id\\": \\"1PNvaesh1mkKZucGhBuqgD\\"
-        },
-        {
-          \\"name\\": \\"DJ Danny\\",
-          \\"id\\": \\"3ReRflPpQwIKOE9gsZ6vTC\\"
-        },
-        {
-          \\"name\\": \\"Flume\\",
-          \\"id\\": \\"6nxWCVXbOlEVRexSbLsTer\\"
-        }
-      ]
+      \\"playedAt\\": \\"2021-09-12T17:38:38.741Z\\"
     },
     {
       \\"name\\": \\"Graf Zahl\\",
       \\"id\\": \\"33R7eq2Yqrhjz7eP6XhCsy\\",
-      \\"playedAt\\": \\"2021-09-12T17:21:00.477Z\\",
-      \\"artists\\": [
-        {
-          \\"name\\": \\"Paul Kalkbrenner\\",
-          \\"id\\": \\"0rasA5Z5h1ITtHelCpfu9R\\"
-        }
-      ]
+      \\"playedAt\\": \\"2021-09-12T17:21:00.477Z\\"
     },
     {
       \\"name\\": \\"Sane\\",
       \\"id\\": \\"43DeMuEuwfEZ6FRLbpHMVb\\",
-      \\"playedAt\\": \\"2021-09-11T21:06:52.925Z\\",
-      \\"artists\\": [
-        {
-          \\"name\\": \\"Fade Black\\",
-          \\"id\\": \\"6lczpQaXIogAbhZfhVOiEe\\"
-        },
-        {
-          \\"name\\": \\"Leo Law\\",
-          \\"id\\": \\"3xrSIs2cnY8G36UApbC1rv\\"
-        }
-      ]
+      \\"playedAt\\": \\"2021-09-11T21:06:52.925Z\\"
     }
   ]
 }",

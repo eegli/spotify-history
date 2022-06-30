@@ -4,41 +4,18 @@ exports[`Handler runs without errors 1`] = `
 Array [
   Array [
     History {
-      "count": 3,
       "songs": Array [
         Object {
-          "artists": Array [
-            Object {
-              "id": "3rVvL036o05Y34SPRsW63P",
-              "name": "Elfenberg",
-            },
-          ],
           "id": "2HuWC2OLujMmdm1Mut8rjM",
           "name": "Loma",
           "playedAt": "2021-09-08T07:23:11.995Z",
         },
         Object {
-          "artists": Array [
-            Object {
-              "id": "0rasA5Z5h1ITtHelCpfu9R",
-              "name": "Paul Kalkbrenner",
-            },
-          ],
           "id": "33R7eq2Yqrhjz7eP6XhCsy",
           "name": "Graf Zahl",
           "playedAt": "2021-09-07T19:12:49.127Z",
         },
         Object {
-          "artists": Array [
-            Object {
-              "id": "54KTsBl98buzGkELjGlnuU",
-              "name": "Active Child",
-            },
-            Object {
-              "id": "1ehDqG6bFGAurxlAJeQgNT",
-              "name": "Matthew Dekay",
-            },
-          ],
           "id": "3SIIAdWl4RmLNYpppSUy7b",
           "name": "Johnny Belinda - Matthew Dekay Remix",
           "playedAt": "2021-09-08T07:27:05.283Z",
