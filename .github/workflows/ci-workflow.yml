@@ -12,14 +12,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
+          cache: 'yarn'
       - name: Install dependencies
-        run: yarn install:ci
-
+        run: yarn install --immutable
+      - name: Lint
+        run: yarn lint
       # Only run the coverage once
       # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
       - name: Run tests and get coverage

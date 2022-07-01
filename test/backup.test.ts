@@ -46,7 +46,7 @@ beforeEach(() => {
 });
 
 describe('Backup handler', () => {
-  jest.useFakeTimers().setSystemTime(new Date(1996, 3, 21));
+  jest.useFakeTimers().setSystemTime(new Date('1996-04-20T22:00:00.000Z'));
 
   it('creates a backup', async () => {
     await handler(

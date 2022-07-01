@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
 import { env } from 'process';
 
-type newDurArgs = [number, dayjs.ManipulateType];
+type DurArgs = [number, dayjs.ManipulateType];
 
-export type Defaults = Record<
-  'dynamoExpireAfter' | 'backupRange',
-  newDurArgs
-> & { backupFolderName: string };
+export type Defaults = Record<'dynamoExpireAfter' | 'backupRange', DurArgs> & {
+  backupFolderName: string;
+};
 
 const defaults: Readonly<Defaults> = {
   dynamoExpireAfter: [1, 'month'],

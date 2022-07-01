@@ -13,22 +13,22 @@
   "scripts": {
     "build": "sls webpack",
     "dynamo": "yarn dynamo:start && yarn:dynamo:migrate",
-    "dynamo:start": "docker-compose up",
     "dynamo:migrate": "sls dynamodb start --stage local",
+    "dynamo:start": "docker-compose up",
     "format": "prettier --write src/**/*.{ts,js}",
     "postinstall": "husky install",
     "install:ci": "yarn install --ignore-scripts --ignore-optional --frozen-lockfile ",
     "lint": "eslint src --ext .js,.ts",
     "lint:watch": "esw -w --color src --ext .js,.ts",
-    "local:history": "sls invoke local -f spotify-history -s local",
     "local:backup": "sls invoke local -f spotify-history-backup -s local",
+    "local:history": "sls invoke local -f spotify-history -s local",
     "prod:deploy": "sls deploy -s prod",
     "stg:__remove": "sls remove -s stg",
     "stg:deploy": "sls deploy -s stg",
-    "stg:deploy:history": "sls deploy -f spotify-history -s stg",
     "stg:deploy:backup": "sls deploy -f spotify-history-backup -s stg",
-    "stg:invoke:history": "sls invoke -f spotify-history -s stg",
+    "stg:deploy:history": "sls deploy -f spotify-history -s stg",
     "stg:invoke:backup": "sls invoke -f spotify-history-backup -s stg",
+    "stg:invoke:history": "sls invoke -f spotify-history -s stg",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:summary": "jest --coverage --coverageReporters=\"text-summary\"",
@@ -71,6 +71,7 @@
     "webpack": "^5.73.0",
     "webpack-node-externals": "^3.0.0"
   },
+  "packageManager": "yarn@3.2.1",
   "engines": {
     "node": ">=16.13"
   }
