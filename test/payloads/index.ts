@@ -1,19 +1,17 @@
 import { drive_v3 } from '@googleapis/drive';
-import { AxiosResponse } from 'axios';
+import { DataResponse } from '@spotifly/core';
 import { GaxiosResponse } from 'googleapis-common';
 import dynamoSeed from '../../dynamo-seed.json';
 import { DynamoHistoryElement } from '../../src/config/types';
 import { History } from '../../src/models/history';
-import { RefreshTokenResponse } from '../../src/services/spotify';
-import spotifyHistoryJSONResponse from './spotify-history.json';
+import spotifyHistoryEmptyJSONResponse from './spotify-history-response-empty.json';
+import spotifyHistoryJSONResponse from './spotify-history-response.json';
 
-function fakeAxiosRes<T>(payload: T): AxiosResponse<T> {
+function fakeSpotiflyRes<T>(payload: T): DataResponse<T> {
   return {
     data: payload,
-    status: 200,
-    statusText: 'OK',
+    statusCode: 200,
     headers: {},
-    config: {},
   };
 }
 
@@ -37,18 +35,14 @@ export const driveCreateResponse = fakeGaxiosRes<drive_v3.Schema$File>({
   webViewLink: 'http://example.com',
 });
 
-export const spotifyPutTokenResponse = fakeAxiosRes<RefreshTokenResponse>({
-  access_token: 'token',
-  token_type: '',
-  scope: '',
-  expires_in: 1,
-});
+export const spotifyHistoryResponse = fakeSpotiflyRes(
+  spotifyHistoryJSONResponse as unknown as SpotifyApi.UsersRecentlyPlayedTracksResponse
+);
 
-// The initial GET request for the history
-// https://api.spotify.com/v1/me/player/recently-played'
-export const spotifyHistoryResponse = fakeAxiosRes(spotifyHistoryJSONResponse);
-
-export const emptyResponse = fakeAxiosRes({ items: [] });
+export const emptyResponse =
+  fakeSpotiflyRes<SpotifyApi.UsersRecentlyPlayedTracksResponse>(
+    spotifyHistoryEmptyJSONResponse
+  );
 
 // Mock full dynamo data
 export const dynamoFullData = (): History[] => {

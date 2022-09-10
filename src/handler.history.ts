@@ -6,15 +6,11 @@ import { isAxiosError } from './utils';
 export const handler: ScheduledHandler = async (): Promise<void> => {
   try {
     const spotify = new Spotify();
-    // Use refresh token to get access token
-    await spotify.getRefreshToken();
 
     const latestHistory = await dynamoGetLatestHistory();
     const latestTimestamp = latestHistory?.timestamp;
 
-    const params: HistoryParams = {
-      limit: 50,
-    };
+    const params: HistoryParams = {};
 
     // If we already have something in dynamo from the last time we
     // scrobbled, request all songs before that date.

@@ -1,13 +1,10 @@
-import axios from 'axios';
-import { URLSearchParams } from 'url';
+import { initialize, SpotifyClient } from '@spotifly/core';
 import config from '../config';
 import { DynamoHistoryElement } from '../config/types';
 
-export type HistoryParams = {
-  limit: 50;
-  before?: number;
-  after?: number;
-};
+export type HistoryParams = Parameters<
+  SpotifyClient['Player']['getRecentlyPlayedTracks']
+>[0];
 
 export interface RefreshTokenResponse {
   access_token: string;
@@ -21,41 +18,31 @@ export type HistoryResponse = SpotifyApi.UsersRecentlyPlayedTracksResponse;
 export type MultipleArtistsResponse = SpotifyApi.MultipleArtistsResponse;
 
 export default class Spotify {
-  private bearerToken = '';
+  private client: SpotifyClient;
   private items: SpotifyApi.PlayHistoryObject[] = [];
   // Unix timestamps
   cursorBefore = 0;
   cursorAfter = 0;
 
+  constructor() {
+    this.client = initialize({
+      clientId: config.SPOTIFY.client_id,
+      clientSecret: config.SPOTIFY.client_secret,
+      refreshToken: config.SPOTIFY.refresh_token,
+    });
+  }
+
   get count() {
     return this.items.length;
   }
 
-  async getRefreshToken(): Promise<void> {
-    const res = await axios.post<RefreshTokenResponse>(
-      'https://accounts.spotify.com/api/token',
-      new URLSearchParams(config.SPOTIFY),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }
-    );
-    this.bearerToken = res.data.access_token;
-  }
-
   // Gets the raw history from Spotify
   async fetchHistory(params: HistoryParams): Promise<void> {
-    const requestParams: HistoryParams = { ...params, limit: 50 };
-    const res = await axios.get<HistoryResponse>(
-      'https://api.spotify.com/v1/me/player/recently-played',
-      {
-        headers: {
-          Authorization: `Bearer ${this.bearerToken}`,
-        },
-        params: requestParams,
-      }
-    );
+    const res = await this.client.Player.getRecentlyPlayedTracks({
+      ...params,
+      limit: 50,
+    });
+
     if (res.data.items.length > 0) {
       this.items = res.data.items;
 
