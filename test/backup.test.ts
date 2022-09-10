@@ -50,7 +50,7 @@ describe('Backup handler', () => {
 
   it('creates a backup', async () => {
     await handler(
-      {} as EventBridgeEvent<'Scheduled Event', any>,
+      {} as EventBridgeEvent<'Scheduled Event', unknown>,
       {} as Context,
       () => {}
     );

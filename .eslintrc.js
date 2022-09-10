@@ -12,5 +12,9 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
       },
     },
+    {
+      files: ['test/**/*'],
+      rules: { '@typescript-eslint/no-empty-function': 'off' },
+    },
   ],
 };
