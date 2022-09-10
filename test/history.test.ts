@@ -20,9 +20,9 @@ const putSpy = jest.spyOn(dynamoDataMapper, 'put');
 // This will be overwritten sometimes
 const iteratorMock = jest.fn().mockReturnValue([].values());
 
-// @ts-ignore
+// @ts-expect-error - This is sufficient for a mock
 const qi: QueryIterator<StringToAnyObjectMap> = QueryIterator;
-// @ts-ignore
+
 qi[Symbol.iterator] = iteratorMock;
 
 querySpy.mockReturnValue(qi);

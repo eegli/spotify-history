@@ -18,7 +18,7 @@
     "format": "prettier --write src/**/*.{ts,js}",
     "postinstall": "husky install",
     "install:ci": "yarn install --ignore-scripts --ignore-optional --frozen-lockfile",
-    "lint": "eslint src --ext .js,.ts",
+    "lint": "eslint src test --ext .js,.ts",
     "lint:watch": "esw -w --color src --ext .js,.ts",
     "local:backup": "sls invoke local -f spotify-history-backup -s local",
     "local:history": "sls invoke local -f spotify-history -s local",
