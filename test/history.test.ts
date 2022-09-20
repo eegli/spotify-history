@@ -22,7 +22,7 @@ const iteratorMock = jest.fn().mockReturnValue([].values());
 
 // @ts-expect-error - This is sufficient for a mock
 const qi: QueryIterator<StringToAnyObjectMap> = QueryIterator;
-
+// @ts-expect-error - Mock the iterator
 qi[Symbol.iterator] = iteratorMock;
 
 querySpy.mockReturnValue(qi);
