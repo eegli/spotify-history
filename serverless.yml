@@ -29,7 +29,10 @@ custom:
           - table: ${self:custom.tableName}
             sources: [./dynamo-seed.json]
   webpack:
-    packager: yarn
+    packager: npm
+    packagerOptions:
+      ignoreScripts: true
+      noInstall: false
     includeModules: true
     keepOutputDirectory: true
     excludeFiles: test/**/*
