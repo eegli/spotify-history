@@ -92,13 +92,13 @@ Almost done!
 7.  Run the following command and follow the steps. This will create a `token_spotify.json` file in the `.secrets` folder containing your long-lived Spotify refresh token. **KEEP THIS FILE SECURE!**
 
 ```bash
-yarn token:spotify
+npm run token:spotify
 ```
 
 8.  Run the following command and follow the steps. This will create a `token_google.json` file in the `.secrets` folder containing your long-lived Google Drive refresh token. **KEEP THIS FILE SECURE!**
 
 ```bash
-yarn token:google
+npm run token:google
 ```
 
 9. Done!
@@ -120,28 +120,28 @@ custom:
 In order to deploy the production version, run:
 
 ```bash
-yarn prod:deploy
+npm run prod:deploy
 ```
 
 You can deploy the staging version as well:
 
 ```bash
 # Deploy everything
-yarn stg:deploy
+npm run stg:deploy
 
 # Deploy functions only
-yarn stg:deploy:history
-yarn stg:deploy:backup
+npm run stg:deploy:history
+npm run stg:deploy:backup
 ```
 
 Again, the staging functions are **NOT scheduled** by default as they are meant to be invoked manually:
 
 ```bash
 # Get history from Spotify and save to DynamoDB
-yarn stg:invoke:history
+npm run stg:invoke:history
 
 # Create backup in Google Drive
-yarn stg:invoke:backup
+npm run stg:invoke:backup
 ```
 
 ## Logging
@@ -221,32 +221,28 @@ For local development and testing the db integration, AWS's official DynamoDB Do
 1. Start the containers (DynamoDB and GUI):
 
 ```bash
-yarn dynamo:start
-
-or
-
-docker-compose up
+npm run dynamo:start
 ```
 
 2. Migrate the table and seed:
 
 ```bash
 
-yarn dynamo:migrate
+npm run dynamo:migrate
 ```
 
 3. If you want to check if everything has been setup correctly, visit http://localhost:8001/
 
 4. Invoke locally:
 
-   Note that `yarn local:backup` will, despite its naming, **still** hit the Google Drive API but save the content in a folder separate from `stg` and `prod` (`local`).
+   Note that `npm run local:backup` will, despite its naming, **still** hit the Google Drive API but save the content in a folder separate from `stg` and `prod` (`local`).
 
 ```bash
 # Gets the history and saves it to local DynamoDB
-yarn local:history
+npm run local:history
 
 # Backs up the history to Google Drive
-yarn local:backup
+npm run local:backup
 ```
 
 ## Good to know

@@ -18,12 +18,9 @@ const config = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   },
-  optimization: {
-    nodeEnv: false,
-    concatenateModules: false,
-  },
   target: 'node',
   externals: [nodeExternals()],
+  externalsPresets: { node: true },
   module: {
     rules: [
       {
