@@ -31,7 +31,7 @@ jobs:
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
       - name: Create the Badge
-        uses: schneegans/dynamic-badges-action@v1.1.0
+        uses: schneegans/dynamic-badges-action@v1.6.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 6a89dcb0ccbc9b64058e7c6a426c6ccb
